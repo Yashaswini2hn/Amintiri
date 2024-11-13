@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Futura BK BT:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: #000000;
+}
+
+p {
+    color: #000000;
+}
+
+.css-1wmbvdf-MuiToolbar-root {
+    padding-right: 13px !important;
+}
+
+.css-1gwu0me-MuiButtonBase-root-MuiTableSortLabel-root:hover {
+    color: #000000 !important;
+}
