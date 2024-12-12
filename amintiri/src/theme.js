@@ -15,9 +15,9 @@ const theme = createTheme({
       muted: 'rgba(0, 0, 0, 0.6)',
     },
     status:{
-      inKitchen: '#E3B21A',
-      ready: '#7FB800',
-      pending: '#E67E22',
+      inKitchen:'#E3B21A',
+      ready:'#7FB800',
+      pending:'#E67E22',
       delivering: '#FFD83D',
       delaying: '#E74C3C',
       delivered: '#375A7F',
@@ -73,7 +73,14 @@ const theme = createTheme({
       xl: 1536,
     },
   },
-  shadows: ['none', '0px 2px 10px rgba(0, 0, 0, 0.1)'],
+  shadows: [
+    'none', // shadow[0]
+    '0px 1px 3px rgba(0,0,0,0.2)', // shadow[1]
+    '0px 1px 5px rgba(0,0,0,0.2)', // shadow[2]
+    '0px 1px 8px rgba(0,0,0,0.2)', // shadow[3]
+    '0px 2px 4px rgba(0,0,0,0.2)', // shadow[4] 
+    // Add additional shadows as needed
+  ],
   components: {
     MuiButton: {
       styleOverrides: {

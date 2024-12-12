@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
+import CalendarIcon from '../assests/calender.svg';
+import DeliveryIcon from '../assests/delivery.svg';
+import DropdownIcon from '../assests/arrow_drop_down (1).svg';
+import OrderCard from '../components/Molecules/OrderCard';
+import OrderDetails from '../components/Molecules/OrderDetails';
+import { ordersData } from '../components/Molecules/OrdersData';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -11,34 +17,347 @@ const LayoutContainer = styled('div')({
 const SidebarContainer = styled('div')({
   width: '178px',
   backgroundColor: '#FFFFFF',
-  position: 'fixed', // Fix sidebar to the left
-  top: '84px', // Space for header height
+  position: 'fixed',
+  top: '84px',
   bottom: 0,
   left: 0,
- 
 });
 
 const MainContainer = styled('div')({
   flexGrow: 1,
-  marginTop: '84px', 
-  marginLeft: '178px', 
+  marginTop: '84px',
+  marginLeft: '178px',
   padding: '20px',
   overflowY: 'auto',
-  height: 'calc(100vh - 84px)', 
+  height: 'calc(100vh - 84px)',
   backgroundColor: '#FFFFFF',
+  display: 'flex',
 });
 
+const OrderListContainer = styled('div')({
+  flex: 1,
+  marginRight: '0px',
+  width: '600px',
+});
+
+const OrderDetailsContainer = styled('div')({
+  width: '390px',
+});
+
+const ButtonGroup = styled('div')({
+  display: 'flex',
+  gap: '15px',
+  marginBottom: '20px',
+  justifyContent: 'center',
+  marginTop: '35px',
+  marginLeft: '-100px',
+  position: 'relative',
+});
+
+const OrdersButton = styled('button')({
+  fontFamily:'Futura Bk BT',
+  fontSize:'18px',
+  fontWeight:400,
+  lineHeight:'21.6px',
+  letterSpacing:'0.05em',
+  textAlign:'center',
+  color:'#06555C',
+  backgroundColor:'transparent',
+  border:'1px solid #E1BD52',
+  padding:'10px 40px',
+  borderRadius:'0px',
+  display:'flex',
+  alignItems:'center',
+  justifyContent:'center',
+  cursor:'pointer',
+  width:'154px',
+});
+
+const DropdownContainer = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position:'absolute',
+  top:'100%',
+  left:'110px',
+  backgroundColor:'#FFFFFF',
+  width:'158px', 
+  height:'100px',
+  borderRadius:'0px',
+  boxShadow:'0 2px 8px rgba(0, 0, 0, 0.1)',
+  zIndex:1000,
+  padding:'10px',
+}));
+
+const DropdownInner = styled('div')({
+  backgroundColor:'#FFFFFF',
+  border:'0.8px solid #E1BD52',
+  borderRadius:'0px',
+});
+
+const DropdownItem = styled('div')({
+  fontFamily:'Futura Lt BT',
+  fontSize:'14px',
+  fontWeight:400,
+  lineHeight:'16.8px',
+  letterSpacing:'0.05em',
+  color:'#0A6169',
+  padding:'10px',
+  cursor:'pointer',
+  '&:hover': {
+  backgroundColor:'#F0F0F0',
+  },
+});
+
+const DateButton = styled('button')({
+  fontFamily:'Futura Bk BT',
+  fontSize:'18px',
+  fontWeight:400,
+  lineHeight:'21.6px',
+  letterSpacing:'0.05em',
+  textAlign:'center',
+  color:'#06555C',
+  backgroundColor:'transparent',
+  border:'1px solid #E1BD52',
+  padding:'10px 20px',
+  borderRadius:'0px',
+  display:'flex',
+  alignItems:'center',
+  gap:'10px',
+  cursor:'pointer',
+  width:'193px',
+});
+
+const DeliveryButton = styled('button')({
+  fontFamily:'Futura Bk BT',
+  fontSize:'18px',
+  fontWeight:400,
+  lineHeight:'21.6px',
+  letterSpacing:'0.05em',
+  textAlign:'center',
+  color:'#06555C',
+  backgroundColor:'transparent',
+  border:'1px solid #E1BD52',
+  padding:'10px 20px',
+  borderRadius:'0px',
+  display:'flex',
+  alignItems:'center',
+  gap:'10px',
+  cursor:'pointer',
+  width:'238px',
+});
+
+const StatusButton = styled('button')({
+  fontFamily:'Futura Bk BT',
+  fontSize:'18px',
+  fontWeight:400,
+  lineHeight:'21.6px',
+  letterSpacing:'0.05em',
+  textAlign:'center',
+  color:'#06555C',
+  backgroundColor:'transparent',
+  border:'1px solid #E1BD52',
+  padding:'10px 40px',
+  borderRadius:'0px',
+  display:'flex',
+  alignItems:'center',
+  justifyContent:'center',
+  cursor:'pointer',
+  width:'140px',
+  gap:'20px',
+});
+
+const BatchButton = styled('button')({
+  width:'108px',
+  height:'44px',
+  position:'absolute',
+  top:'139px',
+  left:'1020px',
+  backgroundColor:'#06555C',
+  fontFamily:'Futura Bk BT',
+  fontSize:'18px',
+  fontWeight:400,
+  lineHeight:'21.6px',
+  textAlign:'center',
+  color:'#FFFFFF',
+  border:'none',
+  cursor:'pointer',
+  '&:hover': {
+  backgroundColor:'#054E50',
+  },
+});
+
+const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position: 'absolute',
+  top: '183px',
+  left: '637px',
+  width: '212px',
+  height: '289px',
+  background: '#FFFFFF',
+  boxShadow: '0px 4px 4px 0px #00000040',
+  zIndex: 1000,
+}));
+
+const DeliveryDropdownInner = styled('div')({
+  position: 'absolute',
+  width: '196px',
+  height: '274px',
+  top: '8px', 
+  left: '8px',
+  border: '0.8px solid #E1BD52',
+  background: '#FFFFFF',
+});
+
+const DeliveryDropdownItem = styled('div')({
+  fontFamily: 'Futura Lt BT',
+  fontSize: '14px',
+  fontWeight: 400,
+  lineHeight: '16.8px',
+  letterSpacing: '0.05em',
+  color: '#0A6169',
+  padding: '10px',
+  cursor: 'pointer',
+  textAlign: 'left',
+  '&:hover': {
+    backgroundColor: '#F9F9F9',
+  },
+});
+
+const times = [
+  '9:00 AM',
+  '10:00 AM',
+  '11:00 AM',
+  '12:00 PM',
+  '1:00 PM',
+  '2:00 PM',
+  '3:00 PM',
+  '4:00 PM',
+  '5:00 PM',
+  '6:00 PM',
+];
+
 const MainPage = () => {
+  const [activeOption,setActiveOption] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [orders,setOrders] = useState([]);
+  const [selectedOrder,setSelectedOrder] = useState(null);
+  const [isDeliveryTimeDropdownVisible,setIsDeliveryTimeDropdownVisible] = useState(false);
+  const [isStatusDropdownVisible,setIsStatusDropdownVisible] = useState(false);
+  const [isOrdersDropdownVisible,setIsOrdersDropdownVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const sortedOrders = [...ordersData].sort(
+        (a, b) => new Date(b.orderTime) - new Date(a.orderTime)
+      );
+      setOrders(sortedOrders);
+      setSelectedOrder(sortedOrders[0]);
+    };
+    if (activeOption === 'ORDERS') {
+      fetchOrders();
+    }
+  }, [activeOption]);
+
+  const toggleStatusDropdown = () => {
+    setIsStatusDropdownVisible((prev) => !prev);
+  };
+
+  const toggleOrdersDropdown = () => {
+    setIsOrdersDropdownVisible((prev) => !prev);
+  };
+
+  const toggleDeliveryTimeDropdown = () => {
+    setIsDeliveryTimeDropdownVisible((prev) => !prev);
+  };
+
   return (
     <LayoutContainer>
-      <HeaderTemplate />
+      <HeaderTemplate/>
       <SidebarContainer>
-        <SidebarTemplate />
+        <SidebarTemplate onOptionSelect={setActiveOption}/>
       </SidebarContainer>
       <MainContainer>
+        {activeOption === 'ORDERS' && (
+          <>
+            <BatchButton>Batch</BatchButton>
+            <OrderListContainer>
+              <ButtonGroup>
+                <OrdersButton onClick={toggleOrdersDropdown}>Orders</OrdersButton>
+                {isOrdersDropdownVisible && (
+                  <DropdownContainer isVisible={isOrdersDropdownVisible}>
+                    <DropdownInner>
+                      <DropdownItem>All Orders</DropdownItem>
+                      <DropdownItem>New Orders</DropdownItem>
+                      <DropdownItem>Completed Orders</DropdownItem>
+                      <DropdownItem>Cancelled Orders</DropdownItem>
+                    </DropdownInner>
+                  </DropdownContainer>
+                )}
+                <DateButton>
+                <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
+                  12-11-2024
+                </DateButton>
+                <DeliveryButton onClick={toggleDeliveryTimeDropdown}>
+                <img
+                 src={DeliveryIcon}
+                 alt="Delivery Icon"
+                 style={{width:'24px',height:'24px',marginRight:'10px'}}
+                 />
+                 Delivery Time
+                <img
+                 src={DropdownIcon}
+                 alt="Dropdown Icon"
+                 style={{width:'16px',height:'16px',marginLeft:'8px'}}
+                  />
+                  </DeliveryButton>
+
+                  {isDeliveryTimeDropdownVisible && (
+                 <DeliveryDropdownOuter>
+                  <DeliveryDropdownInner>
+                    {times.map((time, index) => (
+                    <DeliveryDropdownItem key={index}>{time}</DeliveryDropdownItem>
+                    ))}
+                  </DeliveryDropdownInner>
+                </DeliveryDropdownOuter>
+              )}
+
+                <StatusButton onClick={toggleStatusDropdown}>
+                  Status
+                <img src={DropdownIcon} alt="Dropdown Icon" style={{width:'16px',height:'16px',marginLeft:'8px'}}/>
+                </StatusButton>
+                {isStatusDropdownVisible && (
+                 <DropdownContainer>
+                 <DropdownInner>
+                 <DropdownItem>Pending</DropdownItem>
+                 <DropdownItem>In Kitchen</DropdownItem>
+                 <DropdownItem>Ready</DropdownItem>
+                 </DropdownInner>
+                 </DropdownContainer>
+                )}
+              </ButtonGroup>
+              {orders.map((order) => (
+                <OrderCard
+                  key={order.orderId}
+                  orderNumber={order.orderId}
+                  orderTime={new Date(order.orderTime).toLocaleTimeString()}
+                  status={order.status}
+                  items={order.items}
+                  deliveryTime={new Date(order.deliveryTime).toLocaleTimeString()}
+                  customerName={order.customerName}
+                  address={order.deliveryAddress}
+                  onClick={() => setSelectedOrder(order)}
+                />
+              ))}
+            </OrderListContainer>
+            {selectedOrder && (
+            <OrderDetailsContainer>
+            <OrderDetails order={selectedOrder}/>
+            </OrderDetailsContainer>
+            )}
+          </>
+        )}
       </MainContainer>
     </LayoutContainer>
   );
 };
-
-export default MainPage;
+export default MainPage; 
