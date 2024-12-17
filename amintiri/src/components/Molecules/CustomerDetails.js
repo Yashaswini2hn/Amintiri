@@ -12,9 +12,9 @@ const CustomerDetailsContainer = styled('div')({
   borderRadius: '0px',
   position: 'absolute',
   top: '10px',
-  left: '1100px',
+  left: '977px',
   marginTop: '-20px',
-  marginLeft: '150px',
+  
 });
 
 const Header = styled('div')({

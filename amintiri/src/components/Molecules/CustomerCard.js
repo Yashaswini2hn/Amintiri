@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import MapIcon from '../../assests/Map.svg';
 
 const CardContainer = styled('div')({
-  width:'50%',
+  width:'70%',
   backgroundColor:'#FFFFFF',
   marginBottom:'15px',
   display:'flex',

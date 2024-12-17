@@ -48,11 +48,12 @@ const ButtonGroup = styled('div')({
   display: 'flex',
   gap: '15px',
   marginBottom: '20px',
-  justifyContent: 'center',
+  justifyContent: 'flex-start', 
   marginTop: '5px',
-  marginLeft: '-100px',
+  marginLeft: '10px', 
   position: 'relative',
 });
+
 
 const OrdersButton = styled('button')({
   fontFamily:'Futura Bk BT',
@@ -255,7 +256,7 @@ const BatchButton = styled('button')({
   height:'44px',
   position:'absolute',
   top:'110px',
-  left:'1020px',
+  left:'999px',
   backgroundColor:'#06555C',
   fontFamily:'Futura Bk BT',
   fontSize:'18px',

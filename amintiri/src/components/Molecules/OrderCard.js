@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
 const CardContainer = styled('div')({
-  width: '950px',
+  width: '100%',
   backgroundColor: '#FFFFFF',
   marginBottom: '15px',
   display: 'flex',
@@ -12,7 +12,7 @@ const CardContainer = styled('div')({
   borderRadius: '8px',
   position: 'relative',
   marginTop:'50px',
-  marginLeft:'-5px',
+  marginLeft:'0px',
   boxShadow:'0px 1px 4px 0px #D9D9D926'
 
 });

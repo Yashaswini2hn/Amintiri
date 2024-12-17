@@ -8,7 +8,7 @@ import ScrollIcon from '../../assests/Scroll.svg';
 import DeliveryIcon from '../../assests/delivery.svg'; // Import delivery icon
 
 const OrderDetailsContainer = styled('div')({
-  width: '330px',
+  width: '365px',
   height: '627px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
@@ -18,7 +18,7 @@ const OrderDetailsContainer = styled('div')({
   top: '70px',
   left: '1100px',
   marginTop: '30px',
-  marginLeft:'80px'
+  marginLeft:'50px'
 });
 
 const Header = styled('div')({

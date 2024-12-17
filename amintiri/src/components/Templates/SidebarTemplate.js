@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
 const SidebarContainer = styled(Box)({
-  width: '170px',
+  width: '130px',
   height: '924px',
   position: 'relative',
   display: 'flex',
@@ -19,8 +19,8 @@ const SidebarContainer = styled(Box)({
 
 const SidebarOption = styled(Typography)(({ isActive }) => ({
   fontFamily: 'Futura BK BT',
-  fontSize: '18px',
-  fontWeight: 400,
+  fontSize: '15px',
+  fontWeight: 600,
   lineHeight: '24px',
   textAlign: 'left',
   textDecoration: isActive ? 'underline' : 'none',
@@ -30,7 +30,6 @@ const SidebarOption = styled(Typography)(({ isActive }) => ({
   color: isActive ? '#000' : '#383838',
   marginLeft: '10px', // Adjust left margin for consistent alignment
   marginTop: '0px', // Remove additional top margin
-  marginLeft:'10px'
 }));
 
 const SidebarTemplate = ({ onOptionSelect }) => {
