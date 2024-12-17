@@ -28,11 +28,17 @@ const MainContainer = styled('div')({
   marginTop: '84px',
   marginLeft: '178px',
   padding: '20px',
-  overflowY: 'auto',
+  overflowY: 'scroll', 
   height: 'calc(100vh - 84px)',
   backgroundColor: '#FFFFFF',
   display: 'flex',
+  scrollbarWidth: 'none', 
+  '&::-webkit-scrollbar': {
+    display: 'none', 
+  },
 });
+
+
 
 const OrderListContainer = styled('div')({
   flex: 1,
@@ -50,34 +56,32 @@ const ButtonGroup = styled('div')({
   marginBottom: '20px',
   justifyContent: 'flex-start', 
   marginTop: '5px',
-  marginLeft: '10px', 
+  marginLeft: '0px', 
   position: 'relative',
 });
 
-
 const OrdersButton = styled('button')({
   fontFamily:'Futura Bk BT',
-  fontSize:'18px',
+  fontSize:'14px',
   fontWeight:400,
-  lineHeight:'21.6px',
+  lineHeight:'18px',
   letterSpacing:'0.05em',
   textAlign:'center',
   color:'#06555C',
   backgroundColor:'transparent',
   border:'1px solid #E1BD52',
-  padding:'10px 40px',
   borderRadius:'0px',
   display:'flex',
   alignItems:'center',
   justifyContent:'center',
   cursor:'pointer',
-  width:'154px', 
+  width:'130px', 
 });
 
 const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  width: '155px',
+  width: '130px',
   height: '158px',
   top: '44px', 
   left: 'translateY(-1px)',
@@ -89,7 +93,7 @@ const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
 
 const OrdersDropdownInner = styled('div')({
   position: 'absolute',
-  width: '139px',
+  width: '110px',
   height: '142px',
   top: '8px',
   left: '8px',
@@ -99,7 +103,7 @@ const OrdersDropdownInner = styled('div')({
 
 const OrdersDropdownItem = styled('div')(({ isSelected }) => ({
   fontFamily: 'Futura Lt BT',
-  fontSize: '14px',
+  fontSize: '10px',
   fontWeight: 400,
   lineHeight: '16.8px',
   letterSpacing: '0.05em',
@@ -115,9 +119,9 @@ const OrdersDropdownItem = styled('div')(({ isSelected }) => ({
 
 const DateButton = styled('button')({
   fontFamily:'Futura Bk BT',
-  fontSize:'18px',
+  fontSize:'14px',
   fontWeight:400,
-  lineHeight:'21.6px',
+  lineHeight:'18px',
   letterSpacing:'0.05em',
   textAlign:'center',
   color:'#06555C',
@@ -129,14 +133,14 @@ const DateButton = styled('button')({
   alignItems:'center',
   gap:'10px',
   cursor:'pointer',
-  width:'193px',
+  width:'185px',
 });
 
 const DeliveryButton = styled('button')({
   fontFamily:'Futura Bk BT',
-  fontSize:'18px',
+  fontSize:'14px',
   fontWeight:400,
-  lineHeight:'21.6px',
+  lineHeight:'18px',
   letterSpacing:'0.05em',
   textAlign:'center',
   color:'#06555C',
@@ -148,13 +152,13 @@ const DeliveryButton = styled('button')({
   alignItems:'center',
   gap:'10px',
   cursor:'pointer',
-  width:'238px',
+  width:'230px',
 });
 
 const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  width: '237px', 
+  width: '230px', 
   height: '380px',
   top: '44px', 
   left: '0',
@@ -166,7 +170,7 @@ const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
 
 const DeliveryDropdownInner = styled('div')({
   position: 'absolute',
-  width: '220px',
+  width: '214px',
   height: '365px',
   top: '8px',
   left: '8px',
@@ -193,9 +197,9 @@ const DeliveryDropdownItem = styled('div')(({ isSelected }) => ({
 
 const StatusButton = styled('button')({
   fontFamily:'Futura Bk BT',
-  fontSize:'18px',
+  fontSize:'14px',
   fontWeight:400,
-  lineHeight:'21.6px',
+  lineHeight:'18px',
   letterSpacing:'0.05em',
   textAlign:'center',
   color:'#06555C',
@@ -207,14 +211,14 @@ const StatusButton = styled('button')({
   alignItems:'center',
   justifyContent:'center',
   cursor:'pointer',
-  width:'140px',
+  width:'130px',
   gap:'20px',
 });
 
 const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  width: '139px', 
+  width: '130px', 
   height: '120px',
   top: '44px', 
   left: '0',
@@ -226,7 +230,7 @@ const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
 
 const StatusDropdownInner = styled('div')({
   position: 'absolute',
-  width: '122px',
+  width: '116px',
   height: '106px',
   top: '8px',
   left: '8px',
@@ -236,7 +240,7 @@ const StatusDropdownInner = styled('div')({
 
 const StatusDropdownItem = styled('div')(({ isSelected }) => ({
   fontFamily: 'Futura Lt BT',
-  fontSize: '14px',
+  fontSize: '12px',
   fontWeight: 400,
   lineHeight: '16.8px',
   letterSpacing: '0.05em',
@@ -251,25 +255,25 @@ const StatusDropdownItem = styled('div')(({ isSelected }) => ({
 }));
 
 
-const BatchButton = styled('button')({
+const BatchButton = styled('button')(({ isDisabled }) => ({
   width:'108px',
   height:'44px',
   position:'absolute',
   top:'110px',
-  left:'999px',
-  backgroundColor:'#06555C',
+  left:'1000px',
+  backgroundColor: isDisabled ? '#0A616940' : '#06555C',
   fontFamily:'Futura Bk BT',
   fontSize:'18px',
   fontWeight:400,
-  lineHeight:'21.6px',
+  lineHeight:'18px',
   textAlign:'center',
-  color:'#FFFFFF',
+  color: isDisabled ? '#FFFFFF' : '#FFFFFF',
   border:'none',
   cursor:'pointer',
   '&:hover': {
-  backgroundColor:'#054E50',
+    backgroundColor: isDisabled ? '#0A616940' : '#054E50',
   },
-});
+}));
 
 
 const times = [
@@ -314,8 +318,8 @@ const MainPage = () => {
   const handleCheckboxChange = (orderId, isChecked) => {
     setSelectedCards((prevSelected) =>
       isChecked
-        ? [...prevSelected, orderId] // Add orderId if checked
-        : prevSelected.filter((id) => id !== orderId) // Remove if unchecked
+        ? [...prevSelected, orderId]
+        : prevSelected.filter((id) => id !== orderId)
     );
   };
 
@@ -328,7 +332,7 @@ const MainPage = () => {
       <MainContainer>
         {activeOption === 'ORDERS' && (
           <>
-              {selectedCards.length > 0 && <BatchButton>Batch</BatchButton>}
+              <BatchButton isDisabled={selectedCards.length === 0} disabled={selectedCards.length === 0}>Batch</BatchButton>
             <OrderListContainer>
               <ButtonGroup>
               <OrdersButton

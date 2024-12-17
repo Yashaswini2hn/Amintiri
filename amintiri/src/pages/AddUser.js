@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import HeaderTemplate from "../components/Templates/HeaderTemplate";
 import UserGear from "../assests/UserGear.svg";
 import ChefHat from "../assests/ChefHat.svg";
 import AddUser from "../assests/AddUser.svg";
-import CaretDown from "../assests/CaretDown.svg";
+import CaretDownIcon from "../assests/CaretDown.svg";
 
 const LayoutContainer = styled("div")({
   display: "flex",
@@ -28,12 +28,10 @@ const SidebarContainer = styled("div")({
   width: "141px",
   height: "calc(100vh - 84px)",
   background: "#FFFFFF",
-  border: "none",
   boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
   position: "fixed",
   top: "84px",
   left: 0,
-  zIndex: 50,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -78,12 +76,8 @@ const MainContainer = styled("div")({
 });
 
 const Title = styled("h1")({
-  width: "165px",
-  height: "41px",
   fontFamily: "Futura Md BT",
   fontSize: "34px",
-  fontWeight: "400",
-  lineHeight: "40.8px",
   color: "#06555C",
   marginBottom: "30px",
 });
@@ -102,36 +96,56 @@ const InputField = styled("input")({
   borderRadius: "4px",
   fontFamily: "Futura Md BT",
   fontSize: "20px",
-  fontWeight: "400",
-  lineHeight: "24px",
-  letterSpacing: "0.05em",
   padding: "0 10px",
-  outline: "none",
   color: "#06555C",
   "&::placeholder": {
-    color: "#06555C", // Ensure placeholder color matches the text
+    color: "#06555C",
   },
 });
 
-const SelectField = styled("select")({
+const DropdownContainer = styled("div")({
+  position: "relative",
   width: "454px",
   height: "60px",
   border: "1px solid #E1BD52",
   borderRadius: "4px",
   fontFamily: "Futura Md BT",
   fontSize: "20px",
-  fontWeight: "400",
-  lineHeight: "24px",
-  letterSpacing: "0.05em",
-  padding: "0 10px",
-  outline: "none",
   color: "#06555C",
-  appearance: "none",
-  backgroundImage: `url(${CaretDown})`, // Add the CaretDown icon
-  backgroundRepeat: "no-repeat",
-  backgroundPosition: "right 10px center",
-  backgroundSize: "16px",
+  backgroundColor: "#FFFFFF",
 });
+
+const DropdownHeader = styled("div")({
+  padding: "10px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  cursor: "pointer",
+});
+
+const DropdownList = styled("ul")({
+  position: "absolute",
+  top: "60px",
+  left: 0,
+  width: "100%",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #E1BD52",
+  zIndex: 100,
+  listStyle: "none",
+  padding: 0,
+  margin: 0,
+});
+
+const DropdownItem = styled("li")(({ isSelected }) => ({
+  padding: "10px",
+  backgroundColor: isSelected ? "#E1BD52" : "transparent",
+  color: isSelected ? "#FFFFFF" : "#06555C",
+  cursor: "pointer",
+  "&:hover": {
+    backgroundColor: "#E1BD52",
+    color: "#FFFFFF",
+  },
+}));
 
 const SaveButton = styled("button")({
   gridColumn: "1 / 3",
@@ -143,43 +157,49 @@ const SaveButton = styled("button")({
   borderRadius: "4px",
   fontFamily: "Futura Md BT",
   fontSize: "24px",
-  fontWeight: "400",
-  lineHeight: "28.8px",
   cursor: "pointer",
-  textAlign: "center",
   margin: "40px auto 0",
 });
 
 const AddUserPage = () => {
+  const [selectedRole, setSelectedRole] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
+  const roles = ["Admin", "Kitchen Staff", "Delivery Manager", "Dispatch Staff"];
+
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role);
+    setIsDropdownOpen(false);
+  };
 
   const handleSave = (e) => {
     e.preventDefault();
-    console.log("User information saved.");
-    navigate("/mainpage"); 
+    console.log("User information saved with role:", selectedRole);
+    navigate("/mainpage");
   };
 
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderTemplate/>
+        <HeaderTemplate />
       </HeaderContainer>
       <SidebarContainer>
         <SidebarItem onClick={() => navigate("/admin")}>
           <SidebarIcon>
-            <img src={UserGear} alt="Admin" style={{ width: "50%"}}/>
+            <img src={UserGear} alt="Admin" style={{ width: "50%" }} />
           </SidebarIcon>
           <SidebarText>ADMIN</SidebarText>
         </SidebarItem>
         <SidebarItem onClick={() => navigate("/staff")}>
           <SidebarIcon>
-            <img src={ChefHat} alt="Staff" style={{ width: "50%"}}/>
+            <img src={ChefHat} alt="Staff" style={{ width: "50%" }} />
           </SidebarIcon>
           <SidebarText>STAFF</SidebarText>
         </SidebarItem>
         <SidebarItem>
           <SidebarIcon>
-            <img src={AddUser} alt="Add" style={{ width: "50%"}}/>
+            <img src={AddUser} alt="Add" style={{ width: "50%" }} />
           </SidebarIcon>
           <SidebarText>ADD</SidebarText>
         </SidebarItem>
@@ -190,11 +210,25 @@ const AddUserPage = () => {
           <InputField placeholder="Name" />
           <InputField placeholder="Contact Number" />
           <InputField placeholder="Email ID" />
-          <SelectField>
-            <option value="">Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Staff">Staff</option>
-          </SelectField>
+          <DropdownContainer>
+            <DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+              {selectedRole || "Role"}
+              <img src={CaretDownIcon} alt="CaretDown Icon" style={{ width: "24px", height: "24px" }} />
+            </DropdownHeader>
+            {isDropdownOpen && (
+              <DropdownList>
+                {roles.map((role) => (
+                  <DropdownItem
+                    key={role}
+                    isSelected={selectedRole === role}
+                    onClick={() => handleRoleSelect(role)}
+                  >
+                    {role}
+                  </DropdownItem>
+                ))}
+              </DropdownList>
+            )}
+          </DropdownContainer>
           <InputField placeholder="Password" />
           <SaveButton type="submit">Save</SaveButton>
         </FormContainer>

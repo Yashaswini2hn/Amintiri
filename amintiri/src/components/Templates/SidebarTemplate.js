@@ -10,27 +10,30 @@ const SidebarContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  padding: '16px',
-  paddingTop: '30px', // Adjust this to move options upwards
-  gap: '40px', // Adjust gap between options to match the second image
-  marginLeft: '0px', // Reduce left margin to align closer to the sidebar
+  padding: '14px',
+  paddingTop: '30px',
+  gap: '40px',
+  marginLeft: '0px',
   boxShadow: '0px 1px 4px 0px #00000026',
 });
 
 const SidebarOption = styled(Typography)(({ isActive }) => ({
   fontFamily: 'Futura BK BT',
   fontSize: '15px',
-  fontWeight: 500,
+  fontWeight: 600,
   lineHeight: '24px',
   textAlign: 'left',
-  textDecoration: isActive ? 'underline' : 'none',
+  textDecoration: isActive ? 'underline' : 'none', 
   textUnderlinePosition: 'from-font',
+  textDecorationColor: '#000000',
   textDecorationSkipInk: 'none',
   cursor: 'pointer',
-  color: isActive ? '#000' : '#383838',
-  marginLeft: '10px', // Adjust left margin for consistent alignment
-  marginTop: '0px', // Remove additional top margin
+  color: isActive ? '#E1BD52' : '#383838', 
+  marginLeft: '10px',
+  marginTop: '0px',
+  transition: 'color 0.3s ease', 
 }));
+
 
 const SidebarTemplate = ({ onOptionSelect }) => {
   const navigate = useNavigate();
@@ -58,7 +61,7 @@ const SidebarTemplate = ({ onOptionSelect }) => {
       {['ORDERS', 'CUSTOMERS', 'BATCHES', 'GROUPS', 'DELIVERY EXECUTIVES', 'DELIVERY'].map((option) => (
         <SidebarOption
           key={option}
-          isActive={activeOption === option}
+          isActive={activeOption === option} // Pass active state
           onClick={() => handleOptionClick(option)}
         >
           {option}

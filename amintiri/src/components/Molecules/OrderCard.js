@@ -13,7 +13,8 @@ const CardContainer = styled('div')({
   position: 'relative',
   marginTop:'50px',
   marginLeft:'0px',
-  boxShadow:'0px 1px 4px 0px #D9D9D926'
+  boxShadow:'0px 1px 4px 0px #D9D9D926',
+  alignItems:'flex-start'
 
 });
 

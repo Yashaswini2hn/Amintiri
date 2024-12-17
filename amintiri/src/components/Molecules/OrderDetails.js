@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { styled } from '@mui/system';
 import UserIcon from '../../assests/User.svg';
 import PhoneIcon from '../../assests/Phone.svg';
@@ -16,7 +16,7 @@ const OrderDetailsContainer = styled('div')({
   borderRadius: '0px',
   position: 'absolute',
   top: '70px',
-  left: '1100px',
+  left: '1120px',
   marginTop: '30px',
   marginLeft:'50px'
 });
@@ -45,7 +45,7 @@ const Status = styled('span')({
   color: '#06555C',
   backgroundColor: '#E1BD52',
   padding: '5px 5px',
-  borderRadius: '3px',
+  borderRadius: '0px',
 });
 
 const CustomerInfo = styled('div')({
@@ -143,15 +143,34 @@ const ReadyButton = styled('button')({
   fontSize: '18px',
   fontWeight: 400,
   border: 'none',
-  borderRadius: '4px',
+  borderRadius: '0px',
   cursor: 'pointer',
   marginTop: '255px',
+  lineHeight:'18px'
 });
 
 const OrderDetails = ({order}) => {
   const addressParts = (order.deliveryAddress || "").split(', ');
   const addressLine1 = addressParts.slice(0, -1).join(', ');
   const addressLine2 = addressParts[addressParts.length - 1] || "";
+  const [mainStatus, setMainStatus] = useState(order.status);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [itemStatuses, setItemStatuses] = useState(
+    order.items.map((item) => item.status)
+  );
+
+  const handleStatusChange = (newStatus) => {
+    setMainStatus(newStatus);
+    setDropdownOpen(false);
+  };
+
+  const handleItemStatusChange = (index, newStatus) => {
+    setItemStatuses((prev) => {
+      const updatedStatuses = [...prev];
+      updatedStatuses[index] = newStatus;
+      return updatedStatuses;
+    });
+  };
 
   return (
     <OrderDetailsContainer>
