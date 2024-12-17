@@ -3,10 +3,10 @@ import { styled } from '@mui/system';
 import menIcon from '../../assests/men.svg';
 import bikeIcon from '../../assests/bike.svg';
 import handCoinsIcon from '../../assests/HandCoins.svg';
-import dlIcon from '../../assests/DL.svg';
+import dlIcon from '../../assests/SealCheck.svg';
 
 const CardContainer = styled('div')({
-  width: '981px', // Corrected width
+  width: '981px', 
   height: '133px',
   display: 'flex',
   alignItems: 'center',
@@ -22,7 +22,7 @@ const Checkbox = styled('input')({
   appearance: 'none',
   position: 'absolute',
   top: '20px',
-  left: '20px', // Adjusted position for consistency
+  left: '20px', 
   width: '24px',
   height: '24px',
   border: '2px solid #06555C',
@@ -53,7 +53,7 @@ const Checkbox = styled('input')({
 const DetailsContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  marginLeft: '80px', // Adjusted margin for alignment
+  marginLeft: '80px', 
   gap: '4px',
 });
 
@@ -80,7 +80,7 @@ const RightContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-end',
-  gap: '12px', // Added consistent spacing
+  gap: '12px',
 });
 
 const RightText = styled('div')({
@@ -100,10 +100,8 @@ const HighlightedText = styled(RightText)({
 const ExecutiveCard = () => {
   return (
     <CardContainer>
-      {/* Checkbox */}
       <Checkbox type="checkbox" />
 
-      {/* Left Section */}
       <DetailsContainer>
         <Name>Ramesh Yadav</Name>
         <InfoText>
@@ -113,7 +111,6 @@ const ExecutiveCard = () => {
         <InfoText>#51, 2nd Cross, Kuvempu Nagar, Bengaluru</InfoText>
       </DetailsContainer>
 
-      {/* Right Section */}
       <RightContainer>
         <RightText>
           <img src={bikeIcon} alt="Bike Icon" />

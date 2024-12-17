@@ -4,7 +4,7 @@ import DeliveryIcon from '../../assests/delivery.svg';
 import ScrollIcon from '../../assests/Scroll.svg';
 
 const CardContainer = styled('div')({
-  width: '1200px',
+  width: '100%',
   backgroundColor: '#FFFFFF',
   marginBottom: '30px',
   padding: '20px',

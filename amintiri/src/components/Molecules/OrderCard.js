@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
@@ -13,7 +13,6 @@ const CardContainer = styled('div')({
   position: 'relative',
   marginTop:'50px',
   marginLeft:'-5px',
-  position:'relative',
   boxShadow:'0px 1px 4px 0px #D9D9D926'
 
 });

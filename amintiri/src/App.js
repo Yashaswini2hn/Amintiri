@@ -10,6 +10,8 @@ import Customers from './pages/Customers';
 import Batches from './pages/Batches';
 import Groups from './pages/GroupsPage';
 import DeliveryExecutives from './pages/DeliveryExecutives';
+import DeliveryPage from './pages/Delivery';
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
           <Route path="/batches" element={<Batches />} /> 
           <Route path="/groups" element={<Groups />} />
           <Route path="/delivery-executives" element={<DeliveryExecutives />} /> 
+          <Route path="/delivery" element={<DeliveryPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

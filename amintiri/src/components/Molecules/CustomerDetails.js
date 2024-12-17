@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import UserIcon from '../../assests/User.svg';
 import PhoneIcon from '../../assests/Phone.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 

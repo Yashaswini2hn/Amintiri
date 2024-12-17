@@ -14,7 +14,7 @@ const LayoutContainer = styled('div')({
 
 const SidebarContainer = styled('div')({
   position: 'fixed',
-  top: '84px', // Below the header
+  top: '84px', 
   left: 0,
   bottom: 0,
   width: '178px',
