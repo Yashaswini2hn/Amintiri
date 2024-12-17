@@ -9,13 +9,13 @@ import DeliveryIcon from '../../assests/delivery.svg'; // Import delivery icon
 
 const OrderDetailsContainer = styled('div')({
   width: '330px',
-  height: '620px',
+  height: '627px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
   position: 'absolute',
-  top: '100px',
+  top: '70px',
   left: '1100px',
   marginTop: '30px',
   marginLeft:'80px'
@@ -145,7 +145,7 @@ const ReadyButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '220px',
+  marginTop: '255px',
 });
 
 const OrderDetails = ({order}) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
@@ -172,7 +172,8 @@ const CustomerName = styled('div')({
   fontSize: '18px',
 });
 
-const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, customerName, address }) => {
+const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, customerName, address,onCheckboxChange}) => {
+  const [isChecked, setIsChecked] = useState(false);
   const displayedItems = items.slice(0, 3);
   const remainingItemCount = items.length - displayedItems.length;
 
@@ -180,9 +181,14 @@ const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, custom
   const addressWithoutCity = addressParts.slice(0, -1).join(', ');
   const city = addressParts[addressParts.length - 1];
 
+  const handleCheckboxClick = () => {
+    setIsChecked(!isChecked);
+    onCheckboxChange(orderNumber, !isChecked);
+  };
+
   return (
     <CardContainer>
-      <Checkbox type="checkbox"/>
+      <Checkbox type="checkbox"  checked={isChecked} onChange={handleCheckboxClick}/>
       <OrderInfo>
       <OrderHeader>
       <OrderNumber>{orderNumber}</OrderNumber>

@@ -49,7 +49,7 @@ const ButtonGroup = styled('div')({
   gap: '15px',
   marginBottom: '20px',
   justifyContent: 'center',
-  marginTop: '35px',
+  marginTop: '5px',
   marginLeft: '-100px',
   position: 'relative',
 });
@@ -70,42 +70,47 @@ const OrdersButton = styled('button')({
   alignItems:'center',
   justifyContent:'center',
   cursor:'pointer',
-  width:'154px',
+  width:'154px', 
 });
 
-const DropdownContainer = styled('div')(({ isVisible }) => ({
+const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
-  position:'absolute',
-  top:'100%',
-  left:'110px',
-  backgroundColor:'#FFFFFF',
-  width:'158px', 
-  height:'100px',
-  borderRadius:'0px',
-  boxShadow:'0 2px 8px rgba(0, 0, 0, 0.1)',
-  zIndex:1000,
-  padding:'10px',
+  position: 'absolute',
+  width: '155px',
+  height: '158px',
+  top: '44px', 
+  left: 'translateY(-1px)',
+  background: '#FFFFFF',
+  boxShadow: '0px 4px 4px 0px #00000040',
+  zIndex: 1000,
+  marginTop:'1px'
 }));
 
-const DropdownInner = styled('div')({
-  backgroundColor:'#FFFFFF',
-  border:'0.8px solid #E1BD52',
-  borderRadius:'0px',
+const OrdersDropdownInner = styled('div')({
+  position: 'absolute',
+  width: '139px',
+  height: '142px',
+  top: '8px',
+  left: '8px',
+  border: '0.8px solid #E1BD52',
+  backgroundColor: '#FFFFFF',
 });
 
-const DropdownItem = styled('div')({
-  fontFamily:'Futura Lt BT',
-  fontSize:'14px',
-  fontWeight:400,
-  lineHeight:'16.8px',
-  letterSpacing:'0.05em',
-  color:'#0A6169',
-  padding:'10px',
-  cursor:'pointer',
+const OrdersDropdownItem = styled('div')(({ isSelected }) => ({
+  fontFamily: 'Futura Lt BT',
+  fontSize: '14px',
+  fontWeight: 400,
+  lineHeight: '16.8px',
+  letterSpacing: '0.05em',
+  padding: '10px',
+  cursor: 'pointer',
+  color: isSelected ? '#FFFFFF' : '#0A6169',
+  backgroundColor: isSelected ? '#0A6169' : 'transparent',
   '&:hover': {
-  backgroundColor:'#F0F0F0',
+    backgroundColor: '#0A6169',
+    color: '#FFFFFF',
   },
-});
+}));
 
 const DateButton = styled('button')({
   fontFamily:'Futura Bk BT',
@@ -145,6 +150,46 @@ const DeliveryButton = styled('button')({
   width:'238px',
 });
 
+const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position: 'absolute',
+  width: '237px', 
+  height: '380px',
+  top: '44px', 
+  left: '0',
+  background: '#FFFFFF',
+  boxShadow: '0px 4px 4px 0px #00000040', 
+  zIndex: 1000,
+  marginTop: '1px', 
+}));
+
+const DeliveryDropdownInner = styled('div')({
+  position: 'absolute',
+  width: '220px',
+  height: '365px',
+  top: '8px',
+  left: '8px',
+  border: '0.8px solid #E1BD52',
+  backgroundColor: '#FFFFFF',
+});
+
+const DeliveryDropdownItem = styled('div')(({ isSelected }) => ({
+  fontFamily: 'Futura Lt BT',
+  fontSize: '14px',
+  fontWeight: 400,
+  lineHeight: '16.8px',
+  letterSpacing: '0.05em',
+  textAlign:'left',
+  padding: '10px',
+  cursor: 'pointer',
+  color: isSelected ? '#FFFFFF' : '#0A6169',
+  backgroundColor: isSelected ? '#0A6169' : 'transparent',
+  '&:hover': {
+    backgroundColor: '#0A6169',
+    color: '#FFFFFF',
+  },
+}));
+
 const StatusButton = styled('button')({
   fontFamily:'Futura Bk BT',
   fontSize:'18px',
@@ -165,6 +210,46 @@ const StatusButton = styled('button')({
   gap:'20px',
 });
 
+const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position: 'absolute',
+  width: '139px', 
+  height: '120px',
+  top: '44px', 
+  left: '0',
+  background: '#FFFFFF',
+  boxShadow: '0px 4px 4px 0px #00000040', 
+  zIndex: 1000,
+  marginTop: '1px',
+}));
+
+const StatusDropdownInner = styled('div')({
+  position: 'absolute',
+  width: '122px',
+  height: '106px',
+  top: '8px',
+  left: '8px',
+  border: '0.8px solid #E1BD52', 
+  backgroundColor: '#FFFFFF',
+});
+
+const StatusDropdownItem = styled('div')(({ isSelected }) => ({
+  fontFamily: 'Futura Lt BT',
+  fontSize: '14px',
+  fontWeight: 400,
+  lineHeight: '16.8px',
+  letterSpacing: '0.05em',
+  padding: '10px',
+  cursor: 'pointer',
+  color: isSelected ? '#FFFFFF' : '#0A6169',
+  backgroundColor: isSelected ? '#0A6169' : 'transparent',
+  '&:hover': {
+    backgroundColor: '#0A6169',
+    color: '#FFFFFF',
+  },
+}));
+
+
 const BatchButton = styled('button')({
   width:'108px',
   height:'44px',
@@ -182,44 +267,6 @@ const BatchButton = styled('button')({
   cursor:'pointer',
   '&:hover': {
   backgroundColor:'#054E50',
-  },
-});
-
-const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
-  display: isVisible ? 'block' : 'none',
-  position: 'absolute',
-  width: '212px',
-  height: '289px',
-  top: '44px', // Position below button
-  left: 0,
-  backgroundColor: '#FFFFFF',
-  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
-  zIndex: 1000,
-}));
-
-const DeliveryDropdownInner = styled('div')({
-  position: 'absolute',
-  width: '196px',
-  height: '274px',
-  top: '8px',
-  left: '8px',
-  border: '0.8px solid #E1BD52',
-  backgroundColor: '#FFFFFF',
-  overflowY: 'auto',
-});
-
-const DeliveryDropdownItem = styled('div')({
-  fontFamily: 'Futura Lt BT',
-  fontSize: '14px',
-  fontWeight: 400,
-  lineHeight: '16.8px',
-  letterSpacing: '0.05em',
-  color: '#0A6169',
-  padding: '10px',
-  cursor: 'pointer',
-  '&:hover': {
-    backgroundColor: '#0A6169',
-    color: '#FFFFFF',
   },
 });
 
@@ -245,6 +292,8 @@ const MainPage = () => {
   const [isDeliveryTimeDropdownVisible,setIsDeliveryTimeDropdownVisible] = useState(false);
   const [isStatusDropdownVisible,setIsStatusDropdownVisible] = useState(false);
   const [isOrdersDropdownVisible,setIsOrdersDropdownVisible] = useState(false);
+
+  const [selectedCards, setSelectedCards] = useState([]); 
   
 
   useEffect(() => {
@@ -261,16 +310,12 @@ const MainPage = () => {
     }
   }, [activeOption]);
 
-  const toggleStatusDropdown = () => {
-    setIsStatusDropdownVisible((prev) => !prev);
-  };
-
-  const toggleOrdersDropdown = () => {
-    setIsOrdersDropdownVisible((prev) => !prev);
-  };
-
-  const toggleDeliveryTimeDropdown = () => {
-    setIsDeliveryTimeDropdownVisible((prev) => !prev);
+  const handleCheckboxChange = (orderId, isChecked) => {
+    setSelectedCards((prevSelected) =>
+      isChecked
+        ? [...prevSelected, orderId] // Add orderId if checked
+        : prevSelected.filter((id) => id !== orderId) // Remove if unchecked
+    );
   };
 
   return (
@@ -282,115 +327,114 @@ const MainPage = () => {
       <MainContainer>
         {activeOption === 'ORDERS' && (
           <>
-            <BatchButton>Batch</BatchButton>
+              {selectedCards.length > 0 && <BatchButton>Batch</BatchButton>}
             <OrderListContainer>
               <ButtonGroup>
-                <OrdersButton onMouseEnter={() => setIsOrdersDropdownVisible(true)}
-                 onMouseLeave={() => setIsOrdersDropdownVisible(false)}>Orders</OrdersButton>
-                 {isOrdersDropdownVisible && (
-                  <DropdownContainer isVisible={isOrdersDropdownVisible}>
-                    <DropdownInner>
-                      <DropdownItem>All Orders</DropdownItem>
-                      <DropdownItem>New Orders</DropdownItem>
-                      <DropdownItem>Completed Orders</DropdownItem>
-                      <DropdownItem>Cancelled Orders</DropdownItem>
-                    </DropdownInner>
-                  </DropdownContainer>
-                )}
-                <DateButton>
+              <OrdersButton
+               onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+               onMouseLeave={() => setIsOrdersDropdownVisible(false)}
+               style={{ position: 'relative' }} 
+               >
+               Orders
+               {isOrdersDropdownVisible && (
+               <OrdersDropdownOuter
+                isVisible={isOrdersDropdownVisible}
+                onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+                onMouseLeave={() => setIsOrdersDropdownVisible(false)}
+                >
+               <OrdersDropdownInner>
+               {['All Orders', 'New Orders', 'Completed Orders', 'Cancelled Orders'].map(
+               (orderType, index) => (
+               <OrdersDropdownItem
+                key={index}
+                isSelected={activeDropdown === orderType}
+                onClick={() => setActiveDropdown(orderType)}
+            >
+              {orderType}
+            </OrdersDropdownItem>
+            )
+            )}
+           </OrdersDropdownInner>
+           </OrdersDropdownOuter>
+            )}
+           </OrdersButton>
+
+            <DateButton>
                 <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
                   12-11-2024
                 </DateButton>
                 <DeliveryButton
                  onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
                  onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
-                 style={{ position: 'relative' }} // Make the button a relative reference
+                 style={{ position: 'relative' }} 
                  >
                 <img
-                  src={DeliveryIcon}
-                  alt="Delivery Icon"
-                  style={{ width: '24px', height: '24px', marginRight: '10px' }}
-                    />
+                 src={DeliveryIcon}
+                 alt="Delivery Icon"
+                 style={{ width: '24px', height: '24px', marginRight: '10px' }}
+                 />
                 Delivery Time
+                <img
+                 src={DropdownIcon}
+                 alt="Dropdown Icon"
+                 style={{ width: '16px', height: '16px', marginLeft: '8px' }}
+                  />
+
+                {isDeliveryTimeDropdownVisible && (
+                <DeliveryDropdownOuter
+                 isVisible={isDeliveryTimeDropdownVisible}
+                 onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
+                 onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
+                 >
+                <DeliveryDropdownInner>
+                {times.map((time, index) => (
+                <DeliveryDropdownItem
+                key={index}
+               isSelected={activeDropdown === time}
+             onClick={() => setActiveDropdown(time)}
+          >
+            {time}
+          </DeliveryDropdownItem>
+        ))}
+      </DeliveryDropdownInner>
+    </DeliveryDropdownOuter>
+  )}
+</DeliveryButton>
+               
+<StatusButton
+  onMouseEnter={() => setIsStatusDropdownVisible(true)}
+  onMouseLeave={() => setIsStatusDropdownVisible(false)}
+  style={{ position: 'relative' }} 
+>
+  Status
   <img
     src={DropdownIcon}
     alt="Dropdown Icon"
     style={{ width: '16px', height: '16px', marginLeft: '8px' }}
   />
 
-
-  {isDeliveryTimeDropdownVisible && (
-    <div
-      style={{
-        position: 'absolute',
-        top: '44px', 
-        left: '0',
-        zIndex: 1000,
-        backgroundColor: '#FFFFFF',
-        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
-        width: '212px',
-        height: '289px',
-      }}
+  {isStatusDropdownVisible && (
+    <StatusDropdownOuter
+      isVisible={isStatusDropdownVisible}
+      onMouseEnter={() => setIsStatusDropdownVisible(true)}
+      onMouseLeave={() => setIsStatusDropdownVisible(false)}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: '8px',
-          left: '8px',
-          border: '0.8px solid #E1BD52',
-          width: '196px',
-          height: '274px',
-          backgroundColor: '#FFFFFF',
-        }}
-      >
-        {times.map((time, index) => (
-          <div
+      <StatusDropdownInner>
+        {['Pending', 'In Kitchen', 'Ready'].map((status, index) => (
+          <StatusDropdownItem
             key={index}
-            style={{
-              fontFamily: 'Futura Lt BT',
-              fontSize: '14px',
-              fontWeight: '400',
-              lineHeight: '16.8px',
-              letterSpacing: '0.05em',
-              padding: '10px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              color: '#0A6169',
-            }}
-            onMouseEnter={(e) => (e.target.style.backgroundColor = '#0A6169', e.target.style.color = '#FFFFFF')}
-            onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent', e.target.style.color = '#0A6169')}
+            isSelected={activeDropdown === status}
+            onClick={() => setActiveDropdown(status)}
           >
-            {time}
-          </div>
+            {status}
+          </StatusDropdownItem>
         ))}
-      </div>
-    </div>
+      </StatusDropdownInner>
+    </StatusDropdownOuter>
   )}
-</DeliveryButton>
+</StatusButton>
 
-                  {/* {isDeliveryTimeDropdownVisible && (
-                 <DeliveryDropdownOuter>
-                  <DeliveryDropdownInner>
-                    {times.map((time, index) => (
-                    <DeliveryDropdownItem key={index}>{time}</DeliveryDropdownItem>
-                    ))}
-                  </DeliveryDropdownInner>
-                </DeliveryDropdownOuter>
-              )} */}
-
-                <StatusButton onClick={toggleStatusDropdown}>
-                  Status
-                <img src={DropdownIcon} alt="Dropdown Icon" style={{width:'16px',height:'16px',marginLeft:'8px'}}/>
-                </StatusButton>
-                {isStatusDropdownVisible && (
-                 <DropdownContainer>
-                 <DropdownInner>
-                 <DropdownItem>Pending</DropdownItem>
-                 <DropdownItem>In Kitchen</DropdownItem>
-                 <DropdownItem>Ready</DropdownItem>
-                 </DropdownInner>
-                 </DropdownContainer>
-                )}
+                
               </ButtonGroup>
               {orders.map((order) => (
                 <OrderCard
@@ -403,6 +447,7 @@ const MainPage = () => {
                   customerName={order.customerName}
                   address={order.deliveryAddress}
                   onClick={() => setSelectedOrder(order)}
+                  onCheckboxChange={handleCheckboxChange}
                 />
               ))}
             </OrderListContainer>
