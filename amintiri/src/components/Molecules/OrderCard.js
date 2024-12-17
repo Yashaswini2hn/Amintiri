@@ -14,7 +14,8 @@ const CardContainer = styled('div')({
   marginTop:'50px',
   marginLeft:'-5px',
   position:'relative',
-  boxShadow: '0px 1px 4px 0px #D9D9D926'
+  boxShadow:'0px 1px 4px 0px #D9D9D926'
+
 });
 
 const Checkbox = styled('input')({

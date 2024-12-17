@@ -188,12 +188,12 @@ const BatchButton = styled('button')({
 const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  top: '183px',
-  left: '637px',
   width: '212px',
   height: '289px',
-  background: '#FFFFFF',
-  boxShadow: '0px 4px 4px 0px #00000040',
+  top: '44px', // Position below button
+  left: 0,
+  backgroundColor: '#FFFFFF',
+  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
   zIndex: 1000,
 }));
 
@@ -201,10 +201,11 @@ const DeliveryDropdownInner = styled('div')({
   position: 'absolute',
   width: '196px',
   height: '274px',
-  top: '8px', 
+  top: '8px',
   left: '8px',
   border: '0.8px solid #E1BD52',
-  background: '#FFFFFF',
+  backgroundColor: '#FFFFFF',
+  overflowY: 'auto',
 });
 
 const DeliveryDropdownItem = styled('div')({
@@ -216,11 +217,12 @@ const DeliveryDropdownItem = styled('div')({
   color: '#0A6169',
   padding: '10px',
   cursor: 'pointer',
-  textAlign: 'left',
   '&:hover': {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#0A6169',
+    color: '#FFFFFF',
   },
 });
+
 
 const times = [
   '9:00 AM',
@@ -243,6 +245,7 @@ const MainPage = () => {
   const [isDeliveryTimeDropdownVisible,setIsDeliveryTimeDropdownVisible] = useState(false);
   const [isStatusDropdownVisible,setIsStatusDropdownVisible] = useState(false);
   const [isOrdersDropdownVisible,setIsOrdersDropdownVisible] = useState(false);
+  
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -282,8 +285,9 @@ const MainPage = () => {
             <BatchButton>Batch</BatchButton>
             <OrderListContainer>
               <ButtonGroup>
-                <OrdersButton onClick={toggleOrdersDropdown}>Orders</OrdersButton>
-                {isOrdersDropdownVisible && (
+                <OrdersButton onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+                 onMouseLeave={() => setIsOrdersDropdownVisible(false)}>Orders</OrdersButton>
+                 {isOrdersDropdownVisible && (
                   <DropdownContainer isVisible={isOrdersDropdownVisible}>
                     <DropdownInner>
                       <DropdownItem>All Orders</DropdownItem>
@@ -297,21 +301,74 @@ const MainPage = () => {
                 <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
                   12-11-2024
                 </DateButton>
-                <DeliveryButton onClick={toggleDeliveryTimeDropdown}>
+                <DeliveryButton
+                 onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
+                 onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
+                 style={{ position: 'relative' }} // Make the button a relative reference
+                 >
                 <img
-                 src={DeliveryIcon}
-                 alt="Delivery Icon"
-                 style={{width:'24px',height:'24px',marginRight:'10px'}}
-                 />
-                 Delivery Time
-                <img
-                 src={DropdownIcon}
-                 alt="Dropdown Icon"
-                 style={{width:'16px',height:'16px',marginLeft:'8px'}}
-                  />
-                  </DeliveryButton>
+                  src={DeliveryIcon}
+                  alt="Delivery Icon"
+                  style={{ width: '24px', height: '24px', marginRight: '10px' }}
+                    />
+                Delivery Time
+  <img
+    src={DropdownIcon}
+    alt="Dropdown Icon"
+    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
+  />
 
-                  {isDeliveryTimeDropdownVisible && (
+
+  {isDeliveryTimeDropdownVisible && (
+    <div
+      style={{
+        position: 'absolute',
+        top: '44px', 
+        left: '0',
+        zIndex: 1000,
+        backgroundColor: '#FFFFFF',
+        boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+        width: '212px',
+        height: '289px',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '8px',
+          left: '8px',
+          border: '0.8px solid #E1BD52',
+          width: '196px',
+          height: '274px',
+          backgroundColor: '#FFFFFF',
+        }}
+      >
+        {times.map((time, index) => (
+          <div
+            key={index}
+            style={{
+              fontFamily: 'Futura Lt BT',
+              fontSize: '14px',
+              fontWeight: '400',
+              lineHeight: '16.8px',
+              letterSpacing: '0.05em',
+              padding: '10px',
+              cursor: 'pointer',
+              textAlign: 'left',
+              color: '#0A6169',
+            }}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = '#0A6169', e.target.style.color = '#FFFFFF')}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent', e.target.style.color = '#0A6169')}
+          >
+            {time}
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</DeliveryButton>
+
+                  {/* {isDeliveryTimeDropdownVisible && (
                  <DeliveryDropdownOuter>
                   <DeliveryDropdownInner>
                     {times.map((time, index) => (
@@ -319,7 +376,7 @@ const MainPage = () => {
                     ))}
                   </DeliveryDropdownInner>
                 </DeliveryDropdownOuter>
-              )}
+              )} */}
 
                 <StatusButton onClick={toggleStatusDropdown}>
                   Status

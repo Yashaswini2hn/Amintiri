@@ -5,17 +5,17 @@ import PhoneIcon from '../../assests/Phone.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 
 const CustomerDetailsContainer = styled('div')({
-  width: '330px',
+  width: '360px',
   height: '620px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
   position: 'absolute',
-  top: '100px',
+  top: '10px',
   left: '1100px',
-  marginTop: '30px',
-  marginLeft: '80px',
+  marginTop: '0px',
+  marginLeft: '-110px',
 });
 
 const Header = styled('div')({
@@ -86,6 +86,20 @@ const OrderRow = styled('div')({
   fontSize: '14px',
   color: '#000000',
 });
+const OrderDate = styled('div')({
+  fontFamily: 'Futura Bk BT',
+  fontSize: '12px',
+  fontWeight: 400,
+  lineHeight: '14.4px',
+  letterSpacing: '0.05em',
+  textAlign: 'left',
+  textDecoration: 'underline',
+  textDecorationStyle: 'solid',
+  textUnderlinePosition: 'from-font',
+  textDecorationSkipInk: 'none',
+  color: '#383838',
+  marginBottom: '8px',
+});
 
 const OrderItemName = styled('span')({
   color: '#0A6169',
@@ -106,7 +120,7 @@ const SendOffersButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '20px',
+  marginTop: '210px',
 });
 
 const CustomerDetails = ({ customer = {} }) => {
@@ -140,6 +154,7 @@ const CustomerDetails = ({ customer = {} }) => {
         </InfoRow>
       </CustomerInfo>
       <OrderHistoryHeader>Order History</OrderHistoryHeader>
+      <OrderDate>Order 25-10-2024</OrderDate>
       {items.length > 0 ? (
         items.map((item, index) => (
           <OrderRow key={index}>
