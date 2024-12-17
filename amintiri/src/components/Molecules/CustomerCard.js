@@ -11,10 +11,11 @@ const CardContainer = styled('div')({
   gap:'10px',
   borderRadius:'8px',
   marginTop:'15px',
-  marginLeft:'-5px',
+  marginLeft:'0px',
   position:'relative',
   boxShadow:'0px 1px 4px 0px #D9D9D926',
   cursor:'pointer',
+  justifyContent:'flex-start'
 });
 
 const Checkbox = styled('input')({

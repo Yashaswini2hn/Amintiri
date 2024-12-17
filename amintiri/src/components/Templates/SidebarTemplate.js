@@ -20,7 +20,7 @@ const SidebarContainer = styled(Box)({
 const SidebarOption = styled(Typography)(({ isActive }) => ({
   fontFamily: 'Futura BK BT',
   fontSize: '15px',
-  fontWeight: 600,
+  fontWeight: 500,
   lineHeight: '24px',
   textAlign: 'left',
   textDecoration: isActive ? 'underline' : 'none',

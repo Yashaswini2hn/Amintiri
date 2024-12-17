@@ -4,7 +4,7 @@ import DeliveryIcon from '../../assests/delivery.svg';
 import OrdersIcon from '../../assests/orders.svg';
 
 const CardContainer = styled('div')({
-  width: '969px',
+  width: '70%',
   background: '#FFFFFF',
   borderRadius: '4px 0px 0px 0px',
   boxShadow: '0px 4px 4px 0px #00000026',
