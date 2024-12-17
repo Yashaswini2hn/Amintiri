@@ -165,6 +165,17 @@ const CustomerDetails = ({ customer = {} }) => {
       ) : (
         <div>No orders found.</div>
       )}
+       <OrderDate>Order 25-10-2024</OrderDate>
+      {items.length > 0 ? (
+        items.map((item, index) => (
+          <OrderRow key={index}>
+            <OrderItemName>{item.itemName || "Unnamed Item"}</OrderItemName>
+            <OrderWeight>{item.productWeight || "Unknown Weight"}</OrderWeight>
+          </OrderRow>
+        ))
+      ) : (
+        <div>No orders found.</div>
+      )}
       <SendOffersButton>Send Offers</SendOffersButton>
     </CustomerDetailsContainer>
   );

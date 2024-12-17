@@ -254,7 +254,7 @@ const BatchButton = styled('button')({
   width:'108px',
   height:'44px',
   position:'absolute',
-  top:'139px',
+  top:'110px',
   left:'1020px',
   backgroundColor:'#06555C',
   fontFamily:'Futura Bk BT',
