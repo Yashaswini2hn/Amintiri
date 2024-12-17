@@ -14,7 +14,7 @@ const CustomerDetailsContainer = styled('div')({
   top: '10px',
   left: '1100px',
   marginTop: '-20px',
-  marginLeft: '-120px',
+  marginLeft: '150px',
 });
 
 const Header = styled('div')({
