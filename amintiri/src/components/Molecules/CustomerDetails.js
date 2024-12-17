@@ -6,7 +6,7 @@ import MapPinIcon from '../../assests/MapPin.svg';
 
 const CustomerDetailsContainer = styled('div')({
   width: '360px',
-  height: '620px',
+  height: '647px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
@@ -14,8 +14,8 @@ const CustomerDetailsContainer = styled('div')({
   position: 'absolute',
   top: '10px',
   left: '1100px',
-  marginTop: '0px',
-  marginLeft: '-110px',
+  marginTop: '-20px',
+  marginLeft: '-120px',
 });
 
 const Header = styled('div')({
@@ -120,7 +120,7 @@ const SendOffersButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '210px',
+  marginTop: '80px',
 });
 
 const CustomerDetails = ({ customer = {} }) => {
