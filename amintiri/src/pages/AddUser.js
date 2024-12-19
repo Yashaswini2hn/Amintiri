@@ -6,6 +6,7 @@ import UserGear from "../assests/UserGear.svg";
 import ChefHat from "../assests/ChefHat.svg";
 import AddUser from "../assests/AddUser.svg";
 import CaretDownIcon from "../assests/CaretDown.svg";
+import Apis from "../Utils/APIService/Apis"
 
 const LayoutContainer = styled("div")({
   display: "flex",
@@ -164,9 +165,13 @@ const SaveButton = styled("button")({
 const AddUserPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const roles = ["Admin", "Kitchen Staff", "Delivery Manager", "Dispatch Staff"];
+  const roles = ["ADMIN", "KITCHEN STAFF", "DELIVERY MANAGER", "DISPATCH STAFF"];
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
@@ -174,9 +179,25 @@ const AddUserPage = () => {
   };
 
   const handleSave = (e) => {
+    
     e.preventDefault();
-    console.log("User information saved with role:", selectedRole);
-    navigate("/mainpage");
+
+    const userData = {
+      name,
+      contactNumber,
+      email,
+      role: selectedRole,
+      password,
+    };
+
+    Apis.createUser(userData)
+      .then(() => {
+        console.log("User created successfully");
+        navigate("/mainpage");
+      })
+      .catch((error) => {
+        console.error("Error creating user:", error);
+      });
   };
 
   return (
@@ -185,7 +206,7 @@ const AddUserPage = () => {
         <HeaderTemplate />
       </HeaderContainer>
       <SidebarContainer>
-        <SidebarItem onClick={() => navigate("/admin")}>
+        <SidebarItem onClick={() => navigate("/")}>
           <SidebarIcon>
             <img src={UserGear} alt="Admin" style={{ width: "50%" }} />
           </SidebarIcon>
@@ -207,9 +228,9 @@ const AddUserPage = () => {
       <MainContainer>
         <Title>ADD USER</Title>
         <FormContainer onSubmit={handleSave}>
-          <InputField placeholder="Name" />
-          <InputField placeholder="Contact Number" />
-          <InputField placeholder="Email ID" />
+          <InputField placeholder="Name" onChange={(e) => setName(e.target.value)}/>
+          <InputField placeholder="Contact Number" onChange={(e) => setContactNumber(e.target.value)} />
+          <InputField placeholder="Email ID"  onChange={(e) => setEmail(e.target.value)}/>
           <DropdownContainer>
             <DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               {selectedRole || "Role"}
@@ -229,7 +250,7 @@ const AddUserPage = () => {
               </DropdownList>
             )}
           </DropdownContainer>
-          <InputField placeholder="Password" />
+          <InputField placeholder="Password" onChange={(e) => setPassword(e.target.value)}  />
           <SaveButton type="submit">Save</SaveButton>
         </FormContainer>
       </MainContainer>

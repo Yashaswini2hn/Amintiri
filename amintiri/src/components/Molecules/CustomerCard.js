@@ -66,15 +66,15 @@ const CustomerName = styled('div')({
   marginBottom: '5px',
 });
 
-const MapViewLink = styled('div')({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '5px',
-  color: '#06555C',
-  fontFamily: 'Futura Bk BT',
-  fontSize: '16px',
-  cursor: 'pointer',
-});
+// const MapViewLink = styled('div')({
+//   display: 'flex',
+//   alignItems: 'center',
+//   gap: '5px',
+//   color: '#06555C',
+//   fontFamily: 'Futura Bk BT',
+//   fontSize: '16px',
+//   cursor: 'pointer',
+// });
 
 const CustomerCard = ({ customerName, mobileNumber, deliveryAddress }) => {
   return (
@@ -85,10 +85,10 @@ const CustomerCard = ({ customerName, mobileNumber, deliveryAddress }) => {
         <div>{mobileNumber}</div>
         <div>{deliveryAddress}</div>
       </CustomerInfo>
-      <MapViewLink>
+      {/* <MapViewLink>
         <img src={MapIcon} alt="Map Icon" />
         Map View
-      </MapViewLink>
+      </MapViewLink> */}
     </CardContainer>
   );
 };

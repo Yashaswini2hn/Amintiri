@@ -18,7 +18,7 @@ const OrderDetailsContainer = styled('div')({
   top: '70px',
   left: '1120px',
   marginTop: '30px',
-  marginLeft:'50px'
+  marginLeft:'30px'
 });
 
 const Header = styled('div')({

@@ -8,6 +8,9 @@ import DropdownIcon from '../assests/arrow_drop_down (1).svg';
 import OrderCard from '../components/Molecules/OrderCard';
 import OrderDetails from '../components/Molecules/OrderDetails';
 import { ordersData } from '../components/Molecules/OrdersData';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -76,6 +79,11 @@ const OrdersButton = styled('button')({
   justifyContent:'center',
   cursor:'pointer',
   width:'130px', 
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
 
 const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
@@ -134,6 +142,11 @@ const DateButton = styled('button')({
   gap:'10px',
   cursor:'pointer',
   width:'185px',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
 
 const DeliveryButton = styled('button')({
@@ -153,6 +166,11 @@ const DeliveryButton = styled('button')({
   gap:'10px',
   cursor:'pointer',
   width:'230px',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
 
 const DeliveryDropdownOuter = styled('div')(({ isVisible }) => ({
@@ -213,6 +231,11 @@ const StatusButton = styled('button')({
   cursor:'pointer',
   width:'130px',
   gap:'20px',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
 
 const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
@@ -259,7 +282,7 @@ const BatchButton = styled('button')(({ isDisabled }) => ({
   width:'108px',
   height:'44px',
   position:'absolute',
-  top:'110px',
+  top:'109px',
   left:'1000px',
   backgroundColor: isDisabled ? '#0A616940' : '#06555C',
   fontFamily:'Futura Bk BT',
@@ -273,6 +296,19 @@ const BatchButton = styled('button')(({ isDisabled }) => ({
   '&:hover': {
     backgroundColor: isDisabled ? '#0A616940' : '#054E50',
   },
+}));
+
+const CalendarDropdown = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position: 'absolute',
+  top: '100%', // Opens just below the button
+  left: 0,
+  background: '#FFFFFF',
+  border: '1px solid #E1BD52',
+  zIndex: 1000,
+  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+  borderRadius: '5px',
+  padding: '10px',
 }));
 
 
@@ -290,13 +326,16 @@ const times = [
 ];
 
 const MainPage = () => {
-  const [activeOption,setActiveOption] = useState('');
+  const [activeOption,setActiveOption] = useState('ORDERS');
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [orders,setOrders] = useState([]);
   const [selectedOrder,setSelectedOrder] = useState(null);
   const [isDeliveryTimeDropdownVisible,setIsDeliveryTimeDropdownVisible] = useState(false);
   const [isStatusDropdownVisible,setIsStatusDropdownVisible] = useState(false);
   const [isOrdersDropdownVisible,setIsOrdersDropdownVisible] = useState(false);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
 
   const [selectedCards, setSelectedCards] = useState([]); 
   
@@ -319,8 +358,17 @@ const MainPage = () => {
     setSelectedCards((prevSelected) =>
       isChecked
         ? [...prevSelected, orderId]
-        : prevSelected.filter((id) => id !== orderId)
+        : prevSelected.filter((id) => id!== orderId)
     );
+  };
+
+  const toggleCalendar = () => {
+    setIsCalendarVisible((prev) => !prev);
+  }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setIsCalendarVisible(false); // Close calendar on date selection
   };
 
   return (
@@ -364,10 +412,17 @@ const MainPage = () => {
             )}
            </OrdersButton>
 
-            <DateButton>
+            <DateButton onClick={toggleCalendar}>
                 <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
-                  12-11-2024
+                  {/* 12-11-2024 */}
+                  {selectedDate.toLocaleDateString()}
                 </DateButton>
+                <CalendarDropdown isVisible={isCalendarVisible}>
+            <Calendar
+              onChange={handleDateChange}
+              value={selectedDate}
+            />
+          </CalendarDropdown>
                 <DeliveryButton
                  onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
                  onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
@@ -451,7 +506,7 @@ const MainPage = () => {
                   deliveryTime={new Date(order.deliveryTime).toLocaleTimeString()}
                   customerName={order.customerName}
                   address={order.deliveryAddress}
-                  onClick={() => setSelectedOrder(order)}
+                  onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
                   onCheckboxChange={handleCheckboxChange}
                 />
               ))}

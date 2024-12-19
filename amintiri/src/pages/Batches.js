@@ -53,13 +53,20 @@ const TopBarContainer = styled('div')({
     backgroundColor: '#FFFFFF',
     padding: '10px',
     cursor: 'pointer',
-    marginLeft:'80px'
-  });
+    marginLeft:'80px',
+    transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
+});
+  
   
   const PrintButton = styled(Button)({
     backgroundColor: '#06555C',
     color: '#FFFFFF',
     width: '108px',
+
   });
   
   
@@ -80,6 +87,7 @@ const UnblockButton = styled('button')(({ isVisible }) => ({
   opacity: isVisible ? 1 : 0,
   transition: 'opacity 0.3s ease',
   marginLeft:'25px'
+  
 }));
 
 const Batches = () => {

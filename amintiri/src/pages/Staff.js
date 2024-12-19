@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import HeaderTemplate from "../components/Templates/HeaderTemplate";
 import UserGear from "../assests/UserGear.svg";
 import ChefHat from "../assests/ChefHat.svg";
 import AddUser from "../assests/AddUser.svg";
-import CaretDown from "../assests/CaretDown.svg";
+import Apis from "../Utils/APIService/Apis";
 
 const LayoutContainer = styled("div")({
   display: "flex",
@@ -125,18 +125,7 @@ const HeaderContainer = styled("div")({
       pointerEvents: "none",
     });
   
-  const InputField = styled("input")({
-    width: "100%",
-    height: "100%",
-    border: "none",
-    outline: "none",
-    fontSize: "16px",
-    color: "#000000",
-    background: "transparent",
-    fontFamily: "Futura Md BT",
-    paddingLeft: "50px",
-  });
-  
+
   const LoginButton = styled("button")({
     width: "454px",
     height: "60px",
@@ -150,13 +139,42 @@ const HeaderContainer = styled("div")({
     textAlign: "center",
   });
 
+  const InputField = styled("input")({
+    width: "454px",
+    height: "60px",
+    border: "1px solid #E1BD52",
+    borderRadius: "4px",
+    fontFamily: "Futura Md BT",
+    fontSize: "20px",
+    padding: "0 10px",
+    color: "#06555C",
+    "&::placeholder": {
+      color: "#06555C",
+    },
+  });
+
 const StaffPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
-        e.preventDefault();
-        console.log("Navigating to MainPage...");
-      };
+      e.preventDefault();
+  
+      const loginData = { email, password };
+  
+      Apis.loginUser(loginData)
+        .then((response) => {
+          console.log("Login Success:", response.data);
+          localStorage.setItem("token", response.data.token);
+          navigate("/mainpage"); 
+        })
+        .catch((err) => {
+          console.error("Login Error:", err);
+          setError("Invalid email or password");
+        });
+    };
 
   return (
     <LayoutContainer>
@@ -164,7 +182,7 @@ const StaffPage = () => {
         <HeaderTemplate/>
       </HeaderContainer>
       <SidebarContainer>
-        <SidebarItem>
+        <SidebarItem onClick={()  => navigate("/")}>
           <SidebarIcon>
             <img src={UserGear} alt="Admin" style={{width:"50%" }}/>
           </SidebarIcon>
@@ -186,14 +204,12 @@ const StaffPage = () => {
       <MainContainer>
         <FormOuter>
            <FormContainer onSubmit={handleLogin}>
-            <FieldWrapper>
-            <StyledText>User Name</StyledText>
-            <InputField id="username" type="text"/>
-            </FieldWrapper>
-            <FieldWrapper>
-              <StyledText>Password</StyledText>
-              <InputField id="password" type="password"/>
-            </FieldWrapper>
+           
+            <StyledText >Email</StyledText>
+            <InputField placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
+             <StyledText>Password</StyledText>
+              <InputField placeholder="Password"  onChange={(e) => setPassword(e.target.value)}/>
+          
             <LoginButton type="submit">Login</LoginButton>
           </FormContainer>
         </FormOuter>

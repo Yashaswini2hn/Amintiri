@@ -172,7 +172,7 @@ const CustomerName = styled('div')({
   fontSize: '18px',
 });
 
-const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, customerName, address,onCheckboxChange}) => {
+const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, customerName, address,onCheckboxChange,onSelect}) => {
   const [isChecked, setIsChecked] = useState(false);
   const displayedItems = items.slice(0, 3);
   const remainingItemCount = items.length - displayedItems.length;
@@ -186,8 +186,22 @@ const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, custom
     onCheckboxChange(orderNumber, !isChecked);
   };
 
+  const handleCardClick = () => {
+    if (onSelect) {
+      onSelect({
+        orderId: orderNumber,
+        orderTime,
+        status,
+        items,
+        deliveryTime,
+        customerName,
+        deliveryAddress: address,
+      });
+    }
+  };
+
   return (
-    <CardContainer>
+    <CardContainer onClick={handleCardClick}>
       <Checkbox type="checkbox"  checked={isChecked} onChange={handleCheckboxClick}/>
       <OrderInfo>
       <OrderHeader>

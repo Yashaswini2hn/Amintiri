@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -23,27 +23,29 @@ const SidebarOption = styled(Typography)(({ isActive }) => ({
   fontWeight: 600,
   lineHeight: '24px',
   textAlign: 'left',
-  textDecoration: isActive ? 'underline' : 'none', 
+  textDecoration: isActive ? 'underline' : 'none',
   textUnderlinePosition: 'from-font',
-  textDecorationColor: '#000000',
+  textDecorationColor: isActive ? '#06555C' : 'transparent', // Active underline color
+  textDecorationThickness: '2px',
   textDecorationSkipInk: 'none',
   cursor: 'pointer',
-  color: isActive ? '#E1BD52' : '#383838', 
+  color: isActive ? '#E1BD52' : '#383838', // Active text color
   marginLeft: '10px',
   marginTop: '0px',
-  transition: 'color 0.3s ease', 
+  transition: 'color 0.3s ease',
 }));
-
 
 const SidebarTemplate = ({ onOptionSelect }) => {
   const navigate = useNavigate();
-  const [activeOption, setActiveOption] = useState('');
+  const [activeOption, setActiveOption] = useState('ORDERS'); // Default active option
+
+  useEffect(() => {
+    if (onOptionSelect) onOptionSelect('ORDERS'); // Notify parent on initial load
+  }, [onOptionSelect]);
 
   const handleOptionClick = (option) => {
-    setActiveOption(option);
-    if (onOptionSelect) {
-      onOptionSelect(option);
-    }
+    setActiveOption(option); // Update active state
+    if (onOptionSelect) onOptionSelect(option);
 
     const optionToPathMap = {
       ORDERS: '/mainpage',

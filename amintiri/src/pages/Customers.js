@@ -51,6 +51,11 @@ const SearchInputContainer = styled('div')({
   border: '1px solid #E1BD52',
   paddingLeft: '10px',
   backgroundColor: '#FFFFFF',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
 
 const SearchInput = styled('input')({
@@ -75,7 +80,13 @@ const Button = styled('div')({
   fontSize: '16px',
   color: '#06555C',
   gap: '10px',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
 });
+
 
 const Customers = () => {
   const [customers] = useState([
