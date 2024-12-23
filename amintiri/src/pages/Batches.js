@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -7,6 +7,7 @@ import ArrowDropdownIcon from '../assests/arrow_drop_down (1).svg';
 import CalendarIcon from '../assests/calender.svg';
 import SortByIcon from '../assests/SortBy.svg';
 import PrinterIcon from '../assests/Printer (1).svg';
+import Apis from '../Utils/APIService/Apis';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -91,26 +92,41 @@ const UnblockButton = styled('button')(({ isVisible }) => ({
 }));
 
 const Batches = () => {
-  const [batches, setBatches] = useState([
-    { id: '#1234', name: 'Classic Black Forest Cake', weight: '500 gm', quantity: '1', time: '2:00 PM', isChecked: false },
-    { id: '#1237', name: 'Classic Black Forest Cake', weight: '500 gm', quantity: '1', time: '2:00 PM', isChecked: false },
-    { id: '#1239', name: 'Classic Black Forest Cake', weight: '500 gm', quantity: '1', time: '2:00 PM', isChecked: false },
-    { id: '#1241', name: 'Classic Black Forest Cake', weight: '500 gm', quantity: '1', time: '2:00 PM', isChecked: false },
-  ]);
 
+  const [batches, setBatches] = useState([]);
+  const [isAnyChecked, setIsAnyChecked] = useState(false);
+
+  useEffect(() => {
+    Apis.getBatches()
+      .then((response) => {
+        const batchData = response.data;
+        const formattedBatches = batchData.map((batch) => ({
+          id: batch.id,
+          stationName: batch.stationName || "Unknown",
+          name: batch.productName || "Unknown",
+          weight: batch.productSize || "Unknown",
+          quantity: batch.quantity || 0,
+          customizationNotes: batch.customizationNotes || "No Notes Available",
+          time: batch.deliveryTime || "Not Scheduled",
+          isChecked: false,
+        }));
+        setBatches(formattedBatches);
+      })
+      .catch((error) => console.error("Error fetching batches:", error));
+  }, []);
+  
   const handleCheckboxChange = (index) => {
     const updatedBatches = [...batches];
     updatedBatches[index].isChecked = !updatedBatches[index].isChecked;
     setBatches(updatedBatches);
+    setIsAnyChecked(updatedBatches.some((batch) => batch.isChecked));
   };
-
-  const isAnyChecked = batches.some((batch) => batch.isChecked);
 
   return (
     <LayoutContainer>
   <HeaderTemplate />
   <SidebarContainer>
-    <SidebarTemplate />
+  <SidebarTemplate />
   </SidebarContainer>
 
   <MainContainer>
@@ -138,7 +154,6 @@ const Batches = () => {
       </PrintButton>
     </TopBarContainer>
 
-    {/* Batch Cards */}
     {batches.map((batch, index) => (
       <BatchCard
         key={index}

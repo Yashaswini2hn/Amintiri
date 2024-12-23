@@ -107,27 +107,19 @@ const FieldWrapper = styled("div")({
   padding: "0 10px",
 });
 
-const StyledText = styled("span")({
-  position: "absolute",
-  top: "50%",
-  left: "12px",
-  transform: "translateY(-50%)",
-  fontFamily: "Futura Md BT",
-  fontSize: "16px",
-  fontWeight: "400",
-  color: "#06555C",
-});
-
 const InputField = styled("input")({
   width: "100%",
   height: "100%",
   border: "none",
   outline: "none",
+  padding: "10px 12px",
   fontSize: "16px",
+  fontFamily: "Futura Md BT",
   color: "#000000",
   background: "transparent",
-  fontFamily: "Futura Md BT",
-  paddingLeft: "50px",
+  "&::placeholder": {
+    color: "#999999", // Placeholder color
+  },
 });
 
 const SelectFieldWrapper = styled(FieldWrapper)({
@@ -176,12 +168,42 @@ const LoginButton = styled("button")({
   cursor: "pointer",
 });
 
+const InputFieldWrapper = styled("div")({
+  position: "relative",
+  width: "454px",
+  height: "60px",
+  marginBottom: "20px",
+  border: "1px solid #E1BD52",
+  display: "flex",
+  alignItems: "center",
+  borderRadius: "4px",
+  "&:focus-within label": {
+    top: "10px", // Move the label up when the input is focused
+    fontSize: "12px", // Make the label smaller
+    color: "#06555C", // Change label color
+  },
+});
+
+const StyledText = styled("label")(({ hasValue }) => ({
+  position: "absolute",
+  top: hasValue ? "10px" : "50%", // Adjust position based on value
+  left: "12px",
+  transform: "translateY(-50%)",
+  fontFamily: "Futura Md BT",
+  fontSize: hasValue ? "12px" : "16px", // Adjust size based on value
+  fontWeight: "400",
+  color: hasValue ? "#06555C" : "#999999", // Adjust color based on value
+  transition: "all 0.2s ease-in-out", // Smooth transition
+}));
+
+
 const LandingPage = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [selectedStore, setSelectedStore] = useState("Select a Store");
   const [stores, setStores] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedStoreDetails, setSelectedStoreDetails] = useState(null);
 
 
   const handleDropdownClick = () => {
@@ -199,37 +221,34 @@ const LandingPage = () => {
   }, []);
 
   const handleSelect = (store) => {
-    setSelectedStore(store);
+    setSelectedStore(store.name); 
+    setSelectedStoreDetails(store); 
     setDropdownVisible(false);
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
   
-    const loginData = {
-      email: document.getElementById("email").value,
-      password: document.getElementById("password").value,
-    };
-  
-    Apis.loginUser(loginData)
+    Apis.loginUser(email, password)
       .then((response) => {
         console.log("Login Success:", response.data);
-        localStorage.setItem("token", response.data.token);
-        navigate("/mainpage");
+        localStorage.setItem("userid", response.data.userid); 
+        localStorage.setItem("token", response.data.usersecret); 
+        navigate("/mainpage"); 
       })
       .catch((err) => {
-        console.error("Login Error:", err);
-        alert("Invalid email or password");
+        console.error("Login Error:", err.response ? err.response.data : err.message);
+        alert(err.response?.data?.message || "Invalid email or password");
       });
   };
   
-
+  
   const navigate = useNavigate();
 
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderTemplate />
+        <HeaderTemplate/>
       </HeaderContainer>
       <SidebarContainer>
         <SidebarItem>
@@ -254,30 +273,42 @@ const LandingPage = () => {
       <MainContainer>
         <FormOuter>
           <FormContainer onSubmit={handleLogin}>
-            <SelectFieldWrapper onClick={handleDropdownClick}>
+            <SelectFieldWrapper>
               <StyledText>{selectedStore}</StyledText>
-              <SelectDropdownIcon src={CaretDown} alt="Dropdown Icon" />
+              <SelectDropdownIcon src={CaretDown} alt="Dropdown Icon" onClick={handleDropdownClick} />
               {isDropdownVisible && (
                 <DropdownOptions>
-                  {stores.map((store,index) => ( <DropdownItem
-                      key={index}
-                      onClick={() => handleSelect(store.name)} 
-                    >
-                      {store.name}
-                    </DropdownItem>
-                  ))}
-                  
+                  {stores.map((store, index) => (
+  <DropdownItem
+    key={store.id} 
+    onClick={() => handleSelect(store)} 
+  >
+    {store.name} 
+  </DropdownItem>
+))}  
                 </DropdownOptions>
               )}
             </SelectFieldWrapper>
-            <FieldWrapper>
-              <StyledText>Email</StyledText>
-              <InputField id="email" type="email"  onChange={(e) => setEmail(e.target.value)}/>
-            </FieldWrapper>
-            <FieldWrapper>
-              <StyledText>Password</StyledText>
-              <InputField id="password" type="password"   onChange={(e) => setPassword(e.target.value)} />
-            </FieldWrapper>
+            <InputFieldWrapper>
+  <StyledText htmlFor="email" hasValue={!!email}>Email</StyledText>
+  <InputField
+    id="email"
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+</InputFieldWrapper>
+
+<InputFieldWrapper>
+  <StyledText htmlFor="password" hasValue={!!password}>Password</StyledText>
+  <InputField
+    id="password"
+    type="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+  />
+</InputFieldWrapper>
+
             <LoginButton type="submit">Login</LoginButton>
           </FormContainer>
         </FormOuter>

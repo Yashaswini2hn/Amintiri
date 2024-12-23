@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -7,6 +7,9 @@ import ArrowDropdownIcon from '../assests/arrow_drop_down (1).svg';
 import CalendarIcon from '../assests/calender.svg';
 import CustomerDetails from '../components/Molecules/CustomerDetails';
 import CustomerCard from '../components/Molecules/CustomerCard';
+import Apis from '../Utils/APIService/Apis';
+
+
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -32,7 +35,7 @@ const MainContainer = styled('div')({
   flexDirection: 'column',
   gap: '20px',
   overflowY: 'auto',
-  position: 'relative', // Ensures absolute positioning for CustomerDetails
+  position: 'relative', 
 });
 
 const TopBarContainer = styled('div')({
@@ -89,36 +92,49 @@ const Button = styled('div')({
 
 
 const Customers = () => {
-  const [customers] = useState([
-    {
-      customerName: 'Ramesh Yadav',
-      mobileNumber: '9145687994',
-      address: '#51, 2nd Cross, Kuvempu Nagar, Bengaluru',
-      items: [
-        { itemName: 'Classic Black Forest Cake', productWeight: '500 gms' },
-        { itemName: 'Saffron Rasmalai Cake (Eggless)', productWeight: '1 Kg' },
-        { itemName: 'Tres Leches Dapper', productWeight: '500 gms' },
-      ],
-    },
-    {
-      customerName: 'Preetham H G',
-      mobileNumber: '7463264711',
-      address: '#08, 1st Stage, 3rd Cross, Giri Nagar, Bengaluru',
-      items: [
-        { itemName: 'Tiramisu Cake', productWeight: '500 gms' },
-        { itemName: 'Classic Black Forest Cake', productWeight: '500 gms' },
-      ],
-    },
-    {
-      customerName: 'Jithendra Patel',
-      mobileNumber: '8752468472',
-      address: '#01, 2nd main road, Shivaji Nagar, Bengaluru',
-      items: [
-        { itemName: 'Saffron Rasmalai Cake (Eggless)', productWeight: '1 Kg' },
-      ],
-    },
-  ]);
-  const [selectedCustomer, setSelectedCustomer] = useState(customers[0]); // Default to first customer
+  const [customers, setCustomers] = useState([]); 
+  const [selectedCustomer, setSelectedCustomer] = useState(null); 
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    Apis.getCustomers()
+      .then((response) => {
+        const customerData = response.data;
+        const formattedCustomers = customerData.map((customer) => ({
+          id: customer.id,
+          name: customer.name,
+          mobile: customer.mobile,
+          addresses: customer.addresses,
+        }));
+        setCustomers(formattedCustomers);
+        if (formattedCustomers.length > 0) {
+          const firstCustomer = formattedCustomers[0];
+          setSelectedCustomer(firstCustomer);
+          fetchOrders(firstCustomer.id);
+        }
+      })
+      .catch((error) => console.error('Error fetching customers:', error));
+  }, []);
+
+  const fetchOrders = (customerId) => {
+    Apis.getOrders(customerId)
+      .then((response) => {
+        const formattedOrders = response.data.map((order) => ({
+          orderDate: new Date(order.order_date).toLocaleDateString(),
+          items: order.items.map((item) => ({
+            itemName: item.name,
+            productWeight: item.size,
+          })),
+        }));
+        setOrders(formattedOrders);
+      })
+      .catch((error) => console.error('Error fetching orders:', error));
+  };
+
+  const handleCustomerClick = (customer) => {
+    setSelectedCustomer(customer);
+    fetchOrders(customer.id); // Fetch orders for the selected customer
+  };
 
   return (
     <LayoutContainer>
@@ -134,28 +150,26 @@ const Customers = () => {
           </SearchInputContainer>
           <Button>
             Collections
-            <img src={ArrowDropdownIcon} alt="Dropdown Icon" />
+            <img src={ArrowDropdownIcon} alt="Dropdown Icon"/>
           </Button>
           <Button>
-            <img src={CalendarIcon} alt="Calendar Icon" />
+            <img src={CalendarIcon} alt="Calendar Icon"/>
             12-11-2024
           </Button>
         </TopBarContainer>
-
+         
         {customers.map((customer, index) => (
           <CustomerCard
             key={index}
-            customerName={customer.customerName}
-            mobileNumber={customer.mobileNumber}
-            deliveryAddress={customer.address}
-            isActive={selectedCustomer.customerName === customer.customerName}
-            onClick={() => setSelectedCustomer(customer)}
+            customerName={customer.name}
+            mobileNumber={customer.mobile}
+            deliveryAddress={customer.addresses[0]?.address_line1 || 'No address available'}
+            isActive={selectedCustomer?.id === customer.id}
+            onClick={() => handleCustomerClick(customer)}
           />
         ))}
 
-        {selectedCustomer && (
-          <CustomerDetails customer={selectedCustomer} />
-        )}
+        {selectedCustomer && <CustomerDetails customer={selectedCustomer} orders={orders} />}
       </MainContainer>
     </LayoutContainer>
   );

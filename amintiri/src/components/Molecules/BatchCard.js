@@ -11,10 +11,9 @@ const CardContainer = styled('div')({
   borderRadius: '8px',
   position: 'relative',
   display: 'flex',
-  gap:'10px',
-  marginLeft:'40px',
-  boxShadow: '0px 4px 4px 0px #00000026'
-
+  gap: '10px',
+  marginLeft: '40px',
+  boxShadow: '0px 4px 4px 0px #00000026',
 });
 
 const CheckboxContainer = styled('div')({
@@ -25,37 +24,36 @@ const CheckboxContainer = styled('div')({
 });
 
 const Checkbox = styled('input')({
-    appearance: 'none',
-    position: 'absolute',
-    top: '-15px',
-    left: '10px',
-    width: '24px',
-    height: '24px',
+  appearance: 'none',
+  position: 'absolute',
+  top: '-15px',
+  left: '10px',
+  width: '24px',
+  height: '24px',
+  border: '2px solid #06555C',
+  borderRadius: '2.5px',
+  boxShadow: '0px 0px 4px 0px #00000040',
+  backgroundColor: '#FFFFFF',
+  cursor: 'pointer',
+  '&:checked': {
+    backgroundColor: '#06555C',
     border: '2px solid #06555C',
-    borderRadius: '2.5px',
-    boxShadow: '0px 0px 4px 0px #00000040',
-    backgroundColor: '#FFFFFF',
-    cursor: 'pointer',
-    '&:checked': {
-      backgroundColor: '#06555C',
-      border: '2px solid #06555C',
-    },
-    '&:checked::after': {
-      content: '""',
-      position: 'absolute',
-      top: '1px',
-      left: '6.5px',
-      width: '8px',
-      height: '16px',
-      border: 'solid white',
-      borderWidth: '0 2px 2px 0',
-      transform: 'rotate(45deg)',
-    },
-    '&:hover': {
-      border: '2px solid #054E50',
-    },
-  });
-  
+  },
+  '&:checked::after': {
+    content: '""',
+    position: 'absolute',
+    top: '1px',
+    left: '6.5px',
+    width: '8px',
+    height: '16px',
+    border: 'solid white',
+    borderWidth: '0 2px 2px 0',
+    transform: 'rotate(45deg)',
+  },
+  '&:hover': {
+    border: '2px solid #054E50',
+  },
+});
 
 const BatchInfo = styled('div')({
   flex: 1,
@@ -83,7 +81,6 @@ const Tag = styled('div')(({ backgroundColor }) => ({
   borderRadius: '4px',
 }));
 
-// Separate styles for item name, weight, and quantity
 const ItemName = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '16px',
@@ -94,14 +91,14 @@ const ItemWeight = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '16px',
   color: '#06555C',
-  marginLeft: '290px', // Add space between name and weight
+  marginLeft: '290px',
 });
 
 const ItemQuantity = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '16px',
   color: '#383838',
-  marginLeft: '130px', // Add space between weight and quantity
+  marginLeft: '130px',
 });
 
 const Description = styled('div')({
@@ -138,24 +135,26 @@ const Time = styled('span')({
   color: '#06555C',
 });
 
-const BatchCard = ({ batch , onCheckboxChange }) => {
+const BatchCard = ({ batch, onCheckboxChange }) => {
   return (
     <CardContainer>
       <CheckboxContainer>
-        <Checkbox type="checkbox"
-         checked={batch.isChecked}
-         onChange={onCheckboxChange}/>
+        <Checkbox
+          type="checkbox"
+          checked={batch.isChecked}
+          onChange={onCheckboxChange}
+        />
       </CheckboxContainer>
 
       <BatchInfo>
         {/* Header */}
         <Header>
           <BatchNumber>{batch.id}</BatchNumber>
-          <Tag backgroundColor="#0A616940;">21/10 Batch</Tag>
-          <Tag backgroundColor="#E1BD5280">Station A</Tag>
+          <Tag backgroundColor="#0A616940">21/10 Batch</Tag>
+          <Tag backgroundColor="#E1BD5280">{batch.stationName}</Tag>
         </Header>
 
-        {/* Item name, weight, and quantity */}
+        {/* Item details */}
         <div style={{ display: 'flex', marginTop: '5px' }}>
           <ItemName>{batch.name}</ItemName>
           <ItemWeight>{batch.weight}</ItemWeight>
@@ -165,13 +164,17 @@ const BatchCard = ({ batch , onCheckboxChange }) => {
         {/* Description */}
         <Description>
           <ScrollIconContainer src={ScrollIcon} alt="Scroll Icon" />
-          Lorem ipsum dolor sit amet consectetur. Tempor cras ame....
+          {batch.customizationNotes || 'Lorem ipsum dolor sit amet consectetur. Tempor cras ame...'}
         </Description>
 
         {/* Footer */}
         <Footer>
-          <DeliveryIconImage style={{marginTop:'-130px'}} src={DeliveryIcon} alt="Delivery Icon" />
-          <Time style={{marginTop:'-130px'}}>{batch.time}</Time>
+          <DeliveryIconImage
+            style={{ marginTop: '-130px' }}
+            src={DeliveryIcon}
+            alt="Delivery Icon"
+          />
+          <Time style={{ marginTop: '-130px' }}>{batch.time}</Time>
         </Footer>
       </BatchInfo>
     </CardContainer>

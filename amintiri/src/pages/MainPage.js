@@ -7,10 +7,10 @@ import DeliveryIcon from '../assests/delivery.svg';
 import DropdownIcon from '../assests/arrow_drop_down (1).svg';
 import OrderCard from '../components/Molecules/OrderCard';
 import OrderDetails from '../components/Molecules/OrderDetails';
-import { ordersData } from '../components/Molecules/OrdersData';
+// import { ordersData } from '../components/Molecules/OrdersData';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-
+import Apis from '../Utils/APIService/Apis'
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -90,7 +90,7 @@ const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
   width: '130px',
-  height: '158px',
+  height: '128px',
   top: '44px', 
   left: 'translateY(-1px)',
   background: '#FFFFFF',
@@ -102,7 +102,7 @@ const OrdersDropdownOuter = styled('div')(({ isVisible }) => ({
 const OrdersDropdownInner = styled('div')({
   position: 'absolute',
   width: '110px',
-  height: '142px',
+  height: '112px',
   top: '8px',
   left: '8px',
   border: '0.8px solid #E1BD52',
@@ -301,14 +301,15 @@ const BatchButton = styled('button')(({ isDisabled }) => ({
 const CalendarDropdown = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  top: '100%', // Opens just below the button
-  left: 0,
+  top: '44px',
+  left: '90px',
   background: '#FFFFFF',
   border: '1px solid #E1BD52',
   zIndex: 1000,
-  boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-  borderRadius: '5px',
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', 
+  borderRadius: '0px',
   padding: '10px',
+  width: '300px', 
 }));
 
 
@@ -340,19 +341,59 @@ const MainPage = () => {
   const [selectedCards, setSelectedCards] = useState([]); 
   
 
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     const sortedOrders = [...ordersData].sort(
+  //       (a, b) => new Date(b.orderTime) - new Date(a.orderTime)
+  //     );
+  //     setOrders(sortedOrders);
+  //     setSelectedOrder(sortedOrders[0]);
+  //   };
+  //   if (activeOption === 'ORDERS') {
+  //     fetchOrders();
+  //   }
+  // }, [activeOption]);
+
+  // useEffect(() => {
+  //   Apis.getAllOrders()
+  //   .then((response) => {
+  //     console.log("Stores fetched:", response.data);
+  //     setOrders(response.data);
+      
+  //     // setStores(response.data); 
+  //   })
+  //   .catch((error) => console.error("Error fetching stores:", error));
+
+  // }, [activeOption]);
+ 
   useEffect(() => {
-    const fetchOrders = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const sortedOrders = [...ordersData].sort(
-        (a, b) => new Date(b.orderTime) - new Date(a.orderTime)
-      );
-      setOrders(sortedOrders);
-      setSelectedOrder(sortedOrders[0]);
-    };
-    if (activeOption === 'ORDERS') {
-      fetchOrders();
-    }
+    Apis.getAllOrders()
+      .then((response) => {
+        console.log("Orders fetched:", response.data);
+  
+        const mappedOrders = response.data.map((order) => ({
+          orderId: order.orderName || "N/A",
+          orderTime: order.orderDateTime || new Date(),
+          status: order.orderStatus?.status || "Unknown",
+          items: order.items.map((item) => ({
+            itemName: item.productName || "Unnamed Product",
+            productWeight: item.productSize || "Unknown Size",
+            quantity: item.quantity || 0,
+            status: item.itemStatus?.status || "Pending",
+            customizationNotes: item.customizationNotes || "No Notes",
+          })),
+          deliveryTime: order.deliveryTime || new Date(),
+          customerName: order.customerName || "Unknown Customer",
+          mobileNumber: order.customerMobile || "No Mobile Number",
+          deliveryAddress: order.deliveryAddress || "No Address Provided",
+        }));
+  
+        setOrders(mappedOrders);
+      })
+      .catch((error) => console.error("Error fetching orders:", error));
   }, [activeOption]);
+  
 
   const handleCheckboxChange = (orderId, isChecked) => {
     setSelectedCards((prevSelected) =>
@@ -388,7 +429,7 @@ const MainPage = () => {
                onMouseLeave={() => setIsOrdersDropdownVisible(false)}
                style={{ position: 'relative' }} 
                >
-               Orders
+                All Orders
                {isOrdersDropdownVisible && (
                <OrdersDropdownOuter
                 isVisible={isOrdersDropdownVisible}
@@ -396,7 +437,7 @@ const MainPage = () => {
                 onMouseLeave={() => setIsOrdersDropdownVisible(false)}
                 >
                <OrdersDropdownInner>
-               {['All Orders', 'New Orders', 'Completed Orders', 'Cancelled Orders'].map(
+               {['New Orders', 'Completed Orders', 'Cancelled Orders'].map(
                (orderType, index) => (
                <OrdersDropdownItem
                 key={index}

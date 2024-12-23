@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import PhoneIcon from '../../assests/Phone.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
@@ -14,7 +14,6 @@ const CustomerDetailsContainer = styled('div')({
   top: '10px',
   left: '977px',
   marginTop: '-20px',
-  
 });
 
 const Header = styled('div')({
@@ -55,6 +54,8 @@ const AddressText = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   fontSize: '12px',
+  wordWrap: 'break-word',
+  cursor: 'pointer',
 });
 
 const OrderHistoryHeader = styled('div')({
@@ -76,6 +77,13 @@ const OrderHistoryHeader = styled('div')({
   },
 });
 
+const OrderDate = styled('div')({
+  fontFamily: 'Futura Bk BT',
+  fontSize: '14px',
+  color: '#383838',
+  marginBottom: '10px',
+});
+
 const OrderRow = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
@@ -85,27 +93,18 @@ const OrderRow = styled('div')({
   fontSize: '14px',
   color: '#000000',
 });
-const OrderDate = styled('div')({
-  fontFamily: 'Futura Bk BT',
-  fontSize: '12px',
-  fontWeight: 400,
-  lineHeight: '14.4px',
-  letterSpacing: '0.05em',
-  textAlign: 'left',
-  textDecoration: 'underline',
-  textDecorationStyle: 'solid',
-  textUnderlinePosition: 'from-font',
-  textDecorationSkipInk: 'none',
-  color: '#383838',
-  marginBottom: '8px',
-});
 
 const OrderItemName = styled('span')({
-  color: '#0A6169',
+  fontFamily: 'Futura Bk BT',
+  fontSize: '14px',
+  color: '#000000',
+  flex: 1,
 });
 
 const OrderWeight = styled('span')({
-  color: '#000000',
+  fontFamily: 'Futura Bk BT',
+  fontSize: '14px',
+  color: '#383838',
 });
 
 const SendOffersButton = styled('button')({
@@ -122,55 +121,55 @@ const SendOffersButton = styled('button')({
   marginTop: '80px',
 });
 
-const CustomerDetails = ({ customer = {} }) => {
+const CustomerDetails = ({ customer, orders }) => {
   const {
-    customerName = "Unknown Customer",
-    mobileNumber = "N/A",
-    address = "",
-    items = [], // Default to an empty array if undefined
+    name = 'Unknown Customer',
+    mobile = 'N/A',
+    addresses = [],
   } = customer;
 
-  const addressParts = address.split(", ");
-  const addressLine1 = addressParts.slice(0, -1).join(", ");
-  const addressLine2 = addressParts[addressParts.length - 1] || "";
+  const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
+
+  const addressLine1 = addresses[0]?.address_line1 || 'No address available';
+
+  const handleAddressToggle = () => {
+    setIsFullAddressVisible((prev) => !prev);
+  };
+
+  const truncateAddress = (address) => {
+    const words = address.split(' ');
+    return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
+  };
 
   return (
     <CustomerDetailsContainer>
       <Header>
-        <CustomerName>{customerName}</CustomerName>
+        <CustomerName>{name}</CustomerName>
       </Header>
       <CustomerInfo>
         <InfoRow>
           <Icon src={PhoneIcon} alt="Phone Icon" />
-          {mobileNumber}
+          {mobile}
         </InfoRow>
         <InfoRow>
           <Icon src={MapPinIcon} alt="Map Pin Icon" />
-          <AddressText>
-            <div>{addressLine1}</div>
-            <div>{addressLine2}</div>
+          <AddressText onClick={handleAddressToggle}>
+            {isFullAddressVisible ? addressLine1 : truncateAddress(addressLine1)}
           </AddressText>
         </InfoRow>
       </CustomerInfo>
       <OrderHistoryHeader>Order History</OrderHistoryHeader>
-      <OrderDate>Order 25-10-2024</OrderDate>
-      {items.length > 0 ? (
-        items.map((item, index) => (
-          <OrderRow key={index}>
-            <OrderItemName>{item.itemName || "Unnamed Item"}</OrderItemName>
-            <OrderWeight>{item.productWeight || "Unknown Weight"}</OrderWeight>
-          </OrderRow>
-        ))
-      ) : (
-        <div>No orders found.</div>
-      )}
-       <OrderDate>Order 25-10-2024</OrderDate>
-      {items.length > 0 ? (
-        items.map((item, index) => (
-          <OrderRow key={index}>
-            <OrderItemName>{item.itemName || "Unnamed Item"}</OrderItemName>
-            <OrderWeight>{item.productWeight || "Unknown Weight"}</OrderWeight>
-          </OrderRow>
+      {orders.length > 0 ? (
+        orders.map((order, index) => (
+          <div key={index}>
+            <OrderDate>Order {order.orderDate}</OrderDate>
+            {order.items.map((item, idx) => (
+              <OrderRow key={idx}>
+                <OrderItemName>{item.itemName || 'Unnamed Item'}</OrderItemName>
+                <OrderWeight>{item.productWeight || 'Unknown Weight'}</OrderWeight>
+              </OrderRow>
+            ))}
+          </div>
         ))
       ) : (
         <div>No orders found.</div>
@@ -181,3 +180,5 @@ const CustomerDetails = ({ customer = {} }) => {
 };
 
 export default CustomerDetails;
+
+

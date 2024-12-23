@@ -75,7 +75,9 @@ const TimeDeliveryRow = styled('div')({
 const AddressText = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  fontSize:'12px'
+  fontSize:'12px',
+  cursor: 'pointer', // Indicate that the text is clickable
+  wordBreak: 'break-word',
 });
 
 const OrderItemsHeader = styled('div')({
@@ -145,7 +147,7 @@ const ReadyButton = styled('button')({
   border: 'none',
   borderRadius: '0px',
   cursor: 'pointer',
-  marginTop: '255px',
+  marginTop: '170px',
   lineHeight:'18px'
 });
 
@@ -155,6 +157,8 @@ const OrderDetails = ({order}) => {
   const addressLine2 = addressParts[addressParts.length - 1] || "";
   const [mainStatus, setMainStatus] = useState(order.status);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
+  const address = addressParts.join(', ');
   const [itemStatuses, setItemStatuses] = useState(
     order.items.map((item) => item.status)
   );
@@ -172,6 +176,15 @@ const OrderDetails = ({order}) => {
     });
   };
 
+  const handleAddressToggle = () => {
+    setIsFullAddressVisible((prev) => !prev); // Toggle the address visibility
+  };
+
+  const truncateAddress = (address) => {
+    const words = address.split(' ');
+    return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
+  };
+
   return (
     <OrderDetailsContainer>
       <Header>
@@ -184,15 +197,14 @@ const OrderDetails = ({order}) => {
           {order.customerName}
         </InfoRow>
         <InfoRow>
-          <Icon src={PhoneIcon} alt="Phone Icon"/>
-          {order.mobileNumber}
-        </InfoRow>
+  <Icon src={PhoneIcon} alt="Phone Icon" />
+  {order.customerMobile|| "No Mobile Number"}
+</InfoRow>
         <TimeDeliveryRow>
           <InfoRow>
             <Icon src={MapPinIcon} alt="Map Pin Icon"/>
-            <AddressText>
-              <div>{addressLine1},</div>
-              <div>{addressLine2}</div>
+            <AddressText onClick={handleAddressToggle}>
+            {isFullAddressVisible ? address : truncateAddress(address)}
             </AddressText>
           </InfoRow>
           <div>

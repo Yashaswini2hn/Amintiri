@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { styled } from '@mui/system';
 import MapIcon from '../../assests/Map.svg';
 
@@ -66,6 +66,10 @@ const CustomerName = styled('div')({
   marginBottom: '5px',
 });
 
+const Address = styled('div')({
+  cursor:'pointer'
+});
+
 // const MapViewLink = styled('div')({
 //   display: 'flex',
 //   alignItems: 'center',
@@ -76,14 +80,28 @@ const CustomerName = styled('div')({
 //   cursor: 'pointer',
 // });
 
-const CustomerCard = ({ customerName, mobileNumber, deliveryAddress }) => {
+const CustomerCard = ({ customerName, mobileNumber, deliveryAddress , onClick}) => {
+
+  const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
+
+  const handleAddressToggle = () => {
+    setIsFullAddressVisible((prev) => !prev); 
+  };
+
+  const truncateAddress = (address) => {
+    const words = address.split(' ');
+    return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
+  };
+
+
+
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       <Checkbox type="checkbox" />
       <CustomerInfo>
         <CustomerName>{customerName}</CustomerName>
         <div>{mobileNumber}</div>
-        <div>{deliveryAddress}</div>
+        <Address onClick={handleAddressToggle}>{isFullAddressVisible ? deliveryAddress : truncateAddress(deliveryAddress)}</Address>
       </CustomerInfo>
       {/* <MapViewLink>
         <img src={MapIcon} alt="Map Icon" />

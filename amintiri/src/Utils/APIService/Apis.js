@@ -4,8 +4,12 @@ const baseUrl = "http://ec2-15-207-138-177.ap-south-1.compute.amazonaws.com:8080
 const username = "admin";
 const password = "admin123";
 
-// Encode credentials for Basic Auth
+
 const basicAuth = "Basic " + btoa(`${username}:${password}`);
+
+const userId = localStorage.getItem("userid")
+const apiToken = localStorage.getItem("token")
+
 
 class Apis {
   getStores() {
@@ -18,8 +22,8 @@ class Apis {
     });
   }
 
-  createUser(userData) {
-    return axios.post(baseUrl + "/api/users", userData, {
+  createUser(name,mobile,email,role,password) {
+    return axios.post(baseUrl + `/api/users?name=${name}&mobile=${mobile}&email=${email}&role=${role}&password=${password}`, {
       headers: {
         Authorization: basicAuth,
         Accept: "*/*",
@@ -28,8 +32,8 @@ class Apis {
     });
   }
 
-  loginUser(loginData) {
-    return axios.post(baseUrl + "/api/users/login", loginData, {
+  loginUser(email,password) {
+    return axios.post(baseUrl + `/api/users/login?emailormobile=${email}&password=${password}`,{
       headers: {
         Authorization: basicAuth,
         Accept: "*/*",
@@ -37,6 +41,64 @@ class Apis {
       },
     });
   }
+
+  getAllOrders(userid,usersecret) {
+    return axios.get(baseUrl + `/api/orders?userid=${userId}&authtoken=${apiToken}`,{
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+  }
+ 
+  getCustomers() {
+    return axios.get(
+      baseUrl +
+        `/api/customers?userid=${userId}&authtoken=${apiToken}`,
+      {
+        headers: {
+          Authorization: basicAuth,
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
+  getOrders(customerId) {
+    return axios.get(
+      `${baseUrl}/api/customers/${customerId}/orders?userid=${userId}&authtoken=${apiToken}`,
+      {
+        headers: {
+          Authorization: basicAuth,
+          Accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  }
+
+  getBatches() {
+    const userId = localStorage.getItem("userid");
+    const apiToken = localStorage.getItem("token");
+  
+    if (!userId || !apiToken) {
+      console.error("UserID or AuthToken is missing");
+      return Promise.reject("Missing UserID or AuthToken");
+    }
+  
+    return axios.get(
+      `${baseUrl}/batch?userid=${userId}&authtoken=${apiToken}`,
+      {
+        headers: {
+          Authorization: basicAuth,
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } 
 }
 
 const apisInstance = new Apis();

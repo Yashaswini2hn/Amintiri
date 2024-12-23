@@ -166,7 +166,7 @@ const AddUserPage = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [name, setName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
+  const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -184,16 +184,16 @@ const AddUserPage = () => {
 
     const userData = {
       name,
-      contactNumber,
+      mobile,
       email,
       role: selectedRole,
       password,
     };
 
-    Apis.createUser(userData)
+    Apis.createUser(name,mobile,email,selectedRole,password)
       .then(() => {
         console.log("User created successfully");
-        navigate("/mainpage");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error creating user:", error);
@@ -208,7 +208,7 @@ const AddUserPage = () => {
       <SidebarContainer>
         <SidebarItem onClick={() => navigate("/")}>
           <SidebarIcon>
-            <img src={UserGear} alt="Admin" style={{ width: "50%" }} />
+            <img src={UserGear} alt="Admin" style={{ width: "50%" }}/>
           </SidebarIcon>
           <SidebarText>ADMIN</SidebarText>
         </SidebarItem>
@@ -228,8 +228,8 @@ const AddUserPage = () => {
       <MainContainer>
         <Title>ADD USER</Title>
         <FormContainer onSubmit={handleSave}>
-          <InputField placeholder="Name" onChange={(e) => setName(e.target.value)}/>
-          <InputField placeholder="Contact Number" onChange={(e) => setContactNumber(e.target.value)} />
+          <InputField placeholder="name" onChange={(e) => setName(e.target.value)}/>
+          <InputField placeholder="mobile" onChange={(e) => setMobile(e.target.value)} />
           <InputField placeholder="Email ID"  onChange={(e) => setEmail(e.target.value)}/>
           <DropdownContainer>
             <DropdownHeader onClick={() => setIsDropdownOpen(!isDropdownOpen)}>

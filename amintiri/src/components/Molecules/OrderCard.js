@@ -150,6 +150,10 @@ const AddressInfo = styled('div')({
   fontFamily: 'Futura Bk BT !important',
   fontSize: '18px',
   lineHeight: '1.5',
+  wordWrap: 'break-word',
+  maxWidth: '250px', 
+  textAlign: 'right',
+  cursor:'pointer'
 });
 
 const DeliveryTime = styled('div')({
@@ -176,10 +180,20 @@ const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, custom
   const [isChecked, setIsChecked] = useState(false);
   const displayedItems = items.slice(0, 3);
   const remainingItemCount = items.length - displayedItems.length;
+  const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
 
   const addressParts = address.split(', ');
   const addressWithoutCity = addressParts.slice(0, -1).join(', ');
   const city = addressParts[addressParts.length - 1];
+
+  const handleAddressToggle = () => {
+    setIsFullAddressVisible((prev) => !prev); // Toggle the state
+  };
+
+  const truncateAddress = (address) => {
+    const words = address.split(' ');
+    return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
+  };
 
   const handleCheckboxClick = () => {
     setIsChecked(!isChecked);
@@ -223,14 +237,15 @@ const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, custom
       {remainingItemCount > 0 && <ExtraItemsCircle>+{remainingItemCount}</ExtraItemsCircle>}
       </ItemsList>
       </OrderInfo>
-      <AddressInfo>
+      <AddressInfo onClick={handleAddressToggle}>
       <DeliveryTime>
       <Icon src={DeliveryIcon} alt="Delivery Icon"/>
       {deliveryTime}
       </DeliveryTime>
       <CustomerName>{customerName}</CustomerName>
-      <div>{addressWithoutCity},</div>
-      <div>{city}</div>
+      <div>
+          {isFullAddressVisible ? address : truncateAddress(address)}
+        </div>
       </AddressInfo>
       </CardContainer>
   );
