@@ -9,11 +9,11 @@ const CardContainer = styled('div')({
   display:'flex',
   padding:'20px',
   gap:'10px',
-  borderRadius:'8px',
+  borderRadius:'8px 8px 8px 8px',
   marginTop:'15px',
   marginLeft:'0px',
   position:'relative',
-  boxShadow:'0px 1px 4px 0px #D9D9D926',
+  boxShadow: '4px 4px 4px 4px #00000026',
   cursor:'pointer',
   justifyContent:'flex-start'
 });

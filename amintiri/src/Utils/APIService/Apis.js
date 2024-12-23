@@ -99,6 +99,17 @@ class Apis {
       }
     );
   } 
+
+  getOrdersByStatus(status) {
+    const query = `status=${status}&userid=${userId}&authtoken=${apiToken}`;
+    return axios.get(`${baseUrl}/api/orders?${query}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 const apisInstance = new Apis();

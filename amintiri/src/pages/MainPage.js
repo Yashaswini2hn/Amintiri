@@ -339,6 +339,11 @@ const MainPage = () => {
 
 
   const [selectedCards, setSelectedCards] = useState([]); 
+
+
+  const userId = localStorage.getItem('userid');
+  const authToken = localStorage.getItem('token');
+
   
 
   // useEffect(() => {
@@ -412,6 +417,45 @@ const MainPage = () => {
     setIsCalendarVisible(false); // Close calendar on date selection
   };
 
+  const fetchOrdersByStatus = (status) => {
+    Apis.getOrdersByStatus(status)
+      .then((response) => {
+        const mappedOrders = response.data.map((order) => ({
+          orderId: order.orderName || "N/A",
+          orderTime: order.orderDateTime || new Date(),
+          status: order.orderStatus?.status || "Unknown",
+          items: order.items.map((item) => ({
+            itemName: item.productName || "Unnamed Product",
+            productWeight: item.productSize || "Unknown Size",
+            quantity: item.quantity || 0,
+            status: item.itemStatus?.status || "Pending",
+            customizationNotes: item.customizationNotes || "No Notes",
+          })),
+          deliveryTime: order.deliveryTime || new Date(),
+          customerName: order.customerName || "Unknown Customer",
+          mobileNumber: order.customerMobile || "No Mobile Number",
+          deliveryAddress: order.deliveryAddress || "No Address Provided",
+        }));
+        setOrders(mappedOrders);
+      })
+      .catch((error) => console.error("Error fetching orders by status:", error));
+  };
+
+  
+  const handleDropdownSelect = (orderType) => {
+    setActiveDropdown(orderType);
+
+    const statusMap = {
+      "New Orders": "PENDING",
+      "Completed Orders": "BATCHED",
+      "Cancelled Orders": "CANCELLED",
+    };
+
+    const selectedStatus = statusMap[orderType];
+    if (selectedStatus) {
+      fetchOrdersByStatus(selectedStatus);
+    }
+  };
   return (
     <LayoutContainer>
       <HeaderTemplate/>
@@ -425,34 +469,36 @@ const MainPage = () => {
             <OrderListContainer>
               <ButtonGroup>
               <OrdersButton
-               onMouseEnter={() => setIsOrdersDropdownVisible(true)}
-               onMouseLeave={() => setIsOrdersDropdownVisible(false)}
-               style={{ position: 'relative' }} 
-               >
-                All Orders
-               {isOrdersDropdownVisible && (
-               <OrdersDropdownOuter
-                isVisible={isOrdersDropdownVisible}
-                onMouseEnter={() => setIsOrdersDropdownVisible(true)}
-                onMouseLeave={() => setIsOrdersDropdownVisible(false)}
-                >
-               <OrdersDropdownInner>
-               {['New Orders', 'Completed Orders', 'Cancelled Orders'].map(
-               (orderType, index) => (
-               <OrdersDropdownItem
-                key={index}
-                isSelected={activeDropdown === orderType}
-                onClick={() => setActiveDropdown(orderType)}
-            >
-              {orderType}
-            </OrdersDropdownItem>
-            )
-            )}
-           </OrdersDropdownInner>
-           </OrdersDropdownOuter>
-            )}
-           </OrdersButton>
-
+  onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+  onMouseLeave={() => setIsOrdersDropdownVisible(false)}
+  style={{ position: 'relative' }}
+>
+  All Orders
+  <img
+    src={DropdownIcon}
+    alt="Dropdown Icon"
+    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
+  />
+  {isOrdersDropdownVisible && (
+    <OrdersDropdownOuter
+      isVisible={isOrdersDropdownVisible}
+      onMouseEnter={() => setIsOrdersDropdownVisible(true)} // Keep dropdown visible when hovering over it
+      onMouseLeave={() => setIsOrdersDropdownVisible(false)} // Hide dropdown when mouse leaves
+    >
+      <OrdersDropdownInner>
+        {['New Orders', 'Completed Orders', 'Cancelled Orders'].map((orderType, index) => (
+          <OrdersDropdownItem
+            key={index}
+            isSelected={activeDropdown === orderType}
+            onClick={() => handleDropdownSelect(orderType)}
+          >
+            {orderType}
+          </OrdersDropdownItem>
+        ))}
+      </OrdersDropdownInner>
+    </OrdersDropdownOuter>
+  )}
+</OrdersButton>
             <DateButton onClick={toggleCalendar}>
                 <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
                   {/* 12-11-2024 */}

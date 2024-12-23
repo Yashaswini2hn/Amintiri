@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
@@ -11,15 +11,14 @@ const CardContainer = styled('div')({
   gap: '10px',
   borderRadius: '8px',
   position: 'relative',
-  marginTop:'50px',
-  marginLeft:'0px',
-  boxShadow:'0px 1px 4px 0px #D9D9D926',
-  alignItems:'flex-start'
-
+  marginTop: '50px',
+  marginLeft: '0px',
+  boxShadow: '0px 4px 4px 0px #00000026',
+  alignItems: 'flex-start',
 });
 
 const Checkbox = styled('input')({
-  appearance: 'none', 
+  appearance: 'none',
   position: 'absolute',
   top: '-15px',
   left: '10px',
@@ -28,7 +27,7 @@ const Checkbox = styled('input')({
   border: '2px solid #06555C',
   borderRadius: '2.5px',
   boxShadow: '0px 0px 4px 0px #00000040',
-  backgroundColor: '#FFFFFF', 
+  backgroundColor: '#FFFFFF',
   cursor: 'pointer',
   '&:checked': {
     backgroundColor: '#06555C',
@@ -57,26 +56,26 @@ const OrderInfo = styled('div')({
 });
 
 const OrderHeader = styled('div')({
-  display:'flex',
-  alignItems:'center',
-  marginBottom:'5px',
+  display: 'flex',
+  alignItems: 'center',
+  marginBottom: '5px',
 });
 
 const OrderNumber = styled('span')({
-  fontFamily:'Futura Bk BT ',
-  fontSize:'18px',
-  fontWeight:700,
-  color:'#000000',
-  marginRight:'10px',
+  fontFamily: 'Futura Bk BT ',
+  fontSize: '18px',
+  fontWeight: 700,
+  color: '#000000',
+  marginRight: '10px',
 });
 
 const OrderTimeContainer = styled('div')({
-  backgroundColor:'#0A616940',
-  padding:'2px 8px',
-  borderRadius:'4px',
-  display:'inline-flex',
-  alignItems:'center',
-  marginRight:'10px',
+  backgroundColor: '#0A616940',
+  padding: '2px 8px',
+  borderRadius: '4px',
+  display: 'inline-flex',
+  alignItems: 'center',
+  marginRight: '10px',
 });
 
 const OrderTimeLabel = styled('span')({
@@ -90,7 +89,7 @@ const OrderTimeLabel = styled('span')({
 const OrderTimeValue = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '14px',
-  fontWeight: 700, 
+  fontWeight: 700,
   color: '#06555C',
 });
 
@@ -106,27 +105,27 @@ const StatusLabel = styled('div')({
 });
 
 const ItemsList = styled('div')({
-  marginTop:'10px',
-  color:'#000000',
-  fontFamily:'Futura Bk BT',
-  fontSize:'14px',
-  display:'grid',
-  gridTemplateColumns:'auto 50px 20px',
-  gap:'10px 20px',
+  marginTop: '10px',
+  color: '#000000',
+  fontFamily: 'Futura Bk BT',
+  fontSize: '14px',
+  display: 'grid',
+  gridTemplateColumns: 'auto 50px 20px',
+  gap: '10px 20px',
 });
 
 const ItemName = styled('span')({
-  gridColumn:'1',
+  gridColumn: '1',
 });
 
 const ItemWeight = styled('span')({
-  gridColumn:'2',
-  marginLeft:'-150px',
+  gridColumn: '2',
+  marginLeft: '-150px',
 });
 
 const ItemQuantity = styled('span')({
-  gridColumn:'3',
-  marginLeft:'-100px',
+  gridColumn: '3',
+  marginLeft: '-100px',
 });
 
 const ExtraItemsCircle = styled('div')({
@@ -151,17 +150,17 @@ const AddressInfo = styled('div')({
   fontSize: '18px',
   lineHeight: '1.5',
   wordWrap: 'break-word',
-  maxWidth: '250px', 
+  maxWidth: '250px',
   textAlign: 'right',
-  cursor:'pointer'
+  cursor: 'pointer',
 });
 
 const DeliveryTime = styled('div')({
   display: 'flex',
   alignItems: 'center',
   marginBottom: '8px',
-  fontSize:'16px',
-  fontFamily:'Futura Bk BT'
+  fontSize: '16px',
+  fontFamily: 'Futura Bk BT',
 });
 
 const Icon = styled('img')({
@@ -176,18 +175,19 @@ const CustomerName = styled('div')({
   fontSize: '18px',
 });
 
-const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, customerName, address,onCheckboxChange,onSelect}) => {
+const OrderCard = ({ orderNumber, orderTime, status, items = [], deliveryTime, customerName, address = '', onCheckboxChange, onSelect }) => {
   const [isChecked, setIsChecked] = useState(false);
-  const displayedItems = items.slice(0, 3);
-  const remainingItemCount = items.length - displayedItems.length;
   const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
+
+  const displayedItems = items.slice(0, 3); // Safely handle `items` as an array
+  const remainingItemCount = items.length - displayedItems.length;
 
   const addressParts = address.split(', ');
   const addressWithoutCity = addressParts.slice(0, -1).join(', ');
   const city = addressParts[addressParts.length - 1];
 
   const handleAddressToggle = () => {
-    setIsFullAddressVisible((prev) => !prev); // Toggle the state
+    setIsFullAddressVisible((prev) => !prev);
   };
 
   const truncateAddress = (address) => {
@@ -216,38 +216,37 @@ const OrderCard = ({ orderNumber, orderTime, status, items, deliveryTime, custom
 
   return (
     <CardContainer onClick={handleCardClick}>
-      <Checkbox type="checkbox"  checked={isChecked} onChange={handleCheckboxClick}/>
+      <Checkbox type="checkbox" checked={isChecked} onChange={handleCheckboxClick} />
       <OrderInfo>
-      <OrderHeader>
-      <OrderNumber>{orderNumber}</OrderNumber>
-      <OrderTimeContainer>
-      <OrderTimeLabel>Ordered Time</OrderTimeLabel>
-      <OrderTimeValue>{orderTime}</OrderTimeValue>
-      </OrderTimeContainer>
-      <StatusLabel>{status}</StatusLabel>
-      </OrderHeader>
-      <ItemsList>
-      {displayedItems.map((item, index) => (
-      <React.Fragment key={index}>
-      <ItemName>{item.itemName}</ItemName> 
-      <ItemWeight>{item.productWeight}</ItemWeight> 
-      <ItemQuantity>{item.quantity}</ItemQuantity>
-      </React.Fragment>
-        ))}
-      {remainingItemCount > 0 && <ExtraItemsCircle>+{remainingItemCount}</ExtraItemsCircle>}
-      </ItemsList>
+        <OrderHeader>
+          <OrderNumber>{orderNumber}</OrderNumber>
+          <OrderTimeContainer>
+            <OrderTimeLabel>Ordered Time</OrderTimeLabel>
+            <OrderTimeValue>{orderTime}</OrderTimeValue>
+          </OrderTimeContainer>
+          <StatusLabel>{status}</StatusLabel>
+        </OrderHeader>
+        <ItemsList>
+          {displayedItems.map((item, index) => (
+            <React.Fragment key={index}>
+              <ItemName>{item.itemName || 'N/A'}</ItemName>
+              <ItemWeight>{item.productWeight || 'N/A'}</ItemWeight>
+              <ItemQuantity>{item.quantity || 0}</ItemQuantity>
+            </React.Fragment>
+          ))}
+          {remainingItemCount > 0 && <ExtraItemsCircle>+{remainingItemCount}</ExtraItemsCircle>}
+        </ItemsList>
       </OrderInfo>
       <AddressInfo onClick={handleAddressToggle}>
-      <DeliveryTime>
-      <Icon src={DeliveryIcon} alt="Delivery Icon"/>
-      {deliveryTime}
-      </DeliveryTime>
-      <CustomerName>{customerName}</CustomerName>
-      <div>
-          {isFullAddressVisible ? address : truncateAddress(address)}
-        </div>
+        <DeliveryTime>
+          <Icon src={DeliveryIcon} alt="Delivery Icon" />
+          {deliveryTime}
+        </DeliveryTime>
+        <CustomerName>{customerName}</CustomerName>
+        <div>{isFullAddressVisible ? address : truncateAddress(address)}</div>
       </AddressInfo>
-      </CardContainer>
+    </CardContainer>
   );
 };
+
 export default OrderCard;
