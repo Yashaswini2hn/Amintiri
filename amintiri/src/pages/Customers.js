@@ -90,7 +90,6 @@ const Button = styled('div')({
   },
 });
 
-
 const Customers = () => {
   const [customers, setCustomers] = useState([]); 
   const [selectedCustomer, setSelectedCustomer] = useState(null); 
@@ -133,14 +132,14 @@ const Customers = () => {
 
   const handleCustomerClick = (customer) => {
     setSelectedCustomer(customer);
-    fetchOrders(customer.id); // Fetch orders for the selected customer
+    fetchOrders(customer.id); 
   };
 
   return (
     <LayoutContainer>
-      <HeaderTemplate />
+      <HeaderTemplate/>
       <SidebarContainer>
-        <SidebarTemplate />
+        <SidebarTemplate/>
       </SidebarContainer>
       <MainContainer>
         <TopBarContainer>
@@ -148,10 +147,10 @@ const Customers = () => {
             <img src={SearchIcon} alt="Search Icon" style={{ width: '16px' }} />
             <SearchInput placeholder="Search" />
           </SearchInputContainer>
-          <Button>
+          {/* <Button>
             Collections
             <img src={ArrowDropdownIcon} alt="Dropdown Icon"/>
-          </Button>
+          </Button> */}
           <Button>
             <img src={CalendarIcon} alt="Calendar Icon"/>
             12-11-2024

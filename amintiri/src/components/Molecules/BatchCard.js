@@ -149,7 +149,7 @@ const BatchCard = ({ batch, onCheckboxChange }) => {
       <BatchInfo>
         {/* Header */}
         <Header>
-          <BatchNumber>{batch.id}</BatchNumber>
+          <BatchNumber>{batch.batchName}</BatchNumber>
           <Tag backgroundColor="#0A616940">21/10 Batch</Tag>
           <Tag backgroundColor="#E1BD5280">{batch.stationName}</Tag>
         </Header>

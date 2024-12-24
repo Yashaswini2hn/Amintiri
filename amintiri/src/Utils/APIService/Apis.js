@@ -110,6 +110,56 @@ class Apis {
       },
     });
   }
+
+  getOrdersByDate(date) {
+    const query = `date=${date}&userid=${userId}&authtoken=${apiToken}`;
+    return axios.get(`${baseUrl}/api/orders?${query}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  getOrdersByDeliveryTime(startTime, endTime) {
+    const query = `deliveryTimeStart=${startTime}&deliveryTimeEnd=${endTime}&userid=${userId}&authtoken=${apiToken}`;
+    return axios.get(`${baseUrl}/api/orders?${query}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+  }
+  
+  
+
+  fetchOrdersBySelectedStatusAPI(status) {
+    const query = `status=${status}&userid=${userId}&authtoken=${apiToken}`;
+    return axios.get(`${baseUrl}/api/orders?${query}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+  }  
+
+  batchOrders(orderIds) {
+    return axios.post(
+      `${baseUrl}/batch/batch-orders?userid=${userId}&authtoken=${apiToken}`,
+      orderIds, 
+      {
+        headers: {
+          Authorization: basicAuth,
+          Accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+  
 }
 
 const apisInstance = new Apis();

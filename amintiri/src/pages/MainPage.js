@@ -10,7 +10,8 @@ import OrderDetails from '../components/Molecules/OrderDetails';
 // import { ordersData } from '../components/Molecules/OrdersData';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Apis from '../Utils/APIService/Apis'
+import Apis from '../Utils/APIService/Apis';
+import Loader from '../components/Atoms/Loader'
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -40,8 +41,6 @@ const MainContainer = styled('div')({
     display: 'none', 
   },
 });
-
-
 
 const OrderListContainer = styled('div')({
   flex: 1,
@@ -326,6 +325,8 @@ const times = [
   '6:00 PM',
 ];
 
+
+
 const MainPage = () => {
   const [activeOption,setActiveOption] = useState('ORDERS');
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -335,7 +336,10 @@ const MainPage = () => {
   const [isStatusDropdownVisible,setIsStatusDropdownVisible] = useState(false);
   const [isOrdersDropdownVisible,setIsOrdersDropdownVisible] = useState(false);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split('T')[0] + "T00:00:00"
+  );
 
 
   const [selectedCards, setSelectedCards] = useState([]); 
@@ -373,56 +377,62 @@ const MainPage = () => {
   // }, [activeOption]);
  
   useEffect(() => {
+    setIsLoading(true); // Start loading
     Apis.getAllOrders()
       .then((response) => {
-        console.log("Orders fetched:", response.data);
-  
+        console.log('Orders fetched:', response.data);
+
         const mappedOrders = response.data.map((order) => ({
-          orderId: order.orderName || "N/A",
-          orderTime: order.orderDateTime || new Date(),
-          status: order.orderStatus?.status || "Unknown",
+          orderId: order.orderId || 'N/A',
+          orderName: order.orderName || 'N/A',
+          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+          status: order.orderStatus?.status || 'Unknown',
           items: order.items.map((item) => ({
-            itemName: item.productName || "Unnamed Product",
-            productWeight: item.productSize || "Unknown Size",
+            itemName: item.productName || 'Unnamed Product',
+            productWeight: item.productSize || 'Unknown Size',
             quantity: item.quantity || 0,
-            status: item.itemStatus?.status || "Pending",
-            customizationNotes: item.customizationNotes || "No Notes",
+            status: item.itemStatus?.status || 'Pending',
+            customizationNotes: item.customizationNotes || 'No Notes',
           })),
-          deliveryTime: order.deliveryTime || new Date(),
-          customerName: order.customerName || "Unknown Customer",
-          mobileNumber: order.customerMobile || "No Mobile Number",
-          deliveryAddress: order.deliveryAddress || "No Address Provided",
+          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          customerName: order.customerName || 'Unknown Customer',
+          mobileNumber: order.customerMobile || 'No Mobile Number',
+          deliveryAddress: order.deliveryAddress || 'No Address Provided',
         }));
-  
+
         setOrders(mappedOrders);
+        setSelectedOrder(mappedOrders[0]);
       })
-      .catch((error) => console.error("Error fetching orders:", error));
+      .catch((error) => console.error('Error fetching orders:', error))
+      .finally(() => {
+        setIsLoading(false); // Stop loading
+      });
   }, [activeOption]);
-  
 
   const handleCheckboxChange = (orderId, isChecked) => {
+    console.log("order id ....." ,orderId )
     setSelectedCards((prevSelected) =>
       isChecked
         ? [...prevSelected, orderId]
-        : prevSelected.filter((id) => id!== orderId)
+        : prevSelected.filter((id) => id !== orderId)
     );
   };
-
-  const toggleCalendar = () => {
-    setIsCalendarVisible((prev) => !prev);
-  }
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setIsCalendarVisible(false); // Close calendar on date selection
-  };
-
+  
   const fetchOrdersByStatus = (status) => {
-    Apis.getOrdersByStatus(status)
+    Apis.getAllOrders()
       .then((response) => {
         const mappedOrders = response.data.map((order) => ({
-          orderId: order.orderName || "N/A",
-          orderTime: order.orderDateTime || new Date(),
+          orderId: order.orderId || "N/A",
+          orderName: order.orderName || "N/A",
+          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
           status: order.orderStatus?.status || "Unknown",
           items: order.items.map((item) => ({
             itemName: item.productName || "Unnamed Product",
@@ -431,182 +441,220 @@ const MainPage = () => {
             status: item.itemStatus?.status || "Pending",
             customizationNotes: item.customizationNotes || "No Notes",
           })),
-          deliveryTime: order.deliveryTime || new Date(),
+          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           customerName: order.customerName || "Unknown Customer",
-          mobileNumber: order.customerMobile || "No Mobile Number",
           deliveryAddress: order.deliveryAddress || "No Address Provided",
         }));
-        setOrders(mappedOrders);
+  
+        const filteredOrders = mappedOrders.filter(
+          (order) => order.status === status
+        );
+  
+        setOrders(filteredOrders);
       })
       .catch((error) => console.error("Error fetching orders by status:", error));
   };
-
+  
   
   const handleDropdownSelect = (orderType) => {
     setActiveDropdown(orderType);
-
+  
     const statusMap = {
       "New Orders": "PENDING",
       "Completed Orders": "BATCHED",
       "Cancelled Orders": "CANCELLED",
     };
-
+  
     const selectedStatus = statusMap[orderType];
     if (selectedStatus) {
       fetchOrdersByStatus(selectedStatus);
     }
   };
+
+  const fetchOrdersByDate = (formattedDate) => {
+    console.log("Fetching orders for date:", formattedDate); 
+  
+    Apis.getOrdersByDate(formattedDate)
+      .then((response) => {
+        const mappedOrders = response.data.map((order) => ({
+          orderId: order.orderId || "N/A",
+          orderName: order.orderName || "N/A",
+          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+          status: order.orderStatus?.status || "Unknown",
+          items: order.items.map((item) => ({
+            itemName: item.productName || "Unnamed Product",
+            productWeight: item.productSize || "Unknown Size",
+            quantity: item.quantity || 0,
+            status: item.itemStatus?.status || "Pending",
+            customizationNotes: item.customizationNotes || "No Notes",
+          })),
+          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          customerName: order.customerName || "Unknown Customer",
+          deliveryAddress: order.deliveryAddress || "No Address Provided",
+        }));
+        setOrders(mappedOrders);
+      })
+      .catch((error) => {
+        console.error("Error fetching orders by date:", error.response || error.message);
+      });
+  };
+  
+  const handleDateChange = (date) => {
+    console.log("Selected Date from Calendar:", date);
+    const formattedDate = date.toISOString().split('T')[0] + "T00:00:00";
+    console.log("Formatted Date:", formattedDate); 
+    setSelectedDate(formattedDate); 
+    setIsCalendarVisible(false); 
+    fetchOrdersByDate(formattedDate); 
+  };
+
+  const toggleCalendar = () => {
+    setIsCalendarVisible((prev) => !prev);
+  };
+
+  const fetchOrdersBySelectedStatus = (status) => {
+    Apis.fetchOrdersBySelectedStatusAPI(status)
+      .then((response) => {
+        const mappedOrders = response.data
+          .filter((order) => order.orderStatus?.status === status)
+          .map((order) => ({
+            orderId: order.orderId || "N/A",
+            orderName: order.orderName || "N/A",
+            orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+            status: order.orderStatus?.status || "Unknown",
+            items: order.items.map((item) => ({
+              itemName: item.productName || "Unnamed Product",
+              productWeight: item.productSize || "Unknown Size",
+              quantity: item.quantity || 0,
+              status: item.itemStatus?.status || "Pending",
+              customizationNotes: item.customizationNotes || "No Notes",
+            })),
+            deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            customerName: order.customerName || "Unknown Customer",
+            deliveryAddress: order.deliveryAddress || "No Address Provided",
+          }));
+  
+        setOrders(mappedOrders); 
+      })
+      .catch((error) => console.error("Error fetching orders by selected status:", error));
+  };
+
+  const handleBatchOrders = () => {
+    if (selectedCards.length >= 3) {
+      Apis.batchOrders(selectedCards) 
+        .then((response) => {
+          alert("Batched successfully!");
+          setSelectedCards([]);
+          // fetchOrdersBySelectedStatus(activeDropdown);
+        })
+        .catch((error) => {
+          console.error("Error batching orders:", error);
+          alert("Failed to batch orders. Please try again.");
+        });
+    } else {
+      alert("Select at least 3 orders to batch.");
+    }
+  };
+  
+  
   return (
     <LayoutContainer>
-      <HeaderTemplate/>
+      <HeaderTemplate />
       <SidebarContainer>
-        <SidebarTemplate onOptionSelect={setActiveOption}/>
+        <SidebarTemplate onOptionSelect={setActiveOption} />
       </SidebarContainer>
+      <Loader isLoading={isLoading} /> {/* Show loader */}
       <MainContainer>
-        {activeOption === 'ORDERS' && (
+        {!isLoading && activeOption === 'ORDERS' && ( // Ensure proper condition check
           <>
-              <BatchButton isDisabled={selectedCards.length === 0} disabled={selectedCards.length === 0}>Batch</BatchButton>
+            <BatchButton
+              isDisabled={selectedCards.length < 3}
+              disabled={selectedCards.length < 3}
+              onClick={handleBatchOrders}
+            >
+              Batch
+            </BatchButton>
+  
             <OrderListContainer>
               <ButtonGroup>
-              <OrdersButton
-  onMouseEnter={() => setIsOrdersDropdownVisible(true)}
-  onMouseLeave={() => setIsOrdersDropdownVisible(false)}
-  style={{ position: 'relative' }}
->
-  All Orders
-  <img
-    src={DropdownIcon}
-    alt="Dropdown Icon"
-    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
-  />
-  {isOrdersDropdownVisible && (
-    <OrdersDropdownOuter
-      isVisible={isOrdersDropdownVisible}
-      onMouseEnter={() => setIsOrdersDropdownVisible(true)} // Keep dropdown visible when hovering over it
-      onMouseLeave={() => setIsOrdersDropdownVisible(false)} // Hide dropdown when mouse leaves
-    >
-      <OrdersDropdownInner>
-        {['New Orders', 'Completed Orders', 'Cancelled Orders'].map((orderType, index) => (
-          <OrdersDropdownItem
-            key={index}
-            isSelected={activeDropdown === orderType}
-            onClick={() => handleDropdownSelect(orderType)}
-          >
-            {orderType}
-          </OrdersDropdownItem>
-        ))}
-      </OrdersDropdownInner>
-    </OrdersDropdownOuter>
-  )}
-</OrdersButton>
-            <DateButton onClick={toggleCalendar}>
-                <img src={CalendarIcon} alt="Calendar Icon" style={{width:'24px',height:'24px',marginRight:'10px'}}/>
-                  {/* 12-11-2024 */}
-                  {selectedDate.toLocaleDateString()}
+                <OrdersButton
+                  onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+                  onMouseLeave={() => setIsOrdersDropdownVisible(false)}
+                  style={{ position: 'relative' }}
+                >
+                  All Orders
+                  <img
+                    src={DropdownIcon}
+                    alt="Dropdown Icon"
+                    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
+                  />
+                  {isOrdersDropdownVisible && (
+                    <OrdersDropdownOuter
+                      isVisible={isOrdersDropdownVisible}
+                      onMouseEnter={() => setIsOrdersDropdownVisible(true)}
+                      onMouseLeave={() => setIsOrdersDropdownVisible(false)}
+                    >
+                      <OrdersDropdownInner>
+                        {['New Orders', 'Completed Orders', 'Cancelled Orders'].map(
+                          (orderType, index) => (
+                            <OrdersDropdownItem
+                              key={index}
+                              isSelected={activeDropdown === orderType}
+                              onClick={() => handleDropdownSelect(orderType)}
+                            >
+                              {orderType}
+                            </OrdersDropdownItem>
+                          )
+                        )}
+                      </OrdersDropdownInner>
+                    </OrdersDropdownOuter>
+                  )}
+                </OrdersButton>
+  
+                <DateButton onClick={toggleCalendar}>
+                  <img
+                    src={CalendarIcon}
+                    alt="Calendar Icon"
+                    style={{ width: '24px', height: '24px', marginRight: '10px' }}
+                  />
+                  {selectedDate ? selectedDate.split('T')[0] : 'Select Date'}
                 </DateButton>
                 <CalendarDropdown isVisible={isCalendarVisible}>
-            <Calendar
-              onChange={handleDateChange}
-              value={selectedDate}
-            />
-          </CalendarDropdown>
-                <DeliveryButton
-                 onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
-                 onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
-                 style={{ position: 'relative' }} 
-                 >
-                <img
-                 src={DeliveryIcon}
-                 alt="Delivery Icon"
-                 style={{ width: '24px', height: '24px', marginRight: '10px' }}
-                 />
-                Delivery Time
-                <img
-                 src={DropdownIcon}
-                 alt="Dropdown Icon"
-                 style={{ width: '16px', height: '16px', marginLeft: '8px' }}
-                  />
-
-                {isDeliveryTimeDropdownVisible && (
-                <DeliveryDropdownOuter
-                 isVisible={isDeliveryTimeDropdownVisible}
-                 onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
-                 onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
-                 >
-                <DeliveryDropdownInner>
-                {times.map((time, index) => (
-                <DeliveryDropdownItem
-                key={index}
-               isSelected={activeDropdown === time}
-             onClick={() => setActiveDropdown(time)}
-          >
-            {time}
-          </DeliveryDropdownItem>
-        ))}
-      </DeliveryDropdownInner>
-    </DeliveryDropdownOuter>
-  )}
-</DeliveryButton>
-               
-<StatusButton
-  onMouseEnter={() => setIsStatusDropdownVisible(true)}
-  onMouseLeave={() => setIsStatusDropdownVisible(false)}
-  style={{ position: 'relative' }} 
->
-  Status
-  <img
-    src={DropdownIcon}
-    alt="Dropdown Icon"
-    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
-  />
-
-  {isStatusDropdownVisible && (
-    <StatusDropdownOuter
-      isVisible={isStatusDropdownVisible}
-      onMouseEnter={() => setIsStatusDropdownVisible(true)}
-      onMouseLeave={() => setIsStatusDropdownVisible(false)}
-    >
-      <StatusDropdownInner>
-        {['Pending', 'In Kitchen', 'Ready'].map((status, index) => (
-          <StatusDropdownItem
-            key={index}
-            isSelected={activeDropdown === status}
-            onClick={() => setActiveDropdown(status)}
-          >
-            {status}
-          </StatusDropdownItem>
-        ))}
-      </StatusDropdownInner>
-    </StatusDropdownOuter>
-  )}
-</StatusButton>
-
-                
+                  <Calendar onChange={handleDateChange} value={new Date(selectedDate)} />
+                </CalendarDropdown>
               </ButtonGroup>
+  
               {orders.map((order) => (
                 <OrderCard
                   key={order.orderId}
-                  orderNumber={order.orderId}
-                  orderTime={new Date(order.orderTime).toLocaleTimeString()}
+                  orderNumber={order.orderName}
+                  orderTime={order.orderTime}
+                  orderDate={order.orderDate}
                   status={order.status}
                   items={order.items}
-                  deliveryTime={new Date(order.deliveryTime).toLocaleTimeString()}
+                  deliveryTime={order.deliveryTime}
                   customerName={order.customerName}
                   address={order.deliveryAddress}
                   onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
-                  onCheckboxChange={handleCheckboxChange}
+                  onCheckboxChange={(isChecked) =>
+                    handleCheckboxChange(order.orderId, isChecked)
+                  }
                 />
               ))}
             </OrderListContainer>
+  
             {selectedOrder && (
-            <OrderDetailsContainer>
-            <OrderDetails order={selectedOrder}/>
-            </OrderDetailsContainer>
+              <OrderDetailsContainer>
+                <OrderDetails order={selectedOrder} />
+              </OrderDetailsContainer>
             )}
           </>
         )}
       </MainContainer>
     </LayoutContainer>
   );
+  
 };
 export default MainPage; 

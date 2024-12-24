@@ -100,20 +100,28 @@ const Batches = () => {
     Apis.getBatches()
       .then((response) => {
         const batchData = response.data;
-        const formattedBatches = batchData.map((batch) => ({
-          id: batch.id,
-          stationName: batch.stationName || "Unknown",
-          name: batch.productName || "Unknown",
-          weight: batch.productSize || "Unknown",
-          quantity: batch.quantity || 0,
-          customizationNotes: batch.customizationNotes || "No Notes Available",
-          time: batch.deliveryTime || "Not Scheduled",
-          isChecked: false,
-        }));
+  
+        console.log("batchData ..... ", batchData);
+  
+        const formattedBatches = batchData.flatMap((batch) =>
+          batch.batchOrderItems.map((item) => ({
+            id: batch.batchId,
+            batchName: item.orderItem.productName || "Unknown" ,
+            stationName: batch.stationName || "Unknown",
+            name: item.orderItem.productName || "Unknown",
+            weight: item.orderItem.productSize || "Unknown",
+            quantity: item.orderItem.quantity || 0,
+            customizationNotes: item.orderItem.customizationNotes || "No Notes Available",
+            time: item.orderItem.deliveryTime || "Not Scheduled",
+            isChecked: false,
+          }))
+        );
+  
         setBatches(formattedBatches);
       })
       .catch((error) => console.error("Error fetching batches:", error));
   }, []);
+  
   
   const handleCheckboxChange = (index) => {
     const updatedBatches = [...batches];

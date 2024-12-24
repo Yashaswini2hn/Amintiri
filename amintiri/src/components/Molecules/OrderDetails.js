@@ -5,7 +5,7 @@ import PhoneIcon from '../../assests/Phone.svg';
 import OrdersIcon from '../../assests/orders.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 import ScrollIcon from '../../assests/Scroll.svg';
-import DeliveryIcon from '../../assests/delivery.svg'; // Import delivery icon
+import DeliveryIcon from '../../assests/delivery.svg'; 
 
 const OrderDetailsContainer = styled('div')({
   width: '365px',
@@ -18,7 +18,10 @@ const OrderDetailsContainer = styled('div')({
   top: '70px',
   left: '1120px',
   marginTop: '30px',
-  marginLeft:'30px'
+  marginLeft:'30px',
+  display: 'flex',
+  flexDirection: 'column', 
+  justifyContent: 'space-between', 
 });
 
 const Header = styled('div')({
@@ -103,7 +106,18 @@ const OrderItemsHeader = styled('div')({
 
 const OrderItems = styled('div')({
   fontFamily: 'Futura Bk BT',
+  flexGrow: 1, // Allows this section to take available space
+  overflowY: 'auto', // Makes the items scrollable
+  maxHeight: '300px', // Limit the height of the scrollable area
+  paddingRight: '5px', // Space for scrollbar
+  marginRight: '-5px', // Adjust the layout to avoid layout shift
+  '&::-webkit-scrollbar': {
+    width: '0', // Hide the scrollbar
+  },
+  '-ms-overflow-style': 'none', // IE and Edge
+  'scrollbar-width': 'none', // Firefox
 });
+
 
 const ItemRow = styled('div')({
   display: 'grid',
@@ -137,7 +151,7 @@ const InstructionsText = styled('span')({
 });
 
 const ReadyButton = styled('button')({
-  width:'100%',
+  width: '100%',
   padding: '15px',
   backgroundColor: '#06555C',
   color: '#FFFFFF',
@@ -147,8 +161,9 @@ const ReadyButton = styled('button')({
   border: 'none',
   borderRadius: '0px',
   cursor: 'pointer',
-  marginTop: '170px',
-  lineHeight:'18px'
+  lineHeight: '18px', 
+  bottom: '0',
+  marginTop:'10px'
 });
 
 const OrderDetails = ({order}) => {
@@ -177,7 +192,7 @@ const OrderDetails = ({order}) => {
   };
 
   const handleAddressToggle = () => {
-    setIsFullAddressVisible((prev) => !prev); // Toggle the address visibility
+    setIsFullAddressVisible((prev) => !prev); 
   };
 
   const truncateAddress = (address) => {
@@ -185,10 +200,12 @@ const OrderDetails = ({order}) => {
     return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
   };
 
+  console.log("order card order details ....." ,  order )
+
   return (
     <OrderDetailsContainer>
       <Header>
-      <OrderID>Orders ID {order.orderId}</OrderID> 
+      <OrderID>Orders ID {order.orderName}</OrderID> 
       <Status>{order.status}</Status>
       </Header>
       <CustomerInfo>
@@ -197,9 +214,9 @@ const OrderDetails = ({order}) => {
           {order.customerName}
         </InfoRow>
         <InfoRow>
-  <Icon src={PhoneIcon} alt="Phone Icon" />
-  {order.customerMobile|| "No Mobile Number"}
-</InfoRow>
+       <Icon src={PhoneIcon} alt="Phone Icon" />
+       {order.mobileNumber|| "No Mobile Number"}
+       </InfoRow>
         <TimeDeliveryRow>
           <InfoRow>
             <Icon src={MapPinIcon} alt="Map Pin Icon"/>
@@ -210,11 +227,11 @@ const OrderDetails = ({order}) => {
           <div>
             <InfoRow style={{marginTop:'-30px',marginLeft:'-30px'}}>
               <Icon src={OrdersIcon} alt="Orders Icon"/>
-              {new Date(order.orderTime).toLocaleTimeString()} 
+              {order.orderTime} 
             </InfoRow>
             <InfoRow style={{marginLeft:'-30px'}}>
               <Icon src={DeliveryIcon} alt="Delivery Icon" />
-              {new Date(order.deliveryTime).toLocaleTimeString()} 
+              {order.deliveryTime} 
             </InfoRow>
           </div>
         </TimeDeliveryRow>

@@ -73,9 +73,10 @@ const OrderTimeContainer = styled('div')({
   backgroundColor: '#0A616940',
   padding: '2px 8px',
   borderRadius: '4px',
-  display: 'inline-flex',
+  display: 'flex',
   alignItems: 'center',
   marginRight: '10px',
+  gap: '5px', 
 });
 
 const OrderTimeLabel = styled('span')({
@@ -84,13 +85,23 @@ const OrderTimeLabel = styled('span')({
   fontWeight: 400,
   color: '#06555C',
   marginRight: '4px',
+  
+});
+
+const OrderDateValue = styled('span')({
+  fontFamily: 'Futura Bk BT',
+  fontSize: '12px',
+  fontWeight: 700,
+  color: '#06555C',
+  marginTop:'2px'
 });
 
 const OrderTimeValue = styled('span')({
   fontFamily: 'Futura Bk BT',
-  fontSize: '14px',
+  fontSize: '12px',
   fontWeight: 700,
   color: '#06555C',
+  marginTop:'2px'
 });
 
 const StatusLabel = styled('div')({
@@ -116,11 +127,12 @@ const ItemsList = styled('div')({
 
 const ItemName = styled('span')({
   gridColumn: '1',
+ 
 });
 
 const ItemWeight = styled('span')({
   gridColumn: '2',
-  marginLeft: '-150px',
+  marginLeft: '-220px',
 });
 
 const ItemQuantity = styled('span')({
@@ -175,11 +187,11 @@ const CustomerName = styled('div')({
   fontSize: '18px',
 });
 
-const OrderCard = ({ orderNumber, orderTime, status, items = [], deliveryTime, customerName, address = '', onCheckboxChange, onSelect }) => {
+const OrderCard = ({ orderNumber, orderTime, orderDate,status, items = [], deliveryTime, customerName, address = '', onCheckboxChange, onSelect }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
 
-  const displayedItems = items.slice(0, 3); // Safely handle `items` as an array
+  const displayedItems = items.slice(0, 3); 
   const remainingItemCount = items.length - displayedItems.length;
 
   const addressParts = address.split(', ');
@@ -205,6 +217,7 @@ const OrderCard = ({ orderNumber, orderTime, status, items = [], deliveryTime, c
       onSelect({
         orderId: orderNumber,
         orderTime,
+        orderDate,
         status,
         items,
         deliveryTime,
@@ -216,13 +229,14 @@ const OrderCard = ({ orderNumber, orderTime, status, items = [], deliveryTime, c
 
   return (
     <CardContainer onClick={handleCardClick}>
-      <Checkbox type="checkbox" checked={isChecked} onChange={handleCheckboxClick} />
+      <Checkbox type="checkbox" checked={isChecked} onChange={handleCheckboxClick}/>
       <OrderInfo>
         <OrderHeader>
           <OrderNumber>{orderNumber}</OrderNumber>
           <OrderTimeContainer>
-            <OrderTimeLabel>Ordered Time</OrderTimeLabel>
-            <OrderTimeValue>{orderTime}</OrderTimeValue>
+          <OrderTimeLabel>Ordered:</OrderTimeLabel>
+          <OrderDateValue>{orderDate}</OrderDateValue> 
+          <OrderTimeValue>{orderTime}</OrderTimeValue> 
           </OrderTimeContainer>
           <StatusLabel>{status}</StatusLabel>
         </OrderHeader>

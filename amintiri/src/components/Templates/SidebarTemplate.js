@@ -48,7 +48,6 @@ const SidebarTemplate = ({ onOptionSelect }) => {
     DELIVERY: "/delivery",
   };
 
-  // Sync active option with current route
   useEffect(() => {
     const currentOption = Object.keys(optionToPathMap).find(
       (key) => optionToPathMap[key] === location.pathname
