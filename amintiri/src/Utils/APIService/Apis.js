@@ -157,6 +157,33 @@ class Apis {
       }
     );
   }
+
+  getStations(userId, token) {
+    return axios.get(`${baseUrl}/api/station?userid=${userId}&authtoken=${apiToken}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+  
+  unbatch(batchIds) {
+    const userId = localStorage.getItem('userid');
+    const apiToken = localStorage.getItem('token');
+  
+    return axios.post(
+      `${baseUrl}/batch/unbatch?userid=${userId}&authtoken=${apiToken}`,
+      { batchIds },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: basicAuth,
+        },
+      }
+    );
+  }
+  
   
 }
 

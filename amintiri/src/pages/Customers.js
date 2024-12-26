@@ -8,8 +8,8 @@ import CalendarIcon from '../assests/calender.svg';
 import CustomerDetails from '../components/Molecules/CustomerDetails';
 import CustomerCard from '../components/Molecules/CustomerCard';
 import Apis from '../Utils/APIService/Apis';
-
-
+import Loader from '../components/Atoms/Loader';
+import Calendar from 'react-calendar';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -90,12 +90,37 @@ const Button = styled('div')({
   },
 });
 
+const CalendarDropdown = styled('div')(({ isVisible }) => ({
+  display: isVisible ? 'block' : 'none',
+  position: 'absolute',
+  top: '69px',
+  left: '360px',
+  background: '#FFFFFF',
+  border: '1px solid #E1BD52',
+  zIndex: 1000,
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', 
+  borderRadius: '0px',
+  padding: '10px',
+  width: '300px', 
+}));
+
 const Customers = () => {
   const [customers, setCustomers] = useState([]); 
   const [selectedCustomer, setSelectedCustomer] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split('T')[0] + "T00:00:00"
+  );
+
+
+  const toggleCalendar = () => {
+    setIsCalendarVisible((prev) => !prev);
+  };
 
   useEffect(() => {
+    setIsLoading(true);
     Apis.getCustomers()
       .then((response) => {
         const customerData = response.data;
@@ -112,7 +137,10 @@ const Customers = () => {
           fetchOrders(firstCustomer.id);
         }
       })
-      .catch((error) => console.error('Error fetching customers:', error));
+      .catch((error) => console.error('Error fetching customers:', error))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const fetchOrders = (customerId) => {
@@ -135,12 +163,22 @@ const Customers = () => {
     fetchOrders(customer.id); 
   };
 
+  const handleDateChange = (date) => {
+    console.log("Selected Date from Calendar:", date);
+    const formattedDate = date.toISOString().split('T')[0] + "T00:00:00";
+    console.log("Formatted Date:", formattedDate); 
+    setSelectedDate(formattedDate); 
+    setIsCalendarVisible(false); 
+    // fetchOrdersByDate(formattedDate); 
+  };
+
   return (
     <LayoutContainer>
       <HeaderTemplate/>
       <SidebarContainer>
         <SidebarTemplate/>
       </SidebarContainer>
+      <Loader isLoading={isLoading} />
       <MainContainer>
         <TopBarContainer>
           <SearchInputContainer>
@@ -151,10 +189,17 @@ const Customers = () => {
             Collections
             <img src={ArrowDropdownIcon} alt="Dropdown Icon"/>
           </Button> */}
-          <Button>
-            <img src={CalendarIcon} alt="Calendar Icon"/>
-            12-11-2024
+          <Button onClick={toggleCalendar}>
+          <img
+              src={CalendarIcon}
+              alt="Calendar Icon"
+              style={{ width: '24px', height: '24px', marginRight: '10px' }}
+            />
+            {selectedDate ? selectedDate.split('T')[0] : 'Select Date'}
           </Button>
+          <CalendarDropdown isVisible={isCalendarVisible}>
+            <Calendar onChange={handleDateChange} value={selectedDate} />
+          </CalendarDropdown>
         </TopBarContainer>
          
         {customers.map((customer, index) => (

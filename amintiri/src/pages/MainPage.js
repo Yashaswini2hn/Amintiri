@@ -311,7 +311,6 @@ const CalendarDropdown = styled('div')(({ isVisible }) => ({
   width: '300px', 
 }));
 
-
 const times = [
   '9:00 AM',
   '10:00 AM',
@@ -340,15 +339,11 @@ const MainPage = () => {
     new Date().toISOString().split('T')[0] + "T00:00:00"
   );
 
-
   const [selectedCards, setSelectedCards] = useState([]); 
-
-
   const userId = localStorage.getItem('userid');
   const authToken = localStorage.getItem('token');
 
   
-
   // useEffect(() => {
   //   const fetchOrders = async () => {
   //     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -426,7 +421,7 @@ const MainPage = () => {
 
 
   const fetchOrdersByDeliveryTime = (startTime, endTime) => {
-    setIsLoading(true); // Show loader
+    setIsLoading(true); 
     Apis.getOrdersByDeliveryTime(startTime, endTime)
       .then((response) => {
         const mappedOrders = response.data.map((order) => ({
@@ -610,7 +605,7 @@ const MainPage = () => {
       </SidebarContainer>
       <Loader isLoading={isLoading} />
       <MainContainer>
-  {!isLoading && activeOption === 'ORDERS' && (
+      {!isLoading && activeOption === 'ORDERS' && (
     <>
       <BatchButton
         isDisabled={selectedCards.length < 3}
