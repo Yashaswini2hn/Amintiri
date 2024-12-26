@@ -133,8 +133,6 @@ class Apis {
     });
   }
   
-  
-
   fetchOrdersBySelectedStatusAPI(status) {
     const query = `status=${status}&userid=${userId}&authtoken=${apiToken}`;
     return axios.get(`${baseUrl}/api/orders?${query}`, {
