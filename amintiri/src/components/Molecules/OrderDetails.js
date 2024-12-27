@@ -16,7 +16,6 @@ const OrderDetailsContainer = styled('div')({
   borderRadius: '0px',
   top: '70px',
   left: '1120px',
-  marginTop: '30px',
   marginLeft:'30px',
   display: 'flex',
   flexDirection: 'column', 

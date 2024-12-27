@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -44,6 +44,8 @@ const MainContainer = styled('div')({
 
 const OrderListContainer = styled('div')({
   flex: 1,
+  display:"flex",
+  flexDirection:"column",
   marginRight: '0px',
   width: '600px',
 });
@@ -339,8 +341,10 @@ const MainPage = () => {
     new Date().toISOString().split('T')[0] + "T00:00:00"
   );
 
+  const calendarRef = useRef(null);
+
   const [orderFilters, setOrderFilters] = useState({
-    date: new Date().toISOString().split('T')[0] + "T00:00:00"
+    // date: new Date().toISOString().split('T')[0] + "T00:00:00"
   });
 
 
@@ -353,6 +357,12 @@ const MainPage = () => {
   const OrdersStatus = [{ label: 'New Orders', value: 'PENDING' },
   { label: 'Completed Orders', value: 'BATCHED' }, { label: 'Cancelled Orders', value: 'CANCELLED' }]
 
+
+  const handleOutsideClick = (event) => {
+    if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+      setIsCalendarVisible(false);
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true); // Start loading
@@ -477,21 +487,18 @@ const MainPage = () => {
     };
 
     setOrderFilters((prevFilters) => {
-      const formattedTime = convertTo24HourFormat(time); // Convert 12-hour to 24-hour
-      const deliveryTimeStart = new Date(
-        `${prevFilters.date.split("T")[0]}T${formattedTime}`
-      );
-
+      const formattedTime = convertTo24HourFormat(time); 
+      const datePart = prevFilters?.date ? prevFilters.date.split("T")[0] : new Date().toISOString().split("T")[0];
+      const deliveryTimeStart = new Date(`${datePart}T${formattedTime}`);
       const deliveryTimeEnd = new Date(deliveryTimeStart.getTime() + 2 * 60 * 60 * 1000);
-
+    
       return {
         ...prevFilters,
-        deliveryTimeStart:formatDate(deliveryTimeStart) ,
-        // .toISOString(),
-        deliveryTimeEnd: formatDate(deliveryTimeEnd) ,
-        // .toISOString(),
+        deliveryTimeStart: formatDate(deliveryTimeStart), 
+        deliveryTimeEnd: formatDate(deliveryTimeEnd), 
       };
     });
+    
 
   };
 
@@ -653,21 +660,23 @@ const MainPage = () => {
   // };
 
   const handleDateChange = (date) => {
+    if (!date) return; 
     console.log("Selected Date from Calendar:", date);
-    const formattedDate = date.toISOString().split('T')[0] + "T00:00:00";
-    console.log("Formatted Date:", formattedDate);
-
+  
+    const adjustedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const formattedDate = adjustedDate.toISOString().split('T')[0] + "T00:00:00";
+  
+    console.log("Formatted Date (Adjusted):", formattedDate);
+  
     setSelectedDate(formattedDate);
     setIsCalendarVisible(false);
   
-    // Update the orderFilters state with the new date
     setOrderFilters((prevFilters) => ({
-      ...prevFilters, // Keep the existing filters
-      date: formattedDate, // Update the date key
+      ...prevFilters,
+      date: formattedDate,
     }));
-
-   
   };
+  
 
   const toggleCalendar = () => {
     setIsCalendarVisible((prev) => !prev);
@@ -782,7 +791,7 @@ const MainPage = () => {
                   {selectedDate ? selectedDate.split('T')[0] : 'Select Date'}
                 </DateButton>
                 <CalendarDropdown isVisible={isCalendarVisible}>
-                  <Calendar onChange={handleDateChange} value={selectedDate} />
+                <Calendar onChange={handleDateChange} value={selectedDate ? new Date(selectedDate) : new Date()} />
                 </CalendarDropdown>
 
                 <DeliveryButton

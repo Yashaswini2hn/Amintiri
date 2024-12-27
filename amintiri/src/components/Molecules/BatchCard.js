@@ -174,7 +174,7 @@ const BatchCard = ({ batch, onCheckboxChange }) => {
             src={DeliveryIcon}
             alt="Delivery Icon"
           />
-          <Time style={{ marginTop: '-130px' }}>{batch.time}</Time>
+          <Time style={{ marginTop: '-130px' , gap:'20px'}}>{batch.time}</Time>
         </Footer>
       </BatchInfo>
     </CardContainer>

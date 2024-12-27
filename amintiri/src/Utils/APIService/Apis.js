@@ -118,7 +118,6 @@ class Apis {
 
   }
 
-
   batchOrders(orderIds) {
     return axiosInstance.post(
       `/batch/batch-orders`, orderIds,);
@@ -127,20 +126,24 @@ class Apis {
   getStations() {
     return axiosInstance.get(`/api/station`);
   }
-
-  unbatch(batchIds) {
-    return axiosInstance.post(`/batch/unbatch`, { batchIds });
-  }
-
   
+  getBatchesByStation(stationId) {
+    return axiosInstance.get(`/batch`, {
+      params: {
+        stationId, 
+      },
+    });
+  }
+  unbatch(batchIds) {
+    return axiosInstance.post(`/batch/unbatch`, batchIds, { params: { userid: localStorage.getItem('userid'), authtoken: localStorage.getItem('token') } });
+}
+
   searchCustomers(query) {
     return axiosInstance.get(`/api/customers/search`, { 
       params: { query },
     });
   }
-
   
-
 }
 
 export default new Apis();
