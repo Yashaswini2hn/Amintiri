@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import HeaderTemplate from "../components/Templates/HeaderTemplate";
@@ -6,7 +6,7 @@ import UserGear from "../assests/UserGear.svg";
 import ChefHat from "../assests/ChefHat.svg";
 import AddUser from "../assests/AddUser.svg";
 import CaretDown from "../assests/CaretDown.svg";
-import Apis from  "../Utils/APIService/Apis";
+import Apis from "../Utils/APIService/Apis";
 
 const LayoutContainer = styled("div")({
   display: "flex",
@@ -211,44 +211,47 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-  
+
     Apis.getStores()
       .then((response) => {
         console.log("Stores fetched:", response.data);
-        setStores(response.data); 
+        setStores(response.data);
       })
       .catch((error) => console.error("Error fetching stores:", error));
   }, []);
 
   const handleSelect = (store) => {
-    setSelectedStore(store.name); 
-    setSelectedStoreDetails(store); 
+    setSelectedStore(store.name);
+    setSelectedStoreDetails(store);
     setDropdownVisible(false);
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-  
+
     Apis.loginUser(email, password)
       .then((response) => {
         console.log("Login Success:", response.data);
-        localStorage.setItem("userid", response.data.userid); 
-        localStorage.setItem("token", response.data.usersecret); 
-        navigate("/mainpage"); 
+        localStorage.setItem("userid", response.data.userid);
+        localStorage.setItem("token", response.data.usersecret);
+
+        // Ensure localStorage is updated before navigating
+        Promise.resolve().then(() => navigate("/mainpage"));
       })
       .catch((err) => {
         console.error("Login Error:", err.response ? err.response.data : err.message);
         alert(err.response?.data?.message || "Invalid email or password");
       });
+
   };
-  
-  
+
+
   const navigate = useNavigate();
 
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderTemplate/>
+        <HeaderTemplate />
       </HeaderContainer>
       <SidebarContainer>
         <SidebarItem>
@@ -263,7 +266,7 @@ const LandingPage = () => {
           </SidebarIcon>
           <SidebarText>STAFF</SidebarText>
         </SidebarItem>
-        <SidebarItem onClick={()  => navigate("/addUser")}>
+        <SidebarItem onClick={() => navigate("/addUser")}>
           <SidebarIcon>
             <img src={AddUser} alt="Add" style={{ width: "50%" }} />
           </SidebarIcon>
@@ -279,35 +282,35 @@ const LandingPage = () => {
               {isDropdownVisible && (
                 <DropdownOptions>
                   {stores.map((store, index) => (
-  <DropdownItem
-    key={store.id} 
-    onClick={() => handleSelect(store)} 
-  >
-    {store.name} 
-  </DropdownItem>
-))}  
+                    <DropdownItem
+                      key={store.id}
+                      onClick={() => handleSelect(store)}
+                    >
+                      {store.name}
+                    </DropdownItem>
+                  ))}
                 </DropdownOptions>
               )}
             </SelectFieldWrapper>
             <InputFieldWrapper>
-  <StyledText htmlFor="email" hasValue={!!email}>Email</StyledText>
-  <InputField
-    id="email"
-    type="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-  />
-</InputFieldWrapper>
+              <StyledText htmlFor="email" hasValue={!!email}>Email</StyledText>
+              <InputField
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </InputFieldWrapper>
 
-<InputFieldWrapper>
-  <StyledText htmlFor="password" hasValue={!!password}>Password</StyledText>
-  <InputField
-    id="password"
-    type="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-  />
-</InputFieldWrapper>
+            <InputFieldWrapper>
+              <StyledText htmlFor="password" hasValue={!!password}>Password</StyledText>
+              <InputField
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </InputFieldWrapper>
 
             <LoginButton type="submit">Login</LoginButton>
           </FormContainer>

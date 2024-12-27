@@ -1,164 +1,126 @@
+// import axios from "axios";
+
+// const baseUrl = "http://ec2-15-207-138-177.ap-south-1.compute.amazonaws.com:8080";
+// const username = "admin";
+// const password = "admin123";
+
+
+// const basicAuth = "Basic " + btoa(`${username}:${password}`);
+
+// const userId = localStorage.getItem("userid")
+// const apiToken = localStorage.getItem("token")
+
+// console.log("userId .... " , userId)
+// console.log("apiToken .... " , apiToken)
+
+
+// class Apis {
+//   
+
+//  
+
+//  
+
+//   
+
+
+
+//   batchOrders(orderIds) {
+//     return axios.post(
+//       `${baseUrl}/batch/batch-orders?userid=${userId}&authtoken=${apiToken}`,
+//       orderIds, 
+//       {
+//         headers: {
+//           Authorization: basicAuth,
+//           Accept: "*/*",
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//   }
+
+// }
+
+// const apisInstance = new Apis();
+// export default apisInstance;
+
+
 import axios from "axios";
 
 const baseUrl = "http://ec2-15-207-138-177.ap-south-1.compute.amazonaws.com:8080";
 const username = "admin";
 const password = "admin123";
-
-
 const basicAuth = "Basic " + btoa(`${username}:${password}`);
 
-const userId = localStorage.getItem("userid")
-const apiToken = localStorage.getItem("token")
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: baseUrl,
+  headers: {
+    Authorization: basicAuth,
+    Accept: "*/*",
+    "Content-Type": "application/json",
+  },
+});
 
+// Add an interceptor to include userId and apiToken dynamically
+axiosInstance.interceptors.request.use((config) => {
+  const userId = localStorage.getItem("userid");
+  const apiToken = localStorage.getItem("token");
+
+  // Include userId and apiToken in query params or headers
+  if (userId && apiToken) {
+    config.params = {
+      ...config.params,
+      userid: userId,
+      authtoken: apiToken,
+    };
+  }
+  return config;
+});
 
 class Apis {
+
+
+  createUser(name, mobile, email, role, password) {
+    return axios.post(baseUrl + `/api/users?name=${name}&mobile=${mobile}&email=${email}&role=${role}&password=${password}`);
+  }
+
+  loginUser(email, password) {
+    return axios.post(baseUrl + `/api/users/login?emailormobile=${email}&password=${password}`);
+  }
+
   getStores() {
-    return axios.get(baseUrl + "/api/stores", {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
+    return axiosInstance.get("/api/stores");
   }
 
-  createUser(name,mobile,email,role,password) {
-    return axios.post(baseUrl + `/api/users?name=${name}&mobile=${mobile}&email=${email}&role=${role}&password=${password}`, {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
-  }
-
-  loginUser(email,password) {
-    return axios.post(baseUrl + `/api/users/login?emailormobile=${email}&password=${password}`,{
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
-  }
-
-  getAllOrders(userid,usersecret) {
-    return axios.get(baseUrl + `/api/orders?userid=${userId}&authtoken=${apiToken}`,{
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
-  }
- 
   getCustomers() {
-    return axios.get(
-      baseUrl +
-        `/api/customers?userid=${userId}&authtoken=${apiToken}`,
-      {
-        headers: {
-          Authorization: basicAuth,
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return axiosInstance.get(`/api/customers`);
   }
 
   getOrders(customerId) {
-    return axios.get(
-      `${baseUrl}/api/customers/${customerId}/orders?userid=${userId}&authtoken=${apiToken}`,
-      {
-        headers: {
-          Authorization: basicAuth,
-          Accept: '*/*',
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    return axiosInstance.get(`/api/customers/${customerId}/orders`);
   }
 
   getBatches() {
-    const userId = localStorage.getItem("userid");
-    const apiToken = localStorage.getItem("token");
-  
-    if (!userId || !apiToken) {
-      console.error("UserID or AuthToken is missing");
-      return Promise.reject("Missing UserID or AuthToken");
-    }
-  
-    return axios.get(
-      `${baseUrl}/batch?userid=${userId}&authtoken=${apiToken}`,
-      {
-        headers: {
-          Authorization: basicAuth,
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } 
-
-  getOrdersByStatus(status) {
-    const query = `status=${status}&userid=${userId}&authtoken=${apiToken}`;
-    return axios.get(`${baseUrl}/api/orders?${query}`, {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
+    return axiosInstance.get(`/batch`);
   }
 
-  getOrdersByDate(date) {
-    const query = `date=${date}&userid=${userId}&authtoken=${apiToken}`;
-    return axios.get(`${baseUrl}/api/orders?${query}`, {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
+  // getOrdersByStatus(status) {
+  //   return axiosInstance.get("/api/orders", {
+  //     params: { status }, // Include the status dynamically
+  //   });
+  // }
+
+  getAllOrders(filters) {
+    return axiosInstance.get("/api/orders", {
+      params: { ...filters }, // Spread the filters object into query parameters
     });
+  
   }
 
-  getOrdersByDeliveryTime(startTime, endTime) {
-    const query = `deliveryTimeStart=${startTime}&deliveryTimeEnd=${endTime}&userid=${userId}&authtoken=${apiToken}`;
-    return axios.get(`${baseUrl}/api/orders?${query}`, {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
-  }
-  
-  fetchOrdersBySelectedStatusAPI(status) {
-    const query = `status=${status}&userid=${userId}&authtoken=${apiToken}`;
-    return axios.get(`${baseUrl}/api/orders?${query}`, {
-      headers: {
-        Authorization: basicAuth,
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    });
-  }  
 
-  batchOrders(orderIds) {
-    return axios.post(
-      `${baseUrl}/batch/batch-orders?userid=${userId}&authtoken=${apiToken}`,
-      orderIds, 
-      {
-        headers: {
-          Authorization: basicAuth,
-          Accept: "*/*",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  }
-  
+
 }
 
-const apisInstance = new Apis();
-export default apisInstance;
+export default new Apis();
+
