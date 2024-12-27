@@ -115,62 +115,31 @@ class Apis {
     return axiosInstance.get("/api/orders", {
       params: { ...filters }, // Spread the filters object into query parameters
     });
-  
+
   }
 
 
-//   batchOrders(orderIds) {
-//     return axios.post(
-//       `${baseUrl}/batch/batch-orders?userid=${userId}&authtoken=${apiToken}`,
-//       orderIds, 
-//       {
-//         headers: {
-//           Authorization: basicAuth,
-//           Accept: "*/*",
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//   }
+  batchOrders(orderIds) {
+    return axiosInstance.post(
+      `/batch/batch-orders`, orderIds,);
+  }
 
-//   getStations(userId, token) {
-//     return axios.get(`${baseUrl}/api/station?userid=${userId}&authtoken=${apiToken}`, {
-//       headers: {
-//         Authorization: basicAuth,
-//         Accept: '*/*',
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//   }
-  
-//   unbatch(batchIds) {
-//     const userId = localStorage.getItem('userid');
-//     const apiToken = localStorage.getItem('token');
-  
-//     return axios.post(
-//       `${baseUrl}/batch/unbatch?userid=${userId}&authtoken=${apiToken}`,
-//       { batchIds },
-//       {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: basicAuth,
-//         },
-//       }
-//     );
-//   }
+  getStations() {
+    return axiosInstance.get(`/api/station`);
+  }
 
-//   searchCustomers(query) {
-//     return axios.get(`${baseUrl}/api/customers/search?userid=${userId}&authtoken=${apiToken}&query=${query}`, {
-//       headers: {
-//         Authorization: basicAuth,
-//         Accept: "*/*",
-//         "Content-Type": "application/json",
-//       },
-//     });
-// }
+  unbatch(batchIds) {
+    return axiosInstance.post(`/batch/unbatch`, { batchIds });
+  }
 
-  
-  
+  searchCustomers(query) {
+    return axiosInstance.get(`/api/customers/search`, { 
+      axiosInstance:{query}
+    });
+  }
+
+
+
 }
 
 export default new Apis();
