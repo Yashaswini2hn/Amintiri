@@ -132,13 +132,14 @@ class Apis {
     return axiosInstance.post(`/batch/unbatch`, { batchIds });
   }
 
+  
   searchCustomers(query) {
     return axiosInstance.get(`/api/customers/search`, { 
-      axiosInstance:{query}
+      params: { query },
     });
   }
 
-
+  
 
 }
 

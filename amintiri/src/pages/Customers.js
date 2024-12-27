@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -105,25 +105,40 @@ const CalendarDropdown = styled('div')(({ isVisible }) => ({
 }));
 
 const Customers = () => {
-  const [customers, setCustomers] = useState([]); 
-  const [selectedCustomer, setSelectedCustomer] = useState(null); 
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split('T')[0] + "T00:00:00"
   );
 
+  const calendarRef = useRef(null);
 
   const toggleCalendar = () => {
     setIsCalendarVisible((prev) => !prev);
   };
 
+  const handleOutsideClick = (event) => {
+    if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+      setIsCalendarVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
     Apis.getCustomers()
       .then((response) => {
-        const customerData = response.data;
+        const customerData = response.data || [];
         const formattedCustomers = customerData.map((customer) => ({
           id: customer.id,
           name: customer.name,
@@ -138,9 +153,7 @@ const Customers = () => {
         }
       })
       .catch((error) => console.error('Error fetching customers:', error))
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => setIsLoading(false));
   }, []);
 
   const fetchOrders = (customerId) => {
@@ -160,48 +173,80 @@ const Customers = () => {
 
   const handleCustomerClick = (customer) => {
     setSelectedCustomer(customer);
-    fetchOrders(customer.id); 
+    fetchOrders(customer.id);
   };
 
   const handleDateChange = (date) => {
-    console.log("Selected Date from Calendar:", date);
     const formattedDate = date.toISOString().split('T')[0] + "T00:00:00";
-    console.log("Formatted Date:", formattedDate); 
-    setSelectedDate(formattedDate); 
-    setIsCalendarVisible(false); 
-    // fetchOrdersByDate(formattedDate); 
+    setSelectedDate(formattedDate);
+    setIsCalendarVisible(false);
+  };
+
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+
+    if (query.length > 2) {
+      setIsLoading(true);
+      Apis.searchCustomers(query)
+        .then((response) => {
+          const customerData = response.data || [];
+          const formattedCustomers = customerData.map((customer) => ({
+            id: customer.id,
+            name: customer.name,
+            mobile: customer.mobile,
+            addresses: customer.addresses,
+          }));
+          setCustomers(formattedCustomers);
+        })
+        .catch((error) => console.error("Error searching customers:", error))
+        .finally(() => setIsLoading(false));
+    } else if (query.length === 0) {
+      Apis.getCustomers()
+        .then((response) => {
+          const customerData = response.data || [];
+          const formattedCustomers = customerData.map((customer) => ({
+            id: customer.id,
+            name: customer.name,
+            mobile: customer.mobile,
+            addresses: customer.addresses,
+          }));
+          setCustomers(formattedCustomers);
+        })
+        .catch((error) => console.error("Error fetching customers:", error));
+    }
   };
 
   return (
     <LayoutContainer>
-      <HeaderTemplate/>
+      <HeaderTemplate />
       <SidebarContainer>
-        <SidebarTemplate/>
+        <SidebarTemplate />
       </SidebarContainer>
       <Loader isLoading={isLoading} />
       <MainContainer>
         <TopBarContainer>
           <SearchInputContainer>
             <img src={SearchIcon} alt="Search Icon" style={{ width: '16px' }} />
-            <SearchInput placeholder="Search" />
+            <SearchInput
+              type="text"
+              placeholder="Search by name, phone, or address"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
           </SearchInputContainer>
-          {/* <Button>
-            Collections
-            <img src={ArrowDropdownIcon} alt="Dropdown Icon"/>
-          </Button> */}
           <Button onClick={toggleCalendar}>
-          <img
+            <img
               src={CalendarIcon}
               alt="Calendar Icon"
               style={{ width: '24px', height: '24px', marginRight: '10px' }}
             />
             {selectedDate ? selectedDate.split('T')[0] : 'Select Date'}
           </Button>
-          <CalendarDropdown isVisible={isCalendarVisible}>
+          <CalendarDropdown isVisible={isCalendarVisible} ref={calendarRef}>
             <Calendar onChange={handleDateChange} value={selectedDate} />
           </CalendarDropdown>
         </TopBarContainer>
-         
         {customers.map((customer, index) => (
           <CustomerCard
             key={index}
@@ -212,7 +257,6 @@ const Customers = () => {
             onClick={() => handleCustomerClick(customer)}
           />
         ))}
-
         {selectedCustomer && <CustomerDetails customer={selectedCustomer} orders={orders} />}
       </MainContainer>
     </LayoutContainer>
