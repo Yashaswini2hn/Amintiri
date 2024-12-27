@@ -119,7 +119,6 @@ class Apis {
   }
 
 
-
 }
 
 export default new Apis();

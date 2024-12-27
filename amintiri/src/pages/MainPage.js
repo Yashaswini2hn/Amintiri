@@ -311,7 +311,6 @@ const CalendarDropdown = styled('div')(({ isVisible }) => ({
   width: '300px',
 }));
 
-
 const times = [
   '9:00 AM',
   '10:00 AM',
@@ -418,7 +417,7 @@ const MainPage = () => {
 
 
   const fetchOrdersByDeliveryTime = (startTime, endTime) => {
-    setIsLoading(true); // Show loader
+    setIsLoading(true); 
     Apis.getOrdersByDeliveryTime(startTime, endTime)
       .then((response) => {
         const mappedOrders = response.data.map((order) => ({
@@ -876,7 +875,7 @@ const MainPage = () => {
                 />
               ))}
             </OrderListContainer>
-            
+
             {selectedOrder && (
               <OrderDetailsContainer>
                 <OrderDetails order={selectedOrder} />

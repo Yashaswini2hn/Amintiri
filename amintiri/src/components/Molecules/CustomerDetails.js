@@ -118,7 +118,7 @@ const SendOffersButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '80px',
+  marginTop: '165px',
 });
 
 const CustomerDetails = ({ customer, orders }) => {
