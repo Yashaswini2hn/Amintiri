@@ -183,6 +183,17 @@ class Apis {
       }
     );
   }
+
+  searchCustomers(query) {
+    return axios.get(`${baseUrl}/api/customers/search?userid=${userId}&authtoken=${apiToken}&query=${query}`, {
+      headers: {
+        Authorization: basicAuth,
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    });
+}
+
   
   
 }
