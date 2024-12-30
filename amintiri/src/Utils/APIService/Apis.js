@@ -105,23 +105,25 @@ class Apis {
     return axiosInstance.get(`/batch`);
   }
 
-  // getOrdersByStatus(status) {
-  //   return axiosInstance.get("/api/orders", {
-  //     params: { status }, // Include the status dynamically
-  //   });
-  // }
+
 
   getAllOrders(filters) {
     return axiosInstance.get("/api/orders", {
-      params: { ...filters }, // Spread the filters object into query parameters
+      params: { ...filters }, 
     });
-
   }
 
   batchOrders(orderIds) {
     return axiosInstance.post(
       `/batch/batch-orders`, orderIds,);
   }
+
+  getBatchesByDate(date) {
+    return axiosInstance.get(`/batch`, {
+      date: date,
+    });
+  }
+   
 
   getStations() {
     return axiosInstance.get(`/api/station`);
@@ -134,9 +136,14 @@ class Apis {
       },
     });
   }
-  unbatch(batchIds) {
-    return axiosInstance.post(`/batch/unbatch`, batchIds, { params: { userid: localStorage.getItem('userid'), authtoken: localStorage.getItem('token') } });
+  
+  
+  unbatch(orderItemIds) {
+    return axiosInstance.post(`/batch/unbatch`,  orderItemIds ); 
+    
 }
+
+
 
   searchCustomers(query) {
     return axiosInstance.get(`/api/customers/search`, { 

@@ -15,6 +15,10 @@ import Loader from '../components/Atoms/Loader.js';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
+  flexDirection: 'row',
+  '@media (max-width: 768px)': {
+    flexDirection: 'column', 
+  },
   height: '100vh',
 });
 
@@ -25,6 +29,10 @@ const SidebarContainer = styled('div')({
   top: '84px',
   bottom: 0,
   left: 0,
+  '@media (max-width: 768px)': {
+    width: '100%', 
+    position: 'relative', 
+  },
 });
 
 const MainContainer = styled('div')({
@@ -33,12 +41,19 @@ const MainContainer = styled('div')({
   marginLeft: '178px',
   padding: '20px',
   overflowY: 'scroll',
+  backgroundColor:'#00FF00',
+
   height: 'calc(100vh - 84px)',
   backgroundColor: '#FFFFFF',
   display: 'flex',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
     display: 'none',
+  },
+  '@media (max-width: 768px)': {
+    marginLeft: '0', 
+    marginTop: '10px',
+    height: 'auto', 
   },
 });
 
@@ -48,10 +63,17 @@ const OrderListContainer = styled('div')({
   flexDirection:"column",
   marginRight: '0px',
   width: '600px',
+  '@media (max-width: 768px)': {
+    width: '100%', 
+  },
 });
 
 const OrderDetailsContainer = styled('div')({
   width: '390px',
+  '@media (max-width: 768px)': {
+    width: '100%', 
+    marginTop: '20px', 
+  },
 });
 
 const ButtonGroup = styled('div')({
@@ -62,6 +84,10 @@ const ButtonGroup = styled('div')({
   marginTop: '5px',
   marginLeft: '0px',
   position: 'relative',
+  '@media (max-width: 768px)': {
+    flexDirection: 'column', // Stack buttons on mobile
+    gap: '10px',
+  },
 });
 
 const OrdersButton = styled('button')({
@@ -278,13 +304,9 @@ const StatusDropdownItem = styled('div')(({ isSelected }) => ({
   },
 }));
 
-
 const BatchButton = styled('button')(({ isDisabled }) => ({
   width: '108px',
   height: '44px',
-  position: 'absolute',
-  top: '109px',
-  left: '1000px',
   backgroundColor: isDisabled ? '#0A616940' : '#06555C',
   fontFamily: 'Futura Bk BT',
   fontSize: '18px',
@@ -349,7 +371,8 @@ const MainPage = () => {
 
 
   const [selectedCards, setSelectedCards] = useState([]);
-
+ 
+  const mediaQuery = (maxWidth) => `@media (max-width: ${maxWidth}px)`;
 
   const userId = localStorage.getItem('userid');
   const authToken = localStorage.getItem('token');
@@ -547,8 +570,6 @@ const MainPage = () => {
       console.error("Error fetching orders by status:", error)
       setIsLoading(false); 
   });
-
-
   }
 
   // const fetchOrdersByStatus = (status) => {
@@ -615,9 +636,6 @@ const MainPage = () => {
       status: orderType, // Add or update the status key
     }));
   };
-
-
-
   // fetchOrdersBySelectedStatus
 
 
@@ -727,7 +745,6 @@ const MainPage = () => {
     }
   };
 
-
   return (
     <LayoutContainer>
       <HeaderTemplate />
@@ -738,14 +755,6 @@ const MainPage = () => {
       <MainContainer>
         {!isLoading && activeOption === 'ORDERS' && (
           <>
-            <BatchButton
-              isDisabled={selectedCards.length < 3}
-              disabled={selectedCards.length < 3}
-              onClick={handleBatchOrders}
-            >
-              Batch
-            </BatchButton>
-
             <OrderListContainer>
               <ButtonGroup>
                 <OrdersButton
@@ -865,7 +874,15 @@ const MainPage = () => {
                     </StatusDropdownOuter>
                   )}
                 </StatusButton>
+                <BatchButton
+              isDisabled={selectedCards.length < 3}
+              disabled={selectedCards.length < 3}
+              onClick={handleBatchOrders}
+            >
+              Batch
+            </BatchButton>
               </ButtonGroup>
+              
               {orders.map((order) => (
                 <OrderCard
                   key={order.orderId}
@@ -881,6 +898,7 @@ const MainPage = () => {
                   onCheckboxChange={(isChecked) =>
                     handleCheckboxChange(order.orderId, isChecked)
                   }
+                  isActive={selectedOrder?.orderId === order.orderId}
                 />
               ))}
             </OrderListContainer>

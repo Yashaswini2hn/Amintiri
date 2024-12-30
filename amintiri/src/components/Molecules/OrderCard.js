@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
-const CardContainer = styled('div')({
+const CardContainer = styled('div')(({ isActive }) => ({
   width: '100%',
   backgroundColor: '#FFFFFF',
   marginBottom: '15px',
@@ -15,7 +15,13 @@ const CardContainer = styled('div')({
   marginLeft: '0px',
   boxShadow: '0px 4px 4px 0px #00000026',
   alignItems: 'flex-start',
-});
+  border: isActive ? '2px solid #E1BD52' : '2px solid transparent', 
+  transition: 'transform 0.3s ease-in-out, border 0.3s ease',
+  transform: 'scale(1)',
+  '&:hover': {
+    transform: 'scale(1.05)', 
+  },
+}));
 
 const Checkbox = styled('input')({
   appearance: 'none',
@@ -71,12 +77,20 @@ const OrderNumber = styled('span')({
 
 const OrderTimeContainer = styled('div')({
   backgroundColor: '#0A616940',
-  padding: '2px 8px',
+  padding: '4px 10px', // Adjust padding for better appearance
   borderRadius: '4px',
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'space-between',
   marginRight: '10px',
-  gap: '5px', 
+  gap: '5px',
+  '@media (max-width: 768px)': {
+    width: '100%', // Full width on smaller screens
+    justifyContent: 'flex-start', // Align items to the start
+    gap: '8px',
+    padding:'4px 10px',
+    justifyContent:'space-between'
+  },
 });
 
 const OrderTimeLabel = styled('span')({
@@ -85,7 +99,9 @@ const OrderTimeLabel = styled('span')({
   fontWeight: 400,
   color: '#06555C',
   marginRight: '4px',
-  
+  '@media (max-width: 768px)': {
+    fontSize: '12px', 
+  },
 });
 
 const OrderDateValue = styled('span')({
@@ -93,7 +109,10 @@ const OrderDateValue = styled('span')({
   fontSize: '12px',
   fontWeight: 700,
   color: '#06555C',
-  marginTop:'2px'
+  marginRight: '5px',
+  '@media (max-width: 768px)': {
+    fontSize: '11px', // Reduce font size for smaller screens
+  },
 });
 
 const OrderTimeValue = styled('span')({
@@ -101,7 +120,9 @@ const OrderTimeValue = styled('span')({
   fontSize: '12px',
   fontWeight: 700,
   color: '#06555C',
-  marginTop:'2px'
+  '@media (max-width: 768px)': {
+    fontSize: '11px', // Adjust for smaller screens
+  },
 });
 
 const StatusLabel = styled('div')({
@@ -115,29 +136,54 @@ const StatusLabel = styled('div')({
   display: 'inline-block',
 });
 
-const ItemsList = styled('div')({
-  marginTop: '10px',
-  color: '#000000',
-  fontFamily: 'Futura Bk BT',
-  fontSize: '14px',
-  display: 'grid',
-  gridTemplateColumns: 'auto 50px 20px',
-  gap: '10px 20px',
-});
+// const ItemsList = styled('div')({
+//   marginTop: '10px',
+//   color: '#000000',
+//   fontFamily: 'Futura Bk BT',
+//   fontSize: '14px',
+//   display: 'grid',
+//   gridTemplateColumns: 'auto 50px 20px',
+//   gap: '10px 20px',
+// });
 
 const ItemName = styled('span')({
   gridColumn: '1',
  
 });
 
+const ItemsList = styled('div')({
+  marginTop: '10px',
+  color: '#000000',
+  fontFamily: 'Futura Bk BT',
+  fontSize: '14px',
+  display: 'grid',
+  gridTemplateColumns: '2fr 1fr 1fr', // Adjust columns for better alignment
+  gap: '10px',
+  alignItems: 'center',
+  '@media (max-width: 768px)': {
+    gridTemplateColumns: '1fr', // Stack items vertically on smaller screens
+    gap: '8px',
+  },
+});
+
 const ItemWeight = styled('span')({
-  gridColumn: '2',
-  marginLeft: '-220px',
+  gridColumn: '2', // Place in the second column
+  textAlign: 'right', // Align to the right
+  fontSize: '12px',
+  '@media (max-width: 768px)': {
+    textAlign: 'left', // Align to the left for smaller screens
+    marginLeft: '10px',
+  },
 });
 
 const ItemQuantity = styled('span')({
-  gridColumn: '3',
-  marginLeft: '-100px',
+  gridColumn: '3', // Place in the third column
+  textAlign: 'center', // Center-align for consistency
+  fontSize: '12px',
+  '@media (max-width: 768px)': {
+    textAlign: 'left', // Align to the left for smaller screens
+    marginLeft: '10px',
+  },
 });
 
 const ExtraItemsCircle = styled('div')({
@@ -187,7 +233,7 @@ const CustomerName = styled('div')({
   fontSize: '18px',
 });
 
-const OrderCard = ({ orderNumber, orderTime, orderDate,status, items = [], deliveryTime, customerName, address = '', onCheckboxChange, onSelect }) => {
+const OrderCard = ({ orderNumber, orderTime, orderDate,status, items = [], deliveryTime, customerName, address = '', onCheckboxChange, onSelect ,isActive}) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
 
@@ -228,18 +274,18 @@ const OrderCard = ({ orderNumber, orderTime, orderDate,status, items = [], deliv
   };
 
   return (
-    <CardContainer onClick={handleCardClick}>
+    <CardContainer onClick={handleCardClick} isActive={isActive}>
       <Checkbox type="checkbox" checked={isChecked} onChange={handleCheckboxClick}/>
       <OrderInfo>
-        <OrderHeader>
-          <OrderNumber>{orderNumber}</OrderNumber>
-          <OrderTimeContainer>
-          <OrderTimeLabel>Ordered:</OrderTimeLabel>
-          <OrderDateValue>{orderDate}</OrderDateValue> 
-          <OrderTimeValue>{orderTime}</OrderTimeValue> 
-          </OrderTimeContainer>
-          <StatusLabel>{status}</StatusLabel>
-        </OrderHeader>
+      <OrderHeader>
+      <OrderNumber>{orderNumber}</OrderNumber>
+      <OrderTimeContainer>
+      <OrderTimeLabel>Ordered:</OrderTimeLabel>
+      <OrderDateValue>{orderDate}</OrderDateValue>
+      <OrderTimeValue>{orderTime}</OrderTimeValue>
+      </OrderTimeContainer>
+      <StatusLabel>{status}</StatusLabel>
+      </OrderHeader>
         <ItemsList>
           {displayedItems.map((item, index) => (
             <React.Fragment key={index}>

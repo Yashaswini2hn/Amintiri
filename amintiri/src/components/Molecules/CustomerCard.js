@@ -2,21 +2,28 @@ import React, {  useState } from 'react';
 import { styled } from '@mui/system';
 import MapIcon from '../../assests/Map.svg';
 
-const CardContainer = styled('div')({
-  width:'70%',
-  backgroundColor:'#FFFFFF',
-  marginBottom:'15px',
-  display:'flex',
-  padding:'20px',
-  gap:'10px',
-  borderRadius:'8px 8px 8px 8px',
-  marginTop:'15px',
-  marginLeft:'0px',
-  position:'relative',
+const CardContainer = styled('div')(({ isActive }) => ({
+  width: '70%',
+  backgroundColor: '#FFFFFF',
+  marginBottom: '15px',
+  display: 'flex',
+  padding: '20px',
+  gap: '10px',
+  borderRadius: '8px',
+  marginTop: '15px',
+  marginLeft: '0px',
+  position: 'relative',
   boxShadow: '4px 4px 4px 4px #00000026',
-  cursor:'pointer',
-  justifyContent:'flex-start'
-});
+  cursor: 'pointer',
+  justifyContent: 'flex-start',
+  transition: 'transform 0.3s ease-in-out, border 0.3s ease',
+  transform: 'scale(1)',
+  border: isActive ? '2px solid #E1BD52' : '2px solid transparent',
+  '&:hover': {
+    transform: 'scale(1.05)', 
+  },
+}));
+
 
 const Checkbox = styled('input')({
   appearance: 'none',

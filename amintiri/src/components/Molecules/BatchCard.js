@@ -133,6 +133,9 @@ const Time = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '16px',
   color: '#06555C',
+  display: 'flex',
+  gap: '10px', 
+  alignItems: 'center', 
 });
 
 const BatchCard = ({ batch, onCheckboxChange }) => {
@@ -169,13 +172,16 @@ const BatchCard = ({ batch, onCheckboxChange }) => {
 
         {/* Footer */}
         <Footer>
-          <DeliveryIconImage
-            style={{ marginTop: '-130px' }}
-            src={DeliveryIcon}
-            alt="Delivery Icon"
-          />
-          <Time style={{ marginTop: '-130px' , gap:'20px'}}>{batch.time}</Time>
-        </Footer>
+        <DeliveryIconImage
+         style={{ marginTop: '-130px' }}
+         src={DeliveryIcon}
+         alt="Delivery Icon"
+         />
+        <Time style={{ marginTop: '-130px' }}>
+        <span>{batch.batchDateTime || 'No Date/Time'}</span>
+        </Time>
+       </Footer>
+
       </BatchInfo>
     </CardContainer>
   );

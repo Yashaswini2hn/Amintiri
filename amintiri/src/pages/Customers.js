@@ -235,7 +235,7 @@ const Customers = () => {
               onChange={handleSearch}
             />
           </SearchInputContainer>
-          <Button onClick={toggleCalendar}>
+          {/* <Button onClick={toggleCalendar}>
             <img
               src={CalendarIcon}
               alt="Calendar Icon"
@@ -245,7 +245,7 @@ const Customers = () => {
           </Button>
           <CalendarDropdown isVisible={isCalendarVisible} ref={calendarRef}>
             <Calendar onChange={handleDateChange} value={selectedDate} />
-          </CalendarDropdown>
+          </CalendarDropdown> */}
         </TopBarContainer>
         {customers.map((customer, index) => (
           <CustomerCard

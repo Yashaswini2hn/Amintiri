@@ -14,8 +14,6 @@ const OrderDetailsContainer = styled('div')({
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
-  top: '70px',
-  left: '1120px',
   marginLeft:'30px',
   display: 'flex',
   flexDirection: 'column', 
