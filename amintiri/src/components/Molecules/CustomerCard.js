@@ -22,6 +22,10 @@ const CardContainer = styled('div')(({ isActive }) => ({
   '&:hover': {
     transform: 'scale(1.05)', 
   },
+  '@media (max-width:1200px)': {
+    width:'70%', 
+   
+  },
 }));
 
 

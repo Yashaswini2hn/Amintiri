@@ -14,6 +14,12 @@ const CustomerDetailsContainer = styled('div')({
   top: '10px',
   left: '977px',
   marginTop: '-20px',
+  '@media (min-width:1200px)': {
+    width:'25%', 
+    marginLeft:'300px',
+    height:'810px',
+    marginTop:'40px'
+  },
 });
 
 const Header = styled('div')({
@@ -31,6 +37,9 @@ const CustomerName = styled('span')({
   fontSize: '20px',
   fontWeight: 600,
   color: '#000000',
+  '@media (min-width:1200px)' : {
+    fontSize:'30px'
+  }
 });
 
 const CustomerInfo = styled('div')({
@@ -38,12 +47,19 @@ const CustomerInfo = styled('div')({
   fontSize: '12px',
   color: '#000000',
   marginBottom: '20px',
+  '@media (min-width:1200px)' : {
+    marginBottom:'20px'
+  }
 });
 
 const InfoRow = styled('div')({
   display: 'flex',
   alignItems: 'center',
-  marginBottom: '8px',
+  marginBottom: '8px', 
+  '@media (min-width:1200px)' : {
+    fontSize:'18px',
+   
+  }
 });
 
 const Icon = styled('img')({
@@ -56,6 +72,10 @@ const AddressText = styled('div')({
   fontSize: '12px',
   wordWrap: 'break-word',
   cursor: 'pointer',
+  '@media (min-width:1200px)' : {
+    fontSize:'18px',
+    marginTop:'10px'
+  }
 });
 
 const OrderHistoryHeader = styled('div')({
@@ -75,6 +95,10 @@ const OrderHistoryHeader = styled('div')({
     height: '2px',
     backgroundColor: '#E1BD52',
   },
+  '@media (min-width:1200px)':{
+    fontSize:'18px',
+    fontWeight:'600'
+  }
 });
 
 const OrderDate = styled('div')({
@@ -82,6 +106,9 @@ const OrderDate = styled('div')({
   fontSize: '14px',
   color: '#383838',
   marginBottom: '10px',
+  '@media (min-width:1200px)':{
+    fontSize:'18px',
+  }
 });
 
 const OrderRow = styled('div')({
@@ -99,12 +126,18 @@ const OrderItemName = styled('span')({
   fontSize: '14px',
   color: '#000000',
   flex: 1,
+  '@media (min-width:1200px)' : {
+    fontSize:'16px'
+  }
 });
 
 const OrderWeight = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '14px',
   color: '#383838',
+  '@media (min-width:1200px)': {
+    fontSize:'16px'
+  }
 });
 
 const SendOffersButton = styled('button')({
@@ -119,6 +152,10 @@ const SendOffersButton = styled('button')({
   borderRadius: '4px',
   cursor: 'pointer',
   marginTop: '310px',
+  '@media (min-width:1200px)': {
+   marginTop:'440px'
+  },
+
 });
 
 const CustomerDetails = ({ customer, orders }) => {

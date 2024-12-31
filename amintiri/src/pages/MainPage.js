@@ -19,7 +19,7 @@ const LayoutContainer = styled('div')({
   width: '100%', // Ensures the container spans the full width
   height: '100vh',
   overflowX: 'hidden',
-  '@media (max-width: 768px)': {
+  '@media (max-width:1200px)': {
     flexDirection: 'column', 
   },
 });
@@ -31,11 +31,9 @@ const SidebarContainer = styled('div')({
   top: '84px',
   bottom: 0,
   left: 0,
-  zIndex: 1000, // Ensure sidebar is always on top
-  margin: 0, // Remove extra margins
-  padding: 0, // Remove extra padding
   overflow:'hidden',
-  '@media (max-width: 768px)': {
+  boxShadow: "0px 1px 4px 0px #00000026",
+  '@media (max-width:1200px)': {
     width: '100%',
     position: 'relative',
   },
@@ -55,7 +53,7 @@ const MainContainer = styled('div')({
   '&::-webkit-scrollbar': {
     display: 'none',
   },
-  '@media (max-width: 768px)': {
+  '@media (max-width:1200px)': {
     marginLeft: '0', 
     marginTop: '10px',
     height: 'auto', 
@@ -67,14 +65,14 @@ const OrderListContainer = styled('div')({
   display:"flex",
   flexDirection:"column",
   width: '600px',
-  '@media (max-width: 768px)': {
+  '@media (max-width: 1200px)': {
     width: '100%', 
   },
 });
 
 const OrderDetailsContainer = styled('div')({
   width: '390px',
-  '@media (max-width: 768px)': {
+  '@media (max-width:1200px)': {
     width: '100%', 
     marginTop: '20px', 
   },
@@ -86,11 +84,11 @@ const ButtonGroup = styled('div')({
   marginBottom: '20px',
   justifyContent: 'flex-start',
   marginTop: '5px',
-  marginLeft: '0px',
   position: 'relative',
-  '@media (max-width: 768px)': {
-    flexDirection: 'column', // Stack buttons on mobile
+  '@media (min-width: 1200px)': {
+    flexDirection: 'row', // Stack buttons on mobile
     gap: '10px',
+    marginLeft:'20px'
   },
 });
 
@@ -338,6 +336,22 @@ const CalendarDropdown = styled('div')(({ isVisible }) => ({
   padding: '10px',
   width: '300px',
 }));
+
+const SearchInputContainer = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  width: '371px',
+  height: '44px',
+  border: '1px solid #E1BD52',
+  paddingLeft: '10px',
+  backgroundColor: '#FFFFFF',
+  transition: 'border-color 0.3s ease', 
+  '&:hover': {
+    borderColor: '#a24463',
+    borderWidth:'2px'
+  },
+});
 
 const times = [
   '9:00 AM',
@@ -759,8 +773,9 @@ const MainPage = () => {
       <MainContainer>
         {!isLoading && activeOption === 'ORDERS' && (
           <>
+          
             <OrderListContainer>
-              <ButtonGroup>
+              <ButtonGroup >
                 <OrdersButton
                   onMouseEnter={() => setIsOrdersDropdownVisible(true)}
                   onMouseLeave={() => setIsOrdersDropdownVisible(false)}

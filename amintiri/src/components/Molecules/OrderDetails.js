@@ -8,7 +8,7 @@ import ScrollIcon from '../../assests/Scroll.svg';
 import DeliveryIcon from '../../assests/delivery.svg';
 
 const OrderDetailsContainer = styled('div')({
-  width: '365px',
+  width: '30%',
   height: '627px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
@@ -18,11 +18,11 @@ const OrderDetailsContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-
   '@media (min-width: 1200px)': {
     width: '500px',
     height: '840px',
-    marginLeft: '10px',
+    marginLeft:'-120px'
+   
   },
 });
 
@@ -158,8 +158,8 @@ const OrderItems = styled('div')({
   '&::-webkit-scrollbar': {
     width: '0',
   },
-  '-ms-overflow-style': 'none',
-  'scrollbar-width': 'none',
+  // '-ms-overflow-style': 'none',
+  // 'scrollbar-width': 'none',
 
   '@media (min-width: 1200px)': {
     maxHeight: '400px',

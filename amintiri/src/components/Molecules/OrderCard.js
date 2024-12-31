@@ -21,11 +21,11 @@ const CardContainer = styled('div')(({ isActive }) => ({
   '&:hover': {
     transform: 'scale(1.05)', 
   },
-
   '@media (min-width: 1200px)': {
-    width: '100%',
+    width: '1090px',
     height: '840px',
-    right:'20px'
+    right:'20px',
+    left:'20px'
   },
 }));
 
@@ -154,7 +154,6 @@ const StatusLabel = styled('div')({
 
 const ItemName = styled('span')({
   gridColumn: '1',
- 
 });
 
 const ItemsList = styled('div')({
@@ -166,7 +165,7 @@ const ItemsList = styled('div')({
   gridTemplateColumns: '2fr 1fr 1fr', // Adjust columns for better alignment
   gap: '10px',
   alignItems: 'center',
-  '@media (max-width: 768px)': {
+  '@media (max-width: 1200px)': {
     gridTemplateColumns: '1fr', // Stack items vertically on smaller screens
     gap: '8px',
   },
@@ -176,8 +175,8 @@ const ItemWeight = styled('span')({
   gridColumn: '2', // Place in the second column
   textAlign: 'right', // Align to the right
   fontSize: '12px',
-  '@media (max-width: 768px)': {
-    textAlign: 'left', // Align to the left for smaller screens
+  '@media (max-width: 1200px)': {
+    textAlign: 'center', // Align to the left for smaller screens
     marginLeft: '10px',
   },
 });
@@ -186,7 +185,7 @@ const ItemQuantity = styled('span')({
   gridColumn: '3', // Place in the third column
   textAlign: 'center', // Center-align for consistency
   fontSize: '12px',
-  '@media (max-width: 768px)': {
+  '@media (max-width:1200px)': {
     textAlign: 'left', // Align to the left for smaller screens
     marginLeft: '10px',
   },

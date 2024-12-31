@@ -14,7 +14,6 @@ const SidebarContainer = styled(Box)({
   gap: "40px",
   marginLeft: "0px",
   boxShadow: "0px 1px 4px 0px #00000026",
-
   '@media (min-width: 1200px)': {
     width: '130px',
     height: '100vh',
