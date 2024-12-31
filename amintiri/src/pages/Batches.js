@@ -265,15 +265,14 @@ const Batches = () => {
     fetchBatchesByStation(stationId);
   };
 
-
-const toggleCalendar = () => {
-  setIsCalendarVisible((prev) => !prev);
-};
+  const toggleCalendar = () => {
+   setIsCalendarVisible((prev) => !prev);
+  };
   
-const handleDateChange = (dateOrEvent) => {
+  const handleDateChange = (dateOrEvent) => {
   // Check if it's an event or a date object
   const selectedDate =
-    dateOrEvent.target && dateOrEvent.target.value
+   dateOrEvent.target && dateOrEvent.target.value
       ? dateOrEvent.target.value // From <input>
       : dateOrEvent.toISOString().split("T")[0]; // From react-calendar
 
@@ -294,9 +293,6 @@ const handleDateChange = (dateOrEvent) => {
     .catch((error) => console.error("Error fetching batches by date:", error))
     .finally(() => setIsLoading(false));
 };
-
-
-
 
 const getValidDateRange = () => {
   // Filter valid batch times and parse them as Date objects

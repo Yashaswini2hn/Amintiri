@@ -182,7 +182,7 @@ const StaffPage = () => {
         <HeaderTemplate/>
       </HeaderContainer>
       <SidebarContainer>
-        <SidebarItem onClick={()  => navigate("/")}>
+        <SidebarItem onClick={()  => navigate("/login")}>
           <SidebarIcon>
             <img src={UserGear} alt="Admin" style={{width:"50%" }}/>
           </SidebarIcon>

@@ -16,22 +16,28 @@ import Loader from '../components/Atoms/Loader.js';
 const LayoutContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
+  width: '100%', // Ensures the container spans the full width
+  height: '100vh',
+  overflowX: 'hidden',
   '@media (max-width: 768px)': {
     flexDirection: 'column', 
   },
-  height: '100vh',
 });
 
 const SidebarContainer = styled('div')({
-  width: '178px',
+  width: '130px',
   backgroundColor: '#FFFFFF',
   position: 'fixed',
   top: '84px',
   bottom: 0,
   left: 0,
+  zIndex: 1000, // Ensure sidebar is always on top
+  margin: 0, // Remove extra margins
+  padding: 0, // Remove extra padding
+  overflow:'hidden',
   '@media (max-width: 768px)': {
-    width: '100%', 
-    position: 'relative', 
+    width: '100%',
+    position: 'relative',
   },
 });
 
@@ -41,10 +47,9 @@ const MainContainer = styled('div')({
   marginLeft: '178px',
   padding: '20px',
   overflowY: 'scroll',
-  backgroundColor:'#00FF00',
-
+  overflowX: 'hidden',
   height: 'calc(100vh - 84px)',
-  backgroundColor: '#FFFFFF',
+  backgroundColor:'#FFFFFF',
   display: 'flex',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
@@ -61,7 +66,6 @@ const OrderListContainer = styled('div')({
   flex: 1,
   display:"flex",
   flexDirection:"column",
-  marginRight: '0px',
   width: '600px',
   '@media (max-width: 768px)': {
     width: '100%', 

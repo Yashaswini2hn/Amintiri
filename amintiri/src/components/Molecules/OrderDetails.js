@@ -1,11 +1,11 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/system';
 import UserIcon from '../../assests/User.svg';
 import PhoneIcon from '../../assests/Phone.svg';
 import OrdersIcon from '../../assests/orders.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 import ScrollIcon from '../../assests/Scroll.svg';
-import DeliveryIcon from '../../assests/delivery.svg'; 
+import DeliveryIcon from '../../assests/delivery.svg';
 
 const OrderDetailsContainer = styled('div')({
   width: '365px',
@@ -14,10 +14,16 @@ const OrderDetailsContainer = styled('div')({
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
-  marginLeft:'30px',
+  marginLeft: '30px',
   display: 'flex',
-  flexDirection: 'column', 
-  justifyContent: 'space-between', 
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+
+  '@media (min-width: 1200px)': {
+    width: '500px',
+    height: '840px',
+    marginLeft: '10px',
+  },
 });
 
 const Header = styled('div')({
@@ -28,13 +34,22 @@ const Header = styled('div')({
   borderBottom: '2px solid #E1BD52',
   paddingBottom: '10px',
   marginTop: '10px',
+
+  '@media (min-width: 1200px)': {
+    marginBottom: '15px',
+    paddingBottom: '15px',
+  },
 });
 
 const OrderID = styled('span')({
-  fontFamily:'Futura Bk BT',
-  fontSize:'20px',
-  fontWeight:600,
+  fontFamily: 'Futura Bk BT',
+  fontSize: '20px',
+  fontWeight: 600,
   color: '#000000',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '24px',
+  },
 });
 
 const Status = styled('span')({
@@ -45,6 +60,11 @@ const Status = styled('span')({
   backgroundColor: '#E1BD52',
   padding: '5px 5px',
   borderRadius: '0px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '18px',
+    padding: '8px 10px',
+  },
 });
 
 const CustomerInfo = styled('div')({
@@ -52,31 +72,54 @@ const CustomerInfo = styled('div')({
   fontSize: '12px',
   color: '#000000',
   marginBottom: '20px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '14px',
+    marginBottom: '25px',
+  },
 });
 
 const InfoRow = styled('div')({
   display: 'flex',
   alignItems: 'center',
   marginBottom: '8px',
+
+  '@media (min-width: 1200px)': {
+    marginBottom: '10px',
+  },
 });
 
 const Icon = styled('img')({
   marginRight: '8px',
+
+  '@media (min-width: 1200px)': {
+    marginRight: '10px',
+    width: '20px',
+    height: '20px',
+  },
 });
 
 const TimeDeliveryRow = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  marginTop: '-5px', // Adjusted spacing
+  marginTop: '-5px',
+
+  '@media (min-width: 1200px)': {
+    marginTop: '0',
+  },
 });
 
 const AddressText = styled('div')({
   display: 'flex',
   flexDirection: 'column',
-  fontSize:'12px',
-  cursor: 'pointer', // Indicate that the text is clickable
+  fontSize: '12px',
+  cursor: 'pointer',
   wordBreak: 'break-word',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '14px',
+  },
 });
 
 const OrderItemsHeader = styled('div')({
@@ -86,10 +129,10 @@ const OrderItemsHeader = styled('div')({
   fontSize: '14px',
   color: '#383838CC',
   padding: '10px 0',
-  borderBottom: '1px solid #000', // Black line
+  borderBottom: '1px solid #000',
   position: 'relative',
   marginBottom: '10px',
-  '::before': { // Yellow line above
+  '::before': {
     content: '""',
     position: 'absolute',
     top: '-2px',
@@ -98,52 +141,80 @@ const OrderItemsHeader = styled('div')({
     height: '2px',
     backgroundColor: '#E1BD52',
   },
+
+  '@media (min-width: 1200px)': {
+    fontSize: '16px',
+    padding: '15px 0',
+  },
 });
 
 const OrderItems = styled('div')({
   fontFamily: 'Futura Bk BT',
-  flexGrow: 1, // Allows this section to take available space
-  overflowY: 'auto', // Makes the items scrollable
-  maxHeight: '300px', // Limit the height of the scrollable area
-  paddingRight: '5px', // Space for scrollbar
-  marginRight: '-5px', // Adjust the layout to avoid layout shift
+  flexGrow: 1,
+  overflowY: 'auto',
+  maxHeight: '300px',
+  paddingRight: '5px',
+  marginRight: '-5px',
   '&::-webkit-scrollbar': {
-    width: '0', // Hide the scrollbar
+    width: '0',
   },
-  '-ms-overflow-style': 'none', // IE and Edge
-  'scrollbar-width': 'none', // Firefox
-});
+  '-ms-overflow-style': 'none',
+  'scrollbar-width': 'none',
 
+  '@media (min-width: 1200px)': {
+    maxHeight: '400px',
+  },
+});
 
 const ItemRow = styled('div')({
   display: 'grid',
   gridTemplateColumns: '2fr 1fr 1fr',
   alignItems: 'center',
   padding: '10px 0',
+
+  '@media (min-width: 1200px)': {
+    padding: '15px 0',
+  },
 });
 
 const ItemName = styled('span')({
   color: '#0A6169',
   fontSize: '16px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '18px',
+  },
 });
 
 const ItemQuantity = styled('span')({
   color: '#000000',
   fontSize: '16px',
-  marginTop:'-25px'
+  marginTop: '-25px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '18px',
+  },
 });
 
 const InstructionsContainer = styled('div')({
-  display:'flex',
-  alignItems:'center',
-  color:'#383838CC',
-  marginTop:'10px',
+  display: 'flex',
+  alignItems: 'center',
+  color: '#383838CC',
+  marginTop: '10px',
+
+  '@media (min-width: 1200px)': {
+    marginTop: '15px',
+  },
 });
 
 const InstructionsText = styled('span')({
-  fontFamily:'Futura Lt BT',
-  fontSize:'14px',
-  marginLeft:'5px',
+  fontFamily: 'Futura Lt BT',
+  fontSize: '14px',
+  marginLeft: '5px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '16px',
+  },
 });
 
 const ReadyButton = styled('button')({
@@ -157,38 +228,25 @@ const ReadyButton = styled('button')({
   border: 'none',
   borderRadius: '0px',
   cursor: 'pointer',
-  lineHeight: '18px', 
+  lineHeight: '18px',
   bottom: '0',
-  marginTop:'10px'
+  marginTop: '10px',
+
+  '@media (min-width: 1200px)': {
+    fontSize: '20px',
+    padding: '20px',
+  },
 });
 
-const OrderDetails = ({order}) => {
-  const addressParts = (order.deliveryAddress || "").split(', ');
+const OrderDetails = ({ order }) => {
+  const addressParts = (order.deliveryAddress || '').split(', ');
   const addressLine1 = addressParts.slice(0, -1).join(', ');
-  const addressLine2 = addressParts[addressParts.length - 1] || "";
-  const [mainStatus, setMainStatus] = useState(order.status);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const addressLine2 = addressParts[addressParts.length - 1] || '';
   const [isFullAddressVisible, setIsFullAddressVisible] = useState(false);
   const address = addressParts.join(', ');
-  const [itemStatuses, setItemStatuses] = useState(
-    order.items.map((item) => item.status)
-  );
-
-  const handleStatusChange = (newStatus) => {
-    setMainStatus(newStatus);
-    setDropdownOpen(false);
-  };
-
-  const handleItemStatusChange = (index, newStatus) => {
-    setItemStatuses((prev) => {
-      const updatedStatuses = [...prev];
-      updatedStatuses[index] = newStatus;
-      return updatedStatuses;
-    });
-  };
 
   const handleAddressToggle = () => {
-    setIsFullAddressVisible((prev) => !prev); 
+    setIsFullAddressVisible((prev) => !prev);
   };
 
   const truncateAddress = (address) => {
@@ -196,64 +254,62 @@ const OrderDetails = ({order}) => {
     return words.length > 4 ? `${words.slice(0, 4).join(' ')}...` : address;
   };
 
-  console.log("order card order details ....." ,  order )
-
   return (
     <OrderDetailsContainer>
       <Header>
-      <OrderID>Orders ID {order.orderName}</OrderID> 
-      <Status>{order.status}</Status>
+        <OrderID>Orders ID {order.orderName}</OrderID>
+        <Status>{order.status}</Status>
       </Header>
       <CustomerInfo>
-        <InfoRow style={{fontWeight: 'bold'}}>
-          <Icon src={UserIcon} alt="User Icon"/>
+        <InfoRow style={{ fontWeight: 'bold' }}>
+          <Icon src={UserIcon} alt="User Icon" />
           {order.customerName}
         </InfoRow>
         <InfoRow>
-       <Icon src={PhoneIcon} alt="Phone Icon" />
-       {order.mobileNumber|| "No Mobile Number"}
-       </InfoRow>
+          <Icon src={PhoneIcon} alt="Phone Icon" />
+          {order.mobileNumber || 'No Mobile Number'}
+        </InfoRow>
         <TimeDeliveryRow>
           <InfoRow>
-            <Icon src={MapPinIcon} alt="Map Pin Icon"/>
+            <Icon src={MapPinIcon} alt="Map Pin Icon" />
             <AddressText onClick={handleAddressToggle}>
-            {isFullAddressVisible ? address : truncateAddress(address)}
+              {isFullAddressVisible ? address : truncateAddress(address)}
             </AddressText>
           </InfoRow>
           <div>
-            <InfoRow style={{marginTop:'-30px',marginLeft:'-30px'}}>
-              <Icon src={OrdersIcon} alt="Orders Icon"/>
-              {order.orderTime} 
+            <InfoRow style={{ marginTop: '-30px', marginLeft: '-30px' }}>
+              <Icon src={OrdersIcon} alt="Orders Icon" />
+              {order.orderTime}
             </InfoRow>
-            <InfoRow style={{marginLeft:'-30px'}}>
+            <InfoRow style={{ marginLeft: '-30px' }}>
               <Icon src={DeliveryIcon} alt="Delivery Icon" />
-              {order.deliveryTime} 
+              {order.deliveryTime}
             </InfoRow>
           </div>
         </TimeDeliveryRow>
       </CustomerInfo>
       <OrderItemsHeader>
-        <div style={{marginLeft:'20px'}}>ITEM</div>
-        <div style={{marginLeft:'50px'}}>QTY</div>
-        <div style={{marginLeft:'40px'}}>STATUS</div>
+        <div style={{ marginLeft: '20px' }}>ITEM</div>
+        <div style={{ marginLeft: '50px' }}>QTY</div>
+        <div style={{ marginLeft: '40px' }}>STATUS</div>
       </OrderItemsHeader>
       <OrderItems>
-    {order.items.map((item, index) => (
-    <ItemRow key={index}>
-      <div>
-        <ItemName>{item.itemName}</ItemName> 
-        <InstructionsContainer>
-          <Icon src={ScrollIcon} alt="Scroll Icon" />
-          <InstructionsText>
-            {item.customizationNotes ? item.customizationNotes :'No Notes'}
-          </InstructionsText>
-        </InstructionsContainer>
-      </div>
-      <ItemQuantity>{item.productWeight}</ItemQuantity> 
-      <Status>{item.status}</Status>
-    </ItemRow>
-  ))}
-</OrderItems>
+        {order.items.map((item, index) => (
+          <ItemRow key={index}>
+            <div>
+              <ItemName>{item.itemName}</ItemName>
+              <InstructionsContainer>
+                <Icon src={ScrollIcon} alt="Scroll Icon" />
+                <InstructionsText>
+                  {item.customizationNotes ? item.customizationNotes : 'No Notes'}
+                </InstructionsText>
+              </InstructionsContainer>
+            </div>
+            <ItemQuantity>{item.productWeight}</ItemQuantity>
+            <Status>{item.status}</Status>
+          </ItemRow>
+        ))}
+      </OrderItems>
       <ReadyButton>Ready For Delivery</ReadyButton>
     </OrderDetailsContainer>
   );
