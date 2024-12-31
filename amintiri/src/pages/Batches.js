@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useRef} from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -9,8 +9,8 @@ import PrinterIcon from '../assests/Printer (1).svg';
 import Apis from '../Utils/APIService/Apis';
 import Loader from '../components/Atoms/Loader';
 import Calendar from 'react-calendar';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker styles
+import 'react-calendar/dist/Calendar.css';
+
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -112,14 +112,15 @@ const UnblockButton = styled('button')(({ isDisabled }) => ({
 const CalendarDropdown = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
   position: 'absolute',
-  top: '55px',
-  left: '0px',
+  top: '147px',
+  left: '360px',
   background: '#FFFFFF',
   border: '1px solid #E1BD52',
   zIndex: 1000,
   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
   borderRadius: '0px',
   padding: '10px',
+  width: '300px',
 }));
 
 const PopupOverlay = styled('div')({
@@ -184,6 +185,10 @@ const Batches = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedOrderItemIds, setSelectedOrderItemIds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+ 
+
+  const calendarRef = useRef(null);
+
 
   const formatBatches = (batchData) => {
     return batchData.flatMap((batch) =>
@@ -265,39 +270,52 @@ const toggleCalendar = () => {
   setIsCalendarVisible((prev) => !prev);
 };
   
-const handleDateChange = (date) => {
-  setSelectedDate(date);
-  const formattedDate = date.toISOString().split("T")[0];
+const handleDateChange = (dateOrEvent) => {
+  // Check if it's an event or a date object
+  const selectedDate =
+    dateOrEvent.target && dateOrEvent.target.value
+      ? dateOrEvent.target.value // From <input>
+      : dateOrEvent.toISOString().split("T")[0]; // From react-calendar
 
-  // Fetch batches based on the selected date
-  Apis.getBatchesByDate(formattedDate)
+  setSelectedDate(selectedDate);
+
+  // Fetch batches for the selected date
+  setIsLoading(true);
+  Apis.getBatchesByDate(selectedDate)
     .then((response) => {
-      setBatches(
-        response.data.filter((batch) => {
-          const batchDate = new Date(batch.batchTime).toISOString().split("T")[0];
-          return batchDate === formattedDate;
-        })
-      );
+      // Format the batches using the existing formatBatches function
+      const formattedBatches = formatBatches(response.data);
+      const filteredBatches = formattedBatches.filter((batch) => {
+        const batchDate = new Date(batch.batchDateTime).toISOString().split("T")[0];
+        return batchDate === selectedDate;
+      });
+      setBatches(filteredBatches);
     })
-    .catch((error) => console.error("Error fetching batches by date:", error));
+    .catch((error) => console.error("Error fetching batches by date:", error))
+    .finally(() => setIsLoading(false));
 };
-  
-  const getValidDateRange = () => {
-    // Ensure valid batch times and prevent incorrect calculations
-    const validDates = batches
-      .filter((batch) => batch.batchTime) // Exclude invalid dates
-      .map((batch) => new Date(batch.batchTime));
-    const minDate = validDates.length > 0 ? new Date(Math.min(...validDates)) : new Date();
-    const maxDate = validDates.length > 0 ? new Date(Math.max(...validDates)) : new Date();
-  
+
+
+
+
+const getValidDateRange = () => {
+  // Filter valid batch times and parse them as Date objects
+  const validDates = batches
+    .filter((batch) => batch.batchTime) // Exclude invalid times
+    .map((batch) => new Date(batch.batchTime));
+
+  if (validDates.length > 0) {
+    // Calculate the min and max dates
+    const minDate = new Date(Math.min(...validDates));
+    const maxDate = new Date(Math.max(...validDates));
     return { minDate, maxDate };
-  };
-  
-  // Get the minDate and maxDate dynamically
-  const { minDate, maxDate } = getValidDateRange();     
+  }
 
+  // If no valid dates, default to enabling all dates
+  return { minDate: null, maxDate: null };
+};
 
-  
+const { minDate, maxDate } = getValidDateRange();
 
   // const handleCheckboxChange = (index) => {
   //   const updatedBatches = batches.map((batch, idx) =>
@@ -410,22 +428,19 @@ const handleDateChange = (date) => {
           </div>
           <Button onClick={toggleCalendar}>
           <img
-           src={CalendarIcon}
-           alt="Calendar Icon"
-           style={{ width: '24px', height: '24px', marginRight: '10px' }}
-            />
-          {selectedDate || 'Select Date'}
+          src={CalendarIcon}
+          alt="Calendar Icon"
+          style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+          {selectedDate ? new Date(selectedDate).toISOString().split('T')[0] : 'Select Date'}
           </Button>
-
           <CalendarDropdown isVisible={isCalendarVisible}>
           <Calendar
-          onChange={handleDateChange}
-          value={new Date(selectedDate)}
-    minDate={minDate} // Set minimum date based on batches
-    maxDate={maxDate} // Set maximum date based on batches
-  />
-</CalendarDropdown>
+           onChange={(date) => handleDateChange(date)}
+           value={selectedDate ? new Date(selectedDate) : new Date()}
+           minDate={minDate || undefined}
+           maxDate={maxDate || undefined}/>
 
+          </CalendarDropdown>
 
           {/* Station Dropdown */}
           <div style={{ position: 'relative' }}>
