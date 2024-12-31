@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate';
 import SidebarTemplate from '../components/Templates/SidebarTemplate';
@@ -12,12 +12,13 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Apis from '../Utils/APIService/Apis';
 import Loader from '../components/Atoms/Loader.js';
+import { Input } from '@mui/material';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   '@media (max-width: 768px)': {
-    flexDirection: 'column', 
+    flexDirection: 'column',
   },
   height: '100vh',
 });
@@ -30,8 +31,8 @@ const SidebarContainer = styled('div')({
   bottom: 0,
   left: 0,
   '@media (max-width: 768px)': {
-    width: '100%', 
-    position: 'relative', 
+    width: '100%',
+    position: 'relative',
   },
 });
 
@@ -41,7 +42,7 @@ const MainContainer = styled('div')({
   marginLeft: '178px',
   padding: '20px',
   overflowY: 'scroll',
-  backgroundColor:'#00FF00',
+  backgroundColor: '#00FF00',
 
   height: 'calc(100vh - 84px)',
   backgroundColor: '#FFFFFF',
@@ -51,28 +52,28 @@ const MainContainer = styled('div')({
     display: 'none',
   },
   '@media (max-width: 768px)': {
-    marginLeft: '0', 
+    marginLeft: '0',
     marginTop: '10px',
-    height: 'auto', 
+    height: 'auto',
   },
 });
 
 const OrderListContainer = styled('div')({
   flex: 1,
-  display:"flex",
-  flexDirection:"column",
+  display: "flex",
+  flexDirection: "column",
   marginRight: '0px',
   width: '600px',
   '@media (max-width: 768px)': {
-    width: '100%', 
+    width: '100%',
   },
 });
 
 const OrderDetailsContainer = styled('div')({
   width: '390px',
   '@media (max-width: 768px)': {
-    width: '100%', 
-    marginTop: '20px', 
+    width: '100%',
+    marginTop: '20px',
   },
 });
 
@@ -371,7 +372,7 @@ const MainPage = () => {
 
 
   const [selectedCards, setSelectedCards] = useState([]);
- 
+
   const mediaQuery = (maxWidth) => `@media (max-width: ${maxWidth}px)`;
 
   const userId = localStorage.getItem('userid');
@@ -450,7 +451,7 @@ const MainPage = () => {
 
 
   const fetchOrdersByDeliveryTime = (startTime, endTime) => {
-    setIsLoading(true); 
+    setIsLoading(true);
     Apis.getOrdersByDeliveryTime(startTime, endTime)
       .then((response) => {
         const mappedOrders = response.data.map((order) => ({
@@ -510,18 +511,18 @@ const MainPage = () => {
     };
 
     setOrderFilters((prevFilters) => {
-      const formattedTime = convertTo24HourFormat(time); 
+      const formattedTime = convertTo24HourFormat(time);
       const datePart = prevFilters?.date ? prevFilters.date.split("T")[0] : new Date().toISOString().split("T")[0];
       const deliveryTimeStart = new Date(`${datePart}T${formattedTime}`);
       const deliveryTimeEnd = new Date(deliveryTimeStart.getTime() + 2 * 60 * 60 * 1000);
-    
+
       return {
         ...prevFilters,
-        deliveryTimeStart: formatDate(deliveryTimeStart), 
-        deliveryTimeEnd: formatDate(deliveryTimeEnd), 
+        deliveryTimeStart: formatDate(deliveryTimeStart),
+        deliveryTimeEnd: formatDate(deliveryTimeEnd),
       };
     });
-    
+
 
   };
 
@@ -539,37 +540,37 @@ const MainPage = () => {
 
 
     Apis.getAllOrders(orderFilters)
-    .then((response) => {
-      const mappedOrders = response.data.map((order) => ({
-        orderId: order.orderId || "N/A",
-        orderName: order.orderName || "N/A",
-        orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        orderDate: new Date(order.orderDateTime).toLocaleDateString(),
-        status: order.orderStatus?.status || "Unknown",
-        items: order.items.map((item) => ({
-          itemName: item.productName || "Unnamed Product",
-          productWeight: item.productSize || "Unknown Size",
-          quantity: item.quantity || 0,
-          status: item.itemStatus?.status || "Pending",
-          customizationNotes: item.customizationNotes || "No Notes",
-        })),
-        deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        customerName: order.customerName || "Unknown Customer",
-        deliveryAddress: order.deliveryAddress || "No Address Provided",
-      }));
+      .then((response) => {
+        const mappedOrders = response.data.map((order) => ({
+          orderId: order.orderId || "N/A",
+          orderName: order.orderName || "N/A",
+          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+          status: order.orderStatus?.status || "Unknown",
+          items: order.items.map((item) => ({
+            itemName: item.productName || "Unnamed Product",
+            productWeight: item.productSize || "Unknown Size",
+            quantity: item.quantity || 0,
+            status: item.itemStatus?.status || "Pending",
+            customizationNotes: item.customizationNotes || "No Notes",
+          })),
+          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          customerName: order.customerName || "Unknown Customer",
+          deliveryAddress: order.deliveryAddress || "No Address Provided",
+        }));
 
-      // const filteredOrders = mappedOrders.filter(
-      //   (order) => order.status === status
-      // );
+        // const filteredOrders = mappedOrders.filter(
+        //   (order) => order.status === status
+        // );
 
-      setOrders(mappedOrders);
-      setIsLoading(false); // Start loading
+        setOrders(mappedOrders);
+        setIsLoading(false); // Start loading
 
-    })
-    .catch((error) => {
-      console.error("Error fetching orders by status:", error)
-      setIsLoading(false); 
-  });
+      })
+      .catch((error) => {
+        console.error("Error fetching orders by status:", error)
+        setIsLoading(false);
+      });
   }
 
   // const fetchOrdersByStatus = (status) => {
@@ -678,23 +679,23 @@ const MainPage = () => {
   // };
 
   const handleDateChange = (date) => {
-    if (!date) return; 
+    if (!date) return;
     console.log("Selected Date from Calendar:", date);
-  
+
     const adjustedDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     const formattedDate = adjustedDate.toISOString().split('T')[0] + "T00:00:00";
-  
+
     console.log("Formatted Date (Adjusted):", formattedDate);
-  
+
     setSelectedDate(formattedDate);
     setIsCalendarVisible(false);
-  
+
     setOrderFilters((prevFilters) => ({
       ...prevFilters,
       date: formattedDate,
     }));
   };
-  
+
 
   const toggleCalendar = () => {
     setIsCalendarVisible((prev) => !prev);
@@ -791,19 +792,28 @@ const MainPage = () => {
                     </OrdersDropdownOuter>
                   )}
                 </OrdersButton>
-                <DateButton onClick={toggleCalendar}>
+                {/* <DateButton onClick={toggleCalendar}>
                   <img
                     src={CalendarIcon}
                     alt="Calendar Icon"
                     style={{ width: '24px', height: '24px', marginRight: '10px' }}
                   />
                   {selectedDate ? selectedDate.split('T')[0] : 'Select Date'}
-                </DateButton>
-                <CalendarDropdown isVisible={isCalendarVisible}>
+                </DateButton> */}
+                {/* <CalendarDropdown isVisible={isCalendarVisible}>
                 <Calendar onChange={handleDateChange} value={selectedDate ? new Date(selectedDate) : new Date()} />
-                </CalendarDropdown>
+                </CalendarDropdown> */}
+                <input
+                  type='date'
+                  name='delivery_date'
+                ></input>
 
-                <DeliveryButton
+                <input
+                  type='time'
+                  name='delivery_time'
+                ></input>
+
+                {/* <DeliveryButton
                   onMouseEnter={() => setIsDeliveryTimeDropdownVisible(true)}
                   onMouseLeave={() => setIsDeliveryTimeDropdownVisible(false)}
                   style={{ position: 'relative' }}
@@ -838,7 +848,7 @@ const MainPage = () => {
 
                     </DeliveryDropdownOuter>
                   )}
-                </DeliveryButton>
+                </DeliveryButton> */}
 
                 <StatusButton
                   onMouseEnter={() => setIsStatusDropdownVisible(true)}
@@ -875,14 +885,14 @@ const MainPage = () => {
                   )}
                 </StatusButton>
                 <BatchButton
-              isDisabled={selectedCards.length < 3}
-              disabled={selectedCards.length < 3}
-              onClick={handleBatchOrders}
-            >
-              Batch
-            </BatchButton>
+                  isDisabled={selectedCards.length < 3}
+                  disabled={selectedCards.length < 3}
+                  onClick={handleBatchOrders}
+                >
+                  Batch
+                </BatchButton>
               </ButtonGroup>
-              
+
               {orders.map((order) => (
                 <OrderCard
                   key={order.orderId}
