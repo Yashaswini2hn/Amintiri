@@ -93,10 +93,9 @@ class Apis {
   }
 
   searchOrdersByOrderName(ordername) {
-    return axiosInstance.get(`/api/orders`, {
-        params: { ordername },
-    });
-}
+    return axiosInstance.get(`/api/orders?ordername=${ordername}`);
+  }
+  
 
   unbatch(orderItemIds) {
     return axiosInstance.post(`/batch/unbatch`, orderItemIds);

@@ -407,11 +407,18 @@ const { minDate, maxDate } = getValidDateRange();
       <MainContainer>
         <TopBarContainer>
           {/* Batch Dropdown */}
-          <div style={{ position: 'relative', }}>
-            <Button onClick={() => setIsBatchDropdownVisible((prev) => !prev)} style={{width:'200px'}}>
-              {selectedBatchName || 'Batch'}
-              <img src={ArrowDropdownIcon} alt="Dropdown Icon" />
-            </Button>
+          <Button onClick={toggleCalendar}>
+          <img
+          src={CalendarIcon}
+          alt="Calendar Icon"
+          style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+          {selectedDate ? new Date(selectedDate).toISOString().split('T')[0] : 'Select Date'}
+          </Button>
+           <div style={{ position: 'relative', }}>
+           <Button onClick={() => setIsBatchDropdownVisible((prev) => !prev)} style={{width:'200px'}}>
+           {selectedBatchName || 'Batch'}
+           <img src={ArrowDropdownIcon} alt="Dropdown Icon" />
+           </Button>
             {isBatchDropdownVisible && (
               <Dropdown>
                 {batchNames.map((batchName, index) => (
@@ -422,13 +429,6 @@ const { minDate, maxDate } = getValidDateRange();
               </Dropdown>
             )}
           </div>
-          <Button onClick={toggleCalendar}>
-          <img
-          src={CalendarIcon}
-          alt="Calendar Icon"
-          style={{ width: '24px', height: '24px', marginRight: '10px' }} />
-          {selectedDate ? new Date(selectedDate).toISOString().split('T')[0] : 'Select Date'}
-          </Button>
           <CalendarDropdown isVisible={isCalendarVisible}>
           <Calendar
            onChange={(date) => handleDateChange(date)}

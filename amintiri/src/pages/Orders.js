@@ -665,55 +665,50 @@ const MainPage = () => {
   };
 
 
-  const handleSearch = () => {
-    if (!searchInput) {
-        alert("Please enter an Order Id.");
-        return;
+  const handleSearchByOrderName = () => {
+    if (!searchInput.trim()) {
+      alert("Please enter an Order Name.");
+      return;
     }
-
-    // Fetch orders by orderName
-    Apis.getAllOrders({ orderName: searchInput })
-        .then((response) => {
-            const order = response.data.find((order) => order.orderName === searchInput);
-
-            if (order) {
-                const orderId = order.orderId;
-
-                // Fetch order details using orderId
-                Apis.searchOrdersByOrderId(orderId)
-                    .then((response) => {
-                        const mappedOrders = response.data.map((order) => ({
-                            orderId: order.orderId || "N/A",
-                            orderName: order.orderName || "N/A",
-                            orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                            orderDate: new Date(order.orderDateTime).toLocaleDateString(),
-                            status: order.orderStatus?.status || "Unknown",
-                            items: order.items.map((item) => ({
-                                itemName: item.productName || "Unnamed Product",
-                                productWeight: item.productSize || "Unknown Size",
-                                quantity: item.quantity || 0,
-                                status: item.itemStatus?.status || "Pending",
-                                customizationNotes: item.customizationNotes || "No Notes",
-                            })),
-                            deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                            customerName: order.customerName || "Unknown Customer",
-                            deliveryAddress: order.deliveryAddress || "No Address Provided",
-                        }));
-                        setOrders(mappedOrders);
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching order by ID:", error);
-                        alert("No orders found for this Order ID.");
-                    });
-            } else {
-                alert("No orders found with this Order Name.");
-            }
-        })
-        .catch((error) => {
-            console.error("Error searching orders by Order Name:", error);
-            alert("Error occurred while searching. Please try again.");
-        });
-};
+  
+    setIsLoading(true); // Start loading
+  
+    Apis.searchOrdersByOrderName(searchInput)
+      .then((response) => {
+        const order = response.data; // Assuming the response contains a single order or an array
+  
+        if (order) {
+          const mappedOrder = {
+            orderId: order.orderId || "N/A",
+            orderName: order.orderName || "N/A",
+            orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+            status: order.orderStatus?.status || "Unknown",
+            items: order.items.map((item) => ({
+              itemName: item.productName || "Unnamed Product",
+              productWeight: item.productSize || "Unknown Size",
+              quantity: item.quantity || 0,
+              status: item.itemStatus?.status || "Pending",
+              customizationNotes: item.customizationNotes || "No Notes",
+            })),
+            deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            customerName: order.customerName || "Unknown Customer",
+            deliveryAddress: order.deliveryAddress || "No Address Provided",
+          };
+  
+          setOrders([mappedOrder]); // Update orders with the fetched order
+          setSelectedOrder(mappedOrder); // Set the selected order for details view
+        } else {
+          alert("No orders found with this Order Name.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error searching order by Order Name:", error);
+        alert("Error occurred while searching. Please try again.");
+      })
+      .finally(() => setIsLoading(false)); // Stop loading
+  };
+  
 
   const handleBatchOrders = () => {
     if (selectedCards.length >= 3) {
@@ -765,26 +760,27 @@ const MainPage = () => {
                 </CalendarDropdown>
               <ButtonGroup >
               <SearchBar>
-              <img
-               src={SearchIcon}
-               alt="Search Icon"
-               style={{ width: '16px', height: '16px', marginRight: '8px', cursor: 'pointer' }}
-               onClick={handleSearch} // Call API on click
-               />
-              <input
-               type="text"
-               placeholder="Enter OrderId (e.g., 261760)"
-               value={searchInput}
-               onChange={(e) => setSearchInput(e.target.value)} // Update searchInput state
-               style={{
-               border: "none",
-               outline: "none",
-               width: "200px",
-               fontFamily: "Futura Bk BT",
-               fontSize: "14px",
-               }}
-               />
-              </SearchBar>
+  <img
+    src={SearchIcon}
+    alt="Search Icon"
+    style={{ width: "16px", height: "16px", marginRight: "8px", cursor: "pointer" }}
+    onClick={handleSearchByOrderName} // Call the new API integration
+  />
+  <input
+    type="text"
+    placeholder="Enter Order Name"
+    value={searchInput}
+    onChange={(e) => setSearchInput(e.target.value)}
+    style={{
+      border: "none",
+      outline: "none",
+      width: "200px",
+      fontFamily: "Futura Bk BT",
+      fontSize: "14px",
+    }}
+  />
+</SearchBar>
+
               <StatusBar   onMouseEnter={() => setIsStatusDropdownVisible(true)}
                   onMouseLeave={() => setIsStatusDropdownVisible(false)}
                   style={{ position: 'relative' }}>
