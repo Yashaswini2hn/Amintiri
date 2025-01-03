@@ -8,28 +8,16 @@ import ScrollIcon from '../../assests/Scroll.svg';
 import DeliveryIcon from '../../assests/delivery.svg';
 
 const OrderDetailsContainer = styled('div')({
-  width: '400px',
+  width: '370px',
   height: '627px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
-  marginLeft: '40px',
+  marginLeft: '0px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  // '@media (min-width: 1200px)': {
-  //   width: '400px',
-  //   height: '642px',
-  //   backgroundColor:'#00FF00'
-   
-  // },
-  // '@media (min-width:1200px)' : {
-  //   width:'30px',
-  //   height:'627px',
-  //   marginLeft:'30px',
-  //   backgroundColor:'red'
-  // }
 });
 
 const Header = styled('div')({
@@ -51,9 +39,6 @@ const OrderID = styled('span')({
   fontSize: '20px',
   fontWeight: 600,
   color: '#000000',
-  '@media (min-width: 1200px)': {
-    fontSize: '24px',
-  },
 });
 
 const Status = styled('span')({
@@ -66,10 +51,6 @@ const Status = styled('span')({
   padding: '5px 5px',
   borderRadius: '0px',
   alignItems:'center',
-  '@media (min-width: 1200px)': {
-    fontSize: '18px',
-    padding: '8px 10px',
-  },
 });
 
 const CustomerInfo = styled('div')({
@@ -77,31 +58,16 @@ const CustomerInfo = styled('div')({
   fontSize: '12px',
   color: '#000000',
   marginBottom: '20px',
-
-  '@media (min-width: 1200px)': {
-    fontSize: '14px',
-    marginBottom: '25px',
-  },
 });
 
 const InfoRow = styled('div')({
   display: 'flex',
   alignItems: 'center',
   marginBottom: '8px',
-
-  '@media (min-width: 1200px)': {
-    marginBottom: '10px',
-  },
 });
 
 const Icon = styled('img')({
   marginRight: '8px',
-
-  '@media (min-width: 1200px)': {
-    marginRight: '10px',
-    width: '20px',
-    height: '20px',
-  },
 });
 
 const TimeDeliveryRow = styled('div')({
@@ -109,10 +75,6 @@ const TimeDeliveryRow = styled('div')({
   justifyContent: 'space-between',
   alignItems: 'center',
   marginTop: '-5px',
-
-  '@media (min-width: 1200px)': {
-    marginTop: '0',
-  },
 });
 
 const AddressText = styled('div')({
@@ -122,10 +84,6 @@ const AddressText = styled('div')({
   fontSize: '10px',
   cursor: 'pointer',
   wordBreak: 'break-word',
-  },
- 
-  '@media (min-width: 1200px)': {
-    fontSize: '14px',
   },
 });
 
@@ -148,11 +106,6 @@ const OrderItemsHeader = styled('div')({
     height: '2px',
     backgroundColor: '#E1BD52',
   },
-
-  '@media (min-width: 1200px)': {
-    fontSize: '16px',
-    padding: '15px 0',
-  },
 });
 
 const OrderItems = styled('div')({
@@ -167,10 +120,6 @@ const OrderItems = styled('div')({
   },
   // '-ms-overflow-style': 'none',
   // 'scrollbar-width': 'none',
-
-  '@media (min-width: 1200px)': {
-    maxHeight: '420px',
-  },
 });
 
 const ItemRow = styled('div')({
@@ -178,30 +127,17 @@ const ItemRow = styled('div')({
   gridTemplateColumns: '2fr 1fr 1fr',
   alignItems: 'center',
   padding: '10px 0',
-
-  '@media (min-width: 1200px)': {
-    padding: '15px 0',
-  },
 });
 
 const ItemName = styled('span')({
   color: '#0A6169',
   fontSize: '16px',
-
-  '@media (min-width: 1200px)': {
-    fontSize: '16px',
-  },
 });
 
 const ItemQuantity = styled('span')({
   color: '#000000',
   fontSize: '16px',
   marginTop: '-25px',
-
-  '@media (min-width: 1200px)': {
-    fontSize: '16px',
-    marginTop:'-20px'
-  },
 });
 
 const InstructionsContainer = styled('div')({
@@ -209,22 +145,12 @@ const InstructionsContainer = styled('div')({
   alignItems: 'center',
   color: '#383838CC',
   marginTop: '10px',
-
-  '@media (min-width: 1200px)': {
-    marginTop: '20px',
-
-  },
 });
 
 const InstructionsText = styled('span')({
   fontFamily: 'Futura Lt BT',
   fontSize: '14px',
   marginLeft: '5px',
-
-  '@media (min-width: 1200px)': {
-    fontSize: '14px',
-    
-  },
 });
 
 const ReadyButton = styled('button')({

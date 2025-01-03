@@ -167,34 +167,29 @@ const ItemsList = styled('div')({
   fontFamily: 'Futura Bk BT',
   fontSize: '14px',
   display: 'grid',
-  gridTemplateColumns: '2fr 1fr 1fr', // Adjust columns for better alignment
+  gridTemplateColumns: '2fr 1fr 1fr', // Adjust columns for alignment
   gap: '10px',
   alignItems: 'center',
   '@media (max-width: 1200px)': {
-    gridTemplateColumns: '1fr', // Stack items vertically on smaller screens
+    gridTemplateColumns: '1fr 1fr 1fr', // Keep consistent layout on smaller screens
     gap: '8px',
   },
 });
 
 const ItemWeight = styled('span')({
-  gridColumn: '2', // Place in the second column
-  textAlign: 'right', // Align to the right
+  gridColumn: '2',
+  textAlign: 'center', // Center-align for consistency
   fontSize: '12px',
-  '@media (max-width: 1200px)': {
-    textAlign: 'center', // Align to the left for smaller screens
-    marginLeft: '10px',
-  },
+ 
 });
 
 const ItemQuantity = styled('span')({
-  gridColumn: '3', // Place in the third column
+  gridColumn: '3',
   textAlign: 'center', // Center-align for consistency
   fontSize: '12px',
-  '@media (max-width:1200px)': {
-    textAlign: 'left', // Align to the left for smaller screens
-    marginLeft: '10px',
-  },
+  
 });
+
 
 const ExtraItemsCircle = styled('div')({
   backgroundColor: '#D9D9D9',

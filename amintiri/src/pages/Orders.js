@@ -63,7 +63,8 @@ const OrderListContainer = styled('div')({
   display: "flex",
   flexDirection: "column",
   width: '100%',
-  height: '100%'
+  height: '100%',
+  marginLeft:'-20px'
 });
 
 const OrderDetailsContainer = styled('div')({
@@ -78,7 +79,7 @@ const ButtonGroup = styled('div')({
   display: 'flex',
   gap: '15px',
   margin: '20px',
-  justifyContent: 'flex-start',
+  justifyContent: 'flex-end',
   marginTop: '0px',
 
   // position: 'relative',
@@ -344,12 +345,11 @@ const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
   position: 'absolute',
   width: '130px',
   height: '120px',
-  top: '40px',
-  left: '0',
+  top: '200px',
+  left: '200px',
   background: '#FFFFFF',
   boxShadow: '0px 4px 4px 0px #00000040',
   zIndex: 1000,
-  marginTop: '0px',
   marginLeft: '230px'
 }));
 
@@ -461,6 +461,20 @@ const OrderDateText = styled('span')({
   color: '#06555C',
 });
 
+const ScrollableOrderListContainer = styled('div')({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  width: '100%',
+  height: '100%',
+  overflowY: 'auto', // Allows scrolling for the cards
+  padding: '10px',
+  // backgroundColor: '#06555C', // Green background color
+  borderRadius: '8px', // Optional for rounded edges
+  boxSizing: 'border-box', // Ensures padding doesn't affect the size
+});
+
+
 const times = [
   '9:00 AM',
   '10:00 AM',
@@ -536,40 +550,43 @@ const MainPage = () => {
     console.log("AuthToken:", authToken);
 
     Apis.getOrdersByDate(orderDate, currentPage, currentSize)
-      .then((response) => {
-        const mappedOrders = response.data.map((order) => ({
-          orderId: order.orderId || 'N/A',
-          orderName: order.orderName || 'N/A',
-          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
-          status: order.orderStatus?.status || 'Unknown',
-          items: order.items.map((item) => ({
-            itemName: item.productName || 'Unnamed Product',
-            productWeight: item.productSize || 'Unknown Size',
-            quantity: item.quantity || 0,
-            status: item.itemStatus?.status || 'Pending',
-            customizationNotes: item.customizationNotes || 'No Notes',
-          })),
-          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          customerName: order.customerName || 'Unknown Customer',
-          deliveryAddress: order.deliveryAddress || 'No Address Provided',
-        }));
+    .then((response) => {
+      const { content, totalPages, totalElements, size, number } = response.data;
 
-        setOrders(mappedOrders);
+      const mappedOrders = content.map((order) => ({
+        orderId: order.orderId || 'N/A',
+        orderName: order.orderName || 'N/A',
+        orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+        status: order.orderStatus?.status || 'Unknown',
+        items: order.items.map((item) => ({
+          itemName: item.productName || 'Unnamed Product',
+          productWeight: item.productSize || 'Unknown Size',
+          quantity: item.quantity || 0,
+          customizationNotes: item.customizationNotes || 'No Notes',
+        })),
+        deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        customerName: order.customerName || 'Unknown Customer',
+        deliveryAddress: order.deliveryAddress || 'No Address Provided',
+      }));
 
-        // Set the first order as the default selectedOrder
-        if (mappedOrders.length > 0) {
-          setSelectedOrder(mappedOrders[0]);
-        }
-      })
-      .catch((error) => console.error('Error fetching orders by date:', error))
-      .finally(() => setIsLoading(false));
-  };
+      setOrders(mappedOrders);
+      setTotalOrders(totalElements); // Map total elements
+      setSize(size); // Map page size
+      setPage(number); // Map current page
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-    fetchOrdersByDate(selectedDate, newPage, size);
-  };
+      if (mappedOrders.length > 0) {
+        setSelectedOrder(mappedOrders[0]);
+      }
+    })
+    .catch((error) => console.error('Error fetching orders by date:', error))
+    .finally(() => setIsLoading(false));
+};
+
+  // const handlePageChange = (newPage) => {
+  //   setPage(newPage);
+  //   fetchOrdersByDate(selectedDate, newPage, size);
+  // };
 
   const handleDateChange = (date) => {
     if (!date) return;
@@ -659,10 +676,17 @@ const MainPage = () => {
     setIsCalendar1Visible(false);
   };
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    fetchOrdersByDate(selectedDate, newPage, size); // Trigger API call with the updated page
+  };
+  
   const handleRowsPerPageChange = (newSize) => {
     setSize(newSize);
     setPage(0); // Reset to the first page
+    fetchOrdersByDate(selectedDate, 0, newSize); // Trigger API call with the updated size
   };
+  
 
 
   const handleSearchByOrderName = () => {
@@ -736,15 +760,9 @@ const MainPage = () => {
       <MainContainer>
         {!isLoading && activeOption === 'ORDERS' && (
           <>
-            <OrderListContainer
-              style={{ background: '#06555C' }}
-            >
+            <OrderListContainer>
 
-              <ButtonGroup
-                style={{ background: '', padding: '10px', }}
-              >
-
-
+              <ButtonGroup>
                 <BatchButton
                   isDisabled={selectedCards.length < 3}
                   disabled={selectedCards.length < 3}
@@ -771,13 +789,13 @@ const MainPage = () => {
               </ButtonGroup>
 
 
-              <ButtonGroup style={{ background: 'orange' }} >
+              <ButtonGroup >
                 <SearchBar>
                   <img
                     src={SearchIcon}
                     alt="Search Icon"
                     style={{ width: '16px', height: '16px', marginRight: '8px', cursor: 'pointer' }}
-                    onClick={handleSearch} // Call API on click
+                    onClick={ handleSearchByOrderName} 
                   />
                   <input
                     type="text"
@@ -902,35 +920,38 @@ const MainPage = () => {
 
               </ButtonGroup>
 
-              
+              <ScrollableOrderListContainer>
+             {orders.map((order) => (
+    <OrderCard
+      key={order.orderId}
+      orderNumber={order.orderName}
+      orderTime={order.orderTime}
+      orderDate={order.orderDate}
+      status={order.status}
+      items={order.items}
+      deliveryTime={order.deliveryTime}
+      customerName={order.customerName}
+      address={order.deliveryAddress}
+      onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
+      onCheckboxChange={(isChecked) =>
+        handleCheckboxChange(order.orderId, isChecked)
+      }
+      isActive={selectedOrder?.orderId === order.orderId}
+    />
+  ))}
+  <Pagination
+  currentPage={page}
+  rowsPerPage={size}
+  totalRows={totalOrders}
+  onPageChange={handlePageChange} // Pass page change handler
+  onRowsPerPageChange={handleRowsPerPageChange} // Pass rows per page change handler
+/>
 
-                {orders.map((order) => (
-                  <OrderCard
-                    key={order.orderId}
-                    orderNumber={order.orderName}
-                    orderTime={order.orderTime}
-                    orderDate={order.orderDate}
-                    status={order.status}
-                    items={order.items}
-                    deliveryTime={order.deliveryTime}
-                    customerName={order.customerName}
-                    address={order.deliveryAddress}
-                    onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
-                    onCheckboxChange={(isChecked) =>
-                      handleCheckboxChange(order.orderId, isChecked)
-                    }
-                    isActive={selectedOrder?.orderId === order.orderId}
-                  />
-                ))}
-
-
-            
-
-
+</ScrollableOrderListContainer>
             </OrderListContainer>
 
             {selectedOrder && (
-              <OrderDetailsContainer style={{ background: 'pink' }}>
+              <OrderDetailsContainer>
                 <OrderDetails order={selectedOrder} />
               </OrderDetailsContainer>
             )}

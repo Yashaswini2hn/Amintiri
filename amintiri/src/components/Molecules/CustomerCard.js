@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import MapIcon from '../../assests/Map.svg';
 
 const CardContainer = styled('div')(({ isActive }) => ({
-  '@media (min-width:1200px)' : {
+ 
   width: '70%',
   backgroundColor: '#FFFFFF',
   marginBottom: '15px',
@@ -11,8 +11,8 @@ const CardContainer = styled('div')(({ isActive }) => ({
   padding: '20px',
   gap: '10px',
   borderRadius: '8px',
-  marginTop: '15px',
-  marginLeft: '0px',
+  marginTop: '30px',
+  marginLeft: '10px',
   position: 'relative',
   boxShadow: '4px 4px 4px 4px #00000026',
   cursor: 'pointer',
@@ -23,11 +23,7 @@ const CardContainer = styled('div')(({ isActive }) => ({
   '&:hover': {
     transform: 'scale(1.05)', 
   },
-},
-  '@media (max-width:1200px)': {
-    width:'70%', 
-   
-  },
+  
 }));
 
 

@@ -4,24 +4,16 @@ import PhoneIcon from '../../assests/Phone.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 
 const CustomerDetailsContainer = styled('div')({
-  '@media (min-width: 768px)' : {
-  width: '300px',
-  height: '500px',
+  width: '370px',
+  height: '610px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
   position: 'absolute',
-  top: '10px',
-  left: '700px',
-  marginTop: '-2z0px',
-  },
-  '@media (min-width:1200px)': {
-    width:'25%', 
-    marginLeft:'300px',
-    height:'810px',
-    marginTop:'40px'
-  },
+  top: '120px',
+  left: '1140px',
+  
 });
 
 const Header = styled('div')({
@@ -59,8 +51,7 @@ const InfoRow = styled('div')({
   alignItems: 'center',
   marginBottom: '8px', 
   '@media (min-width:1200px)' : {
-    fontSize:'18px',
-   
+    fontSize:'18px',  
   }
 });
 
@@ -97,10 +88,6 @@ const OrderHistoryHeader = styled('div')({
     height: '2px',
     backgroundColor: '#E1BD52',
   },
-  '@media (min-width:1200px)':{
-    fontSize:'18px',
-    fontWeight:'600'
-  }
 });
 
 const OrderDate = styled('div')({
@@ -128,22 +115,15 @@ const OrderItemName = styled('span')({
   fontSize: '14px',
   color: '#000000',
   flex: 1,
-  '@media (min-width:1200px)' : {
-    fontSize:'16px'
-  }
 });
 
 const OrderWeight = styled('span')({
   fontFamily: 'Futura Bk BT',
   fontSize: '14px',
   color: '#383838',
-  '@media (min-width:1200px)': {
-    fontSize:'16px'
-  }
 });
 
 const SendOffersButton = styled('button')({
-  '@media (min-width:768px)' : {
   width: '100%',
   padding: '15px',
   backgroundColor: '#06555C',
@@ -154,13 +134,8 @@ const SendOffersButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '100px',
+  marginTop: '310px',
   marginBottom:'100px'
-  },
-  '@media (min-width:1200px)': {
-   marginTop:'440px'
-  },
-
 });
 
 const CustomerDetails = ({ customer, orders }) => {

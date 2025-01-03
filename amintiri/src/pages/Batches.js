@@ -189,21 +189,33 @@ const Batches = () => {
 
   const calendarRef = useRef(null);
 
-
   const formatBatches = (batchData) => {
     return batchData.flatMap((batch) =>
       batch.batchOrderItems.map((item) => {
         const batchDateTime = batch.batchTime ? new Date(batch.batchTime) : null;
   
         return {
-          id: item.id, // Use orderItem.id instead of batch.batchId
-          batchId: batch.batchId, // Keep batchId for display purposes
-          batchName: item.orderItem.orderName || "Unknown", // Map orderName to batchName
-          stationName: batch.stationName || "Unknown",
-          name: item.orderItem.productName || "Unknown",
-          weight: item.orderItem.productSize || "Unknown",
-          quantity: item.orderItem.quantity || 0,
-          customizationNotes: item.orderItem.customizationNotes || "No Notes Available",
+          id: item.id, // Use orderItem.id as the unique identifier
+          batchId: batch.batchId, // Keep batchId for reference
+          batchName: batch.batchName || "Unknown", // Use the batchName from the batch
+          stationName: batch.stationName || "Unknown", // Map stationName
+          productName: item.orderItem.productName || "Unknown", // Map productName
+          productSize: item.orderItem.productSize || "Unknown", // Map productSize
+          quantity: item.orderItem.quantity || 0, // Map quantity
+          customizationNotes: item.orderItem.customizationNotes || "No Notes Available", // Map customizationNotes
+          deliverySlot: item.orderItem.deliverySlot || "No Slot Available", // Map delivery slot
+          orderName: item.orderItem.orderName || "Unknown Order", // Map orderName
+          deliveryTime: item.orderItem.deliveryTime
+            ? new Date(item.orderItem.deliveryTime).toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            : "Not Scheduled", // Map deliveryTime
+          itemStatus: item.orderItem.itemStatus?.status || "Unknown", // Map item status
           batchDateTime: batchDateTime
             ? `${batchDateTime.toLocaleDateString("en-US", {
                 year: "numeric",
@@ -214,32 +226,34 @@ const Batches = () => {
                 minute: "2-digit",
                 hour12: true,
               })}`
-            : "No Date/Time",
-          time: item.orderItem.deliveryTime
-            ? `${new Date(item.orderItem.deliveryTime).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })} ${new Date(item.orderItem.deliveryTime).toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}`
-            : "Not Scheduled",
-          isChecked: false,
+            : "No Date/Time", // Map batchDateTime
+          isChecked: false, // Default unchecked
         };
       })
     );
   };
   
+  // Example usage when fetching data
+  useEffect(() => {
+    setIsLoading(true);
+    Apis.getBatches()
+      .then((response) => {
+        const formattedBatches = formatBatches(response.data); // Map batches
+        setBatches(formattedBatches); // Update state
+      })
+      .catch((error) => console.error("Error fetching batches:", error))
+      .finally(() => setIsLoading(false));
+  }, []);
+  
+  
   const fetchBatchesByStation = (stationId) => {
     setIsLoading(true);
-    Apis.getBatchesByStation(stationId)
-      .then((response) => {
-        setBatches(formatBatches(response.data));
-      })
-      .catch((error) => console.error('Error fetching batches by station:', error))
-      .finally(() => setIsLoading(false));
+    // Apis.getBatchesByStation(stationId)
+    //   .then((response) => {
+    //     setBatches(formatBatches(response.data));
+    //   })
+    //   .catch((error) => console.error('Error fetching batches by station:', error))
+    //   .finally(() => setIsLoading(false));
   };
 
   const fetchBatchesByBatchName = (batchName) => {
@@ -392,6 +406,7 @@ const { minDate, maxDate } = getValidDateRange();
   useEffect(() => {
     Apis.getBatches()
       .then((response) => {
+        console.log(response)
         setBatchNames([...new Set(response.data.map((batch) => batch.batchName || 'Unknown'))]);
       })
       .catch((error) => console.error('Error fetching batch names:', error));

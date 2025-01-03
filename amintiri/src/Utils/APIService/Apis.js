@@ -63,7 +63,7 @@ class Apis {
   }
 
   getBatches() {
-    return axiosInstance.get(`/batch`);
+    return axiosInstance.get(`/api/batch/batched`);
   }
 
   getAllOrders(filters) {

@@ -22,13 +22,9 @@ const Logo = styled('img')({
  
   height: '60px',
   marginBottom: '4px',
-  left: '150px',
+  marginLeft: '560px',
   width:'350px',
  
-  '@media (min-width : 1200px)' : {
-    marginLeft : "850px"
-
-  }
 });
 
 const LogoUnderline = styled(Box)({
@@ -39,11 +35,7 @@ const LogoUnderline = styled(Box)({
   left:'2px',
   borderTop:'2px solid #E1BD52',
   opacity: 1,
-  marginLeft:'580px',
-  '@media (min-width : 1200px)' : {
-    marginLeft : "850px"
-
-  }
+  marginLeft:'560px',
 
 });
 
