@@ -46,7 +46,7 @@ const SidebarTemplate = ({ onOptionSelect }) => {
   const [activeOption, setActiveOption] = useState("");
 
   const optionToPathMap = {
-    ORDERS: "/mainpage",
+    ORDERS: "/orders",
     CUSTOMERS: "/customers",
     BATCHES: "/batches",
     GROUPS: "/groups",

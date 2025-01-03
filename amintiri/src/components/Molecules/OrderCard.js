@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 import DeliveryIcon from '../../assests/delivery.svg';
 
 const CardContainer = styled('div')(({ isActive }) => ({
-  width: '100%',
+  width: '85%',
   backgroundColor: '#FFFFFF',
   marginBottom: '15px',
   display: 'flex',
@@ -22,11 +22,16 @@ const CardContainer = styled('div')(({ isActive }) => ({
     transform: 'scale(1.05)', 
   },
   '@media (min-width: 1200px)': {
-    width: '1090px',
+    width: '80%',
     height: '840px',
     right:'20px',
-    left:'20px'
+    left:'45px'
   },
+  '@media (min-width : 768px)' : {
+    width: '97%',
+    marginLeft:'-30px'
+  }
+ 
 }));
 
 const Checkbox = styled('input')({

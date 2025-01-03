@@ -4,16 +4,18 @@ import PhoneIcon from '../../assests/Phone.svg';
 import MapPinIcon from '../../assests/MapPin.svg';
 
 const CustomerDetailsContainer = styled('div')({
-  width: '360px',
-  height: '647px',
+  '@media (min-width: 768px)' : {
+  width: '300px',
+  height: '500px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
   position: 'absolute',
   top: '10px',
-  left: '977px',
-  marginTop: '-20px',
+  left: '700px',
+  marginTop: '-2z0px',
+  },
   '@media (min-width:1200px)': {
     width:'25%', 
     marginLeft:'300px',
@@ -141,6 +143,7 @@ const OrderWeight = styled('span')({
 });
 
 const SendOffersButton = styled('button')({
+  '@media (min-width:768px)' : {
   width: '100%',
   padding: '15px',
   backgroundColor: '#06555C',
@@ -151,7 +154,9 @@ const SendOffersButton = styled('button')({
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
-  marginTop: '310px',
+  marginTop: '100px',
+  marginBottom:'100px'
+  },
   '@media (min-width:1200px)': {
    marginTop:'440px'
   },

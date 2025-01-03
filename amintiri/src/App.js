@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
-import MainPage from './pages/MainPage';
+import Orders from './pages/Orders';
 import LandingPage from './pages/LandingPage';
 import StaffPage from './pages/Staff';
 import AddUserPage from './pages/AddUser';
@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<LandingPage />} />
           <Route path="/staff" element={<StaffPage />} />
           <Route path="/adduser" element={<AddUserPage />} />
-          <Route path="/mainpage" element={<MainPage />} />
+          <Route path="/orders" element={<Orders/>} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/batches" element={<Batches />} /> 
           <Route path="/groups" element={<Groups />} />

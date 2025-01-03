@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
-import HeaderTemplate from "../components/Templates/HeaderTemplate";
+import LoginHeaderTemplate from "../components/Templates/LoginHeaderTemplate";
 import UserGear from "../assests/UserGear.svg";
 import ChefHat from "../assests/ChefHat.svg";
 import AddUser from "../assests/AddUser.svg";
@@ -80,7 +80,7 @@ const MainContainer = styled("div")({
 const FormOuter = styled("div")({
   width: "827px",
   height: "563px",
-  boxShadow: "0px 4px 4px 0px #00000040",
+  // boxShadow: "0px 4px 4px 0px #00000040",
   background: "#FFFFFF",
   display: "flex",
   flexDirection: "column",
@@ -94,6 +94,7 @@ const FormContainer = styled("form")({
   flexDirection: "column",
   gap: "20px",
   width: "454px",
+  marginLeft:'-90px'
 });
 
 const FieldWrapper = styled("div")({
@@ -236,7 +237,7 @@ const LandingPage = () => {
         localStorage.setItem("token", response.data.usersecret);
 
         // Ensure localStorage is updated before navigating
-        Promise.resolve().then(() => navigate("/mainpage"));
+        Promise.resolve().then(() => navigate("/orders"));
       })
       .catch((err) => {
         console.error("Login Error:", err.response ? err.response.data : err.message);
@@ -251,9 +252,9 @@ const LandingPage = () => {
   return (
     <LayoutContainer>
       <HeaderContainer>
-        <HeaderTemplate />
+        <LoginHeaderTemplate />
       </HeaderContainer>
-      <SidebarContainer>
+      {/* <SidebarContainer>
         <SidebarItem>
           <SidebarIcon>
             <img src={UserGear} alt="Admin" style={{ width: "50%" }} />
@@ -272,7 +273,7 @@ const LandingPage = () => {
           </SidebarIcon>
           <SidebarText>ADD</SidebarText>
         </SidebarItem>
-      </SidebarContainer>
+      </SidebarContainer> */}
       <MainContainer>
         <FormOuter>
           <FormContainer onSubmit={handleLogin}>

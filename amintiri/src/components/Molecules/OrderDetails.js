@@ -8,37 +8,42 @@ import ScrollIcon from '../../assests/Scroll.svg';
 import DeliveryIcon from '../../assests/delivery.svg';
 
 const OrderDetailsContainer = styled('div')({
-  width: '30%',
+  width: '400px',
   height: '627px',
   padding: '10px',
   backgroundColor: '#FFFFFF',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
   borderRadius: '0px',
-  marginLeft: '30px',
+  marginLeft: '40px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  '@media (min-width: 1200px)': {
-    width: '500px',
-    height: '840px',
-    marginLeft:'-120px'
+  // '@media (min-width: 1200px)': {
+  //   width: '400px',
+  //   height: '642px',
+  //   backgroundColor:'#00FF00'
    
-  },
+  // },
+  '@media (min-width:1200px)' : {
+    width:'30px',
+    height:'627px',
+    marginLeft:'30px',
+    backgroundColor:'red'
+  }
 });
 
 const Header = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: '10px',
-  borderBottom: '2px solid #E1BD52',
-  paddingBottom: '10px',
-  marginTop: '10px',
-
   '@media (min-width: 1200px)': {
     marginBottom: '15px',
     paddingBottom: '15px',
   },
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '10px',
+    borderBottom: '2px solid #E1BD52',
+    paddingBottom: '10px',
+    marginTop: '10px',
 });
 
 const OrderID = styled('span')({
@@ -46,7 +51,6 @@ const OrderID = styled('span')({
   fontSize: '20px',
   fontWeight: 600,
   color: '#000000',
-
   '@media (min-width: 1200px)': {
     fontSize: '24px',
   },
@@ -54,13 +58,14 @@ const OrderID = styled('span')({
 
 const Status = styled('span')({
   fontFamily: 'Futura Bk BT',
-  fontSize: '16px',
+  width:'110px',
+  fontSize: '12px',
   fontWeight: 400,
   color: '#06555C',
   backgroundColor: '#E1BD52',
   padding: '5px 5px',
   borderRadius: '0px',
-
+  alignItems:'center',
   '@media (min-width: 1200px)': {
     fontSize: '18px',
     padding: '8px 10px',
@@ -111,12 +116,14 @@ const TimeDeliveryRow = styled('div')({
 });
 
 const AddressText = styled('div')({
-  display: 'flex',
+  '@media (min-width : 768px)' : {
+    display: 'flex',
   flexDirection: 'column',
-  fontSize: '12px',
+  fontSize: '10px',
   cursor: 'pointer',
   wordBreak: 'break-word',
-
+  },
+ 
   '@media (min-width: 1200px)': {
     fontSize: '14px',
   },
@@ -162,7 +169,7 @@ const OrderItems = styled('div')({
   // 'scrollbar-width': 'none',
 
   '@media (min-width: 1200px)': {
-    maxHeight: '400px',
+    maxHeight: '420px',
   },
 });
 
@@ -182,7 +189,7 @@ const ItemName = styled('span')({
   fontSize: '16px',
 
   '@media (min-width: 1200px)': {
-    fontSize: '18px',
+    fontSize: '16px',
   },
 });
 
@@ -192,7 +199,8 @@ const ItemQuantity = styled('span')({
   marginTop: '-25px',
 
   '@media (min-width: 1200px)': {
-    fontSize: '18px',
+    fontSize: '16px',
+    marginTop:'-20px'
   },
 });
 
@@ -203,7 +211,8 @@ const InstructionsContainer = styled('div')({
   marginTop: '10px',
 
   '@media (min-width: 1200px)': {
-    marginTop: '15px',
+    marginTop: '20px',
+
   },
 });
 
@@ -213,7 +222,8 @@ const InstructionsText = styled('span')({
   marginLeft: '5px',
 
   '@media (min-width: 1200px)': {
-    fontSize: '16px',
+    fontSize: '14px',
+    
   },
 });
 
@@ -231,11 +241,6 @@ const ReadyButton = styled('button')({
   lineHeight: '18px',
   bottom: '0',
   marginTop: '10px',
-
-  '@media (min-width: 1200px)': {
-    fontSize: '20px',
-    padding: '20px',
-  },
 });
 
 const OrderDetails = ({ order }) => {
@@ -306,7 +311,7 @@ const OrderDetails = ({ order }) => {
               </InstructionsContainer>
             </div>
             <ItemQuantity>{item.productWeight}</ItemQuantity>
-            <Status>{item.status}</Status>
+            <Status style={{}}>{item.status}</Status>
           </ItemRow>
         ))}
       </OrderItems>

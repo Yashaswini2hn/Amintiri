@@ -10,6 +10,7 @@ import CustomerCard from '../components/Molecules/CustomerCard';
 import Apis from '../Utils/APIService/Apis';
 import Loader from '../components/Atoms/Loader';
 import Calendar from 'react-calendar';
+import { Pagination } from '@mui/material';
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -34,8 +35,7 @@ const MainContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   gap: '20px',
-  overflowY: 'auto',
-  position: 'relative', 
+  overflow: 'hidden', 
 });
 
 const TopBarContainer = styled('div')({
@@ -110,6 +110,9 @@ const Customers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(0); 
+  const [size, setSize] = useState(10); 
+  const [totalCustomers, setTotalCustomers] = useState(0); 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split('T')[0] + "T00:00:00"
@@ -135,26 +138,47 @@ const Customers = () => {
   }, []);
 
   useEffect(() => {
+    fetchCustomers(page, size);
+  }, [page, size]);
+
+  const fetchCustomers = (page, size) => {
     setIsLoading(true);
-    Apis.getCustomers()
+    Apis.getCustomers(page, size) // Use Apis.getCustomers
       .then((response) => {
-        const customerData = response.data || [];
-        const formattedCustomers = customerData.map((customer) => ({
+
+        console.log("raw response  .... " , response )
+        // const { data, totalElements } = response.data;
+
+        // console.log("response data .... " , data  )
+        // console.log("response  totalElements  .... " , totalElements   )
+
+
+        const formattedCustomers = response.data.map((customer) => ({
           id: customer.id,
           name: customer.name,
           mobile: customer.mobile,
           addresses: customer.addresses,
         }));
         setCustomers(formattedCustomers);
+        setTotalCustomers(formattedCustomers.length);
         if (formattedCustomers.length > 0) {
-          const firstCustomer = formattedCustomers[0];
-          setSelectedCustomer(firstCustomer);
-          fetchOrders(firstCustomer.id);
+          setSelectedCustomer(formattedCustomers[0]);
         }
       })
       .catch((error) => console.error('Error fetching customers:', error))
       .finally(() => setIsLoading(false));
-  }, []);
+  };
+  
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handleRowsPerPageChange = (newSize) => {
+    setSize(newSize);
+    setPage(0); // Reset to the first page
+  };
+
 
   const fetchOrders = (customerId) => {
     Apis.getOrders(customerId)
@@ -259,6 +283,13 @@ const Customers = () => {
         ))}
         {selectedCustomer && <CustomerDetails customer={selectedCustomer} orders={orders} />}
       </MainContainer>
+      <Pagination
+        currentPage={page}
+        rowsPerPage={size}
+        totalRows={totalCustomers}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
     </LayoutContainer>
   );
 };

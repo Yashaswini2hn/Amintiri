@@ -1,50 +1,3 @@
-// import axios from "axios";
-
-// const baseUrl = "http://ec2-15-207-138-177.ap-south-1.compute.amazonaws.com:8080";
-// const username = "admin";
-// const password = "admin123";
-
-
-// const basicAuth = "Basic " + btoa(`${username}:${password}`);
-
-// const userId = localStorage.getItem("userid")
-// const apiToken = localStorage.getItem("token")
-
-// console.log("userId .... " , userId)
-// console.log("apiToken .... " , apiToken)
-
-
-// class Apis {
-//   
-
-//  
-
-//  
-
-//   
-
-
-
-//   batchOrders(orderIds) {
-//     return axios.post(
-//       `${baseUrl}/batch/batch-orders?userid=${userId}&authtoken=${apiToken}`,
-//       orderIds, 
-//       {
-//         headers: {
-//           Authorization: basicAuth,
-//           Accept: "*/*",
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//   }
-
-// }
-
-// const apisInstance = new Apis();
-// export default apisInstance;
-
-
 import axios from "axios";
 
 const baseUrl = "http://ec2-15-207-138-177.ap-south-1.compute.amazonaws.com:8080";
@@ -62,41 +15,49 @@ const axiosInstance = axios.create({
   },
 });
 
-// Add an interceptor to include userId and apiToken dynamically
+// Add an interceptor to include userId and apiToken dynamically in the headers
 axiosInstance.interceptors.request.use((config) => {
   const userId = localStorage.getItem("userid");
   const apiToken = localStorage.getItem("token");
 
-  // Include userId and apiToken in query params or headers
+  // Include userId and apiToken in headers
   if (userId && apiToken) {
-    config.params = {
-      ...config.params,
-      userid: userId,
-      authtoken: apiToken,
+    config.headers = {
+      ...config.headers,
+      "userid": userId,
+      "authtoken": apiToken,
     };
   }
   return config;
 });
 
 class Apis {
-
-
   createUser(name, mobile, email, role, password) {
-    return axios.post(baseUrl + `/api/users?name=${name}&mobile=${mobile}&email=${email}&role=${role}&password=${password}`);
+    return axiosInstance.post(`/api/users`, null, {
+      params: { name, mobile, email, role, password },
+    });
   }
 
   loginUser(email, password) {
-    return axios.post(baseUrl + `/api/users/login?emailormobile=${email}&password=${password}`);
+    return axiosInstance.post(`/api/users/login`, null, {
+      params: { emailormobile: email, password },
+    });
   }
 
   getStores() {
     return axiosInstance.get("/api/stores");
   }
 
-  getCustomers() {
-    return axiosInstance.get(`/api/customers`);
+  getOrdersByDate(orderdate, page = 0, size = 10) {
+    return axiosInstance.get(`/api/orders`, {
+      params: { orderdate, page, size }, 
+    });
   }
-
+  getCustomers(page = 0, size = 10) {
+    return axiosInstance.get(`/api/customers`, {
+      params: { page, size },
+    });
+  }
   getOrders(customerId) {
     return axiosInstance.get(`/api/customers/${customerId}/orders`);
   }
@@ -105,53 +66,47 @@ class Apis {
     return axiosInstance.get(`/batch`);
   }
 
-
-
   getAllOrders(filters) {
     return axiosInstance.get("/api/orders", {
-      params: { ...filters }, 
+      params: { ...filters },
     });
   }
 
   batchOrders(orderIds) {
-    return axiosInstance.post(
-      `/batch/batch-orders`, orderIds,);
+    return axiosInstance.post(`/batch/batch-orders`, orderIds);
   }
 
   getBatchesByDate(date) {
     return axiosInstance.get(`/batch`, {
-      date: date,
+      params: { date },
     });
   }
-   
 
   getStations() {
     return axiosInstance.get(`/api/station`);
   }
-  
+
   getBatchesByStation(stationId) {
     return axiosInstance.get(`/batch`, {
-      params: {
-        stationId, 
-      },
+      params: { stationId },
     });
   }
-  
-  
-  unbatch(orderItemIds) {
-    return axiosInstance.post(`/batch/unbatch`,  orderItemIds ); 
-    
+
+  searchOrdersByOrderName(ordername) {
+    return axiosInstance.get(`/api/orders`, {
+        params: { ordername },
+    });
 }
 
-
+  unbatch(orderItemIds) {
+    return axiosInstance.post(`/batch/unbatch`, orderItemIds);
+  }
 
   searchCustomers(query) {
-    return axiosInstance.get(`/api/customers/search`, { 
+    return axiosInstance.get(`/api/customers/search`, {
       params: { query },
     });
   }
-  
 }
 
 export default new Apis();
-
