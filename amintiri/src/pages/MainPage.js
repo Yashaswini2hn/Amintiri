@@ -17,16 +17,8 @@ import { Input } from '@mui/material';
 const LayoutContainer = styled('div')({
   display: 'flex',
   flexDirection: 'row',
-<<<<<<< HEAD
-  width: '100%', // Ensures the container spans the full width
-  height: '100vh',
-  overflowX: 'hidden',
-  '@media (max-width:1200px)': {
-    flexDirection: 'column', 
-=======
   '@media (max-width: 768px)': {
     flexDirection: 'column',
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
   },
 });
 
@@ -37,13 +29,7 @@ const SidebarContainer = styled('div')({
   top: '84px',
   bottom: 0,
   left: 0,
-<<<<<<< HEAD
-  overflow:'hidden',
-  boxShadow: "0px 1px 4px 0px #00000026",
-  '@media (max-width:1200px)': {
-=======
   '@media (max-width: 768px)': {
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
     width: '100%',
     position: 'relative',
   },
@@ -55,12 +41,8 @@ const MainContainer = styled('div')({
   marginLeft: '178px',
   padding: '20px',
   overflowY: 'scroll',
-<<<<<<< HEAD
-  overflowX: 'hidden',
-=======
   backgroundColor: '#00FF00',
 
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
   height: 'calc(100vh - 84px)',
   backgroundColor:'#FFFFFF',
   display: 'flex',
@@ -68,13 +50,8 @@ const MainContainer = styled('div')({
   '&::-webkit-scrollbar': {
     display: 'none',
   },
-<<<<<<< HEAD
-  '@media (max-width:1200px)': {
-    marginLeft: '0', 
-=======
   '@media (max-width: 768px)': {
     marginLeft: '0',
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
     marginTop: '10px',
     height: 'auto',
   },
@@ -82,34 +59,20 @@ const MainContainer = styled('div')({
 
 const OrderListContainer = styled('div')({
   flex: 1,
-<<<<<<< HEAD
-  display:"flex",
-  flexDirection:"column",
-  width: '600px',
-  '@media (max-width: 1200px)': {
-    width: '100%', 
-=======
   display: "flex",
   flexDirection: "column",
   marginRight: '0px',
   width: '600px',
   '@media (max-width: 768px)': {
     width: '100%',
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
   },
 });
 
 const OrderDetailsContainer = styled('div')({
   width: '390px',
-<<<<<<< HEAD
-  '@media (max-width:1200px)': {
-    width: '100%', 
-    marginTop: '20px', 
-=======
   '@media (max-width: 768px)': {
     width: '100%',
     marginTop: '20px',
->>>>>>> df69be30320f711c2325a8468769aa9e113c3856
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { styled } from '@mui/system';
 import HeaderTemplate from '../components/Templates/HeaderTemplate.js';
 import SidebarTemplate from '../components/Templates/SidebarTemplate.js';
@@ -14,7 +14,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Apis from '../Utils/APIService/Apis.js';
 import Loader from '../components/Atoms/Loader.js';
-import  Pagination   from '../components/Molecules/Pagination.js'
+import Pagination from '../components/Molecules/Pagination.js'
 
 const LayoutContainer = styled('div')({
   display: 'flex',
@@ -23,7 +23,7 @@ const LayoutContainer = styled('div')({
   height: '100vh',
   overflowX: 'hidden',
   '@media (max-width:1200px)': {
-    flexDirection: 'column', 
+    flexDirection: 'column',
   },
 });
 
@@ -34,7 +34,7 @@ const SidebarContainer = styled('div')({
   top: '84px',
   bottom: 0,
   left: 0,
-  overflow:'hidden',
+  overflow: 'hidden',
   boxShadow: "0px 1px 4px 0px #00000026",
   '@media (max-width:1200px)': {
     width: '100%',
@@ -50,40 +50,38 @@ const MainContainer = styled('div')({
   overflowY: 'scroll',
   overflowX: 'hidden',
   height: 'calc(100vh - 84px)',
-  backgroundColor:'#FFFFFF',
+  backgroundColor: '#FFFFFF',
   display: 'flex',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
     display: 'none',
-  }, 
+  },
 });
 
 const OrderListContainer = styled('div')({
   flex: 1,
-  display:"flex",
-  flexDirection:"column",
-  width: '600px',
-  
-  '@media (max-width: 1200px)': {
-    width: '100%', 
-  },
+  display: "flex",
+  flexDirection: "column",
+  width: '100%',
+  height: '100%'
 });
 
 const OrderDetailsContainer = styled('div')({
   width: '390px',
   '@media (max-width:1200px)': {
-    width: '100%', 
-    marginTop: '20px', 
+    width: '100%',
+    marginTop: '20px',
   },
 });
 
 const ButtonGroup = styled('div')({
-  display:'flex',
-  gap:'15px',
-  marginBottom:'20px',
-  justifyContent:'flex-start',
-  marginTop:'0px',
-  position:'relative',
+  display: 'flex',
+  gap: '15px',
+  margin: '20px',
+  justifyContent: 'flex-start',
+  marginTop: '0px',
+
+  // position: 'relative',
 });
 
 // const OrdersButton = styled('button')({
@@ -117,17 +115,17 @@ const SearchBar = styled('div')({
   letterSpacing: '0.05em',
   color: '#383838',
   display: 'flex',
-  alignItems: 'center', 
+  alignItems: 'center',
   justifyContent: 'space-between',
-  height: '40px', 
-  padding: '0 10px', 
-  border: 'none', 
-  borderRadius: '4px', 
-  marginLeft: '-20px', 
+  height: '40px',
+  padding: '0 10px',
+  border: 'none',
+  borderRadius: '4px',
+  marginLeft: '-20px',
   backgroundColor: 'transparent',
   cursor: 'pointer',
   gap: '5px',
-  marginTop:'3px' ,
+  marginTop: '3px',
 });
 
 const StatusBar = styled('div')({
@@ -141,8 +139,8 @@ const StatusBar = styled('div')({
   display: 'flex',
   alignItems: 'center',
   cursor: 'pointer',
-  marginLeft:'20px',
-  gap: '8px', 
+  marginLeft: '20px',
+  gap: '8px',
 });
 
 const StatusDropdownIcon = styled('img')({
@@ -352,7 +350,7 @@ const StatusDropdownOuter = styled('div')(({ isVisible }) => ({
   boxShadow: '0px 4px 4px 0px #00000040',
   zIndex: 1000,
   marginTop: '0px',
-  marginLeft:'230px'
+  marginLeft: '230px'
 }));
 
 const StatusDropdownInner = styled('div')({
@@ -370,7 +368,7 @@ const StatusDropdownItem = styled('div')(({ isSelected }) => ({
   fontSize: '12px',
   fontWeight: 400,
   lineHeight: '16.8px',
-  alignItems:'center',
+  alignItems: 'center',
   letterSpacing: '0.05em',
   padding: '10px',
   cursor: 'pointer',
@@ -392,7 +390,7 @@ const BatchButton = styled('button')(({ isDisabled }) => ({
   lineHeight: '18px',
   textAlign: 'center',
   // margintop:'50px',
-  marginLeft:'530px',
+  marginLeft: '530px',
   color: isDisabled ? '#FFFFFF' : '#FFFFFF',
   border: 'none',
   cursor: 'pointer',
@@ -403,7 +401,7 @@ const BatchButton = styled('button')(({ isDisabled }) => ({
 
 const CalendarDropdown = styled('div')(({ isVisible }) => ({
   display: isVisible ? 'block' : 'none',
-  position: 'absolute',
+  // position: 'relative',
   top: '45px',
   left: '200px',
   background: '#FFFFFF',
@@ -436,7 +434,7 @@ const OrderDateButton = styled('button')({
   textUnderlinePosition: 'from-font',
   textDecorationSkipInk: 'none',
   color: '#E1BD52',
-  position: 'relative', // Important for proper positioning
+  // position: 'relative', // Important for proper positioning
   top: '-20px', // Adjust alignment to move closer to the desired location
   right: '-652px', // Horizontal adjustment
   '&:hover': {
@@ -446,9 +444,9 @@ const OrderDateButton = styled('button')({
 
 const VerticalLine = styled('div')({
   width: '1.5px',
-  height: '40px', 
-  backgroundColor: '#E1BD52', 
-  alignSelf: 'center', 
+  height: '40px',
+  backgroundColor: '#E1BD52',
+  alignSelf: 'center',
 });
 
 const OrderDateText = styled('span')({
@@ -490,24 +488,24 @@ const MainPage = () => {
   const [isSortByDropdownVisible, setIsSortByDropdownVisible] = useState(false);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [isCalendar1Visible, setIsCalendar1Visible] = useState(false); // State for the first calendar
-  const [isCalendar2Visible, setIsCalendar2Visible] = useState(false); 
+  const [isCalendar2Visible, setIsCalendar2Visible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split('T')[0] // Format: YYYY-MM-DD
   );
-  
+
   const calendarRef = useRef(null);
 
   const [orderFilters, setOrderFilters] = useState({
     // date: new Date().toISOString().split('T')[0] + "T00:00:00"
   });
-  
+
   const statusOptions = ['Pending', 'In Kitchen', 'Ready'];
   const sortByOptions = ['OrderID', 'Delivery Date', 'Order Date'];
 
 
   const [selectedCards, setSelectedCards] = useState([]);
- 
+
 
   const userId = localStorage.getItem('userid');
   const authToken = localStorage.getItem('token');
@@ -530,49 +528,49 @@ const MainPage = () => {
 
   const fetchOrdersByDate = (orderDate, currentPage = page, currentSize = size) => {
     setIsLoading(true);
-  
+
     const userId = localStorage.getItem("userid");
     const authToken = localStorage.getItem("token");
-  
+
     console.log("UserId:", userId);
     console.log("AuthToken:", authToken);
-  
+
     Apis.getOrdersByDate(orderDate, currentPage, currentSize)
-    .then((response) => {
-      const mappedOrders = response.data.map((order) => ({
-        orderId: order.orderId || 'N/A',
-        orderName: order.orderName || 'N/A',
-        orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        orderDate: new Date(order.orderDateTime).toLocaleDateString(),
-        status: order.orderStatus?.status || 'Unknown',
-        items: order.items.map((item) => ({
-          itemName: item.productName || 'Unnamed Product',
-          productWeight: item.productSize || 'Unknown Size',
-          quantity: item.quantity || 0,
-          status: item.itemStatus?.status || 'Pending',
-          customizationNotes: item.customizationNotes || 'No Notes',
-        })),
-        deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        customerName: order.customerName || 'Unknown Customer',
-        deliveryAddress: order.deliveryAddress || 'No Address Provided',
-      }));
+      .then((response) => {
+        const mappedOrders = response.data.map((order) => ({
+          orderId: order.orderId || 'N/A',
+          orderName: order.orderName || 'N/A',
+          orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+          status: order.orderStatus?.status || 'Unknown',
+          items: order.items.map((item) => ({
+            itemName: item.productName || 'Unnamed Product',
+            productWeight: item.productSize || 'Unknown Size',
+            quantity: item.quantity || 0,
+            status: item.itemStatus?.status || 'Pending',
+            customizationNotes: item.customizationNotes || 'No Notes',
+          })),
+          deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          customerName: order.customerName || 'Unknown Customer',
+          deliveryAddress: order.deliveryAddress || 'No Address Provided',
+        }));
 
-      setOrders(mappedOrders);
+        setOrders(mappedOrders);
 
-      // Set the first order as the default selectedOrder
-      if (mappedOrders.length > 0) {
-        setSelectedOrder(mappedOrders[0]);
-      }
-    })
-    .catch((error) => console.error('Error fetching orders by date:', error))
-    .finally(() => setIsLoading(false));
-};
+        // Set the first order as the default selectedOrder
+        if (mappedOrders.length > 0) {
+          setSelectedOrder(mappedOrders[0]);
+        }
+      })
+      .catch((error) => console.error('Error fetching orders by date:', error))
+      .finally(() => setIsLoading(false));
+  };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
     fetchOrdersByDate(selectedDate, newPage, size);
   };
-   
+
   const handleDateChange = (date) => {
     if (!date) return;
     const formattedDate = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
@@ -580,7 +578,7 @@ const MainPage = () => {
     setIsCalendarVisible(false); // Close calendar after selection
     fetchOrdersByDate(formattedDate); // Fetch orders for the selected date
   };
-  
+
   const handleCheckboxChange = (orderId, isChecked) => {
     console.log("order id .....", orderId)
     setSelectedCards((prevSelected) =>
@@ -589,12 +587,13 @@ const MainPage = () => {
         : prevSelected.filter((id) => id !== orderId)
     );
   };
+
   const handleStatusSelect = (status) => {
     setActiveDropdown(status); // Set the selected status
     handlestatusChange(status.toUpperCase()); // Update the state with the selected status
     setIsStatusDropdownVisible(false); // Close the dropdown after selection
   };
-  
+
 
   const handleDeliveryTimeSelect = (time) => {
     const convertTo24HourFormat = (time) => {
@@ -615,18 +614,19 @@ const MainPage = () => {
     };
 
     setOrderFilters((prevFilters) => {
-      const formattedTime = convertTo24HourFormat(time); 
+      const formattedTime = convertTo24HourFormat(time);
       const datePart = prevFilters?.date ? prevFilters.date.split("T")[0] : new Date().toISOString().split("T")[0];
       const deliveryTimeStart = new Date(`${datePart}T${formattedTime}`);
       const deliveryTimeEnd = new Date(deliveryTimeStart.getTime() + 2 * 60 * 60 * 1000);
-    
+
       return {
         ...prevFilters,
-        deliveryTimeStart: formatDate(deliveryTimeStart), 
-        deliveryTimeEnd: formatDate(deliveryTimeEnd), 
+        deliveryTimeStart: formatDate(deliveryTimeStart),
+        deliveryTimeEnd: formatDate(deliveryTimeEnd),
       };
     });
   };
+
   useEffect(() => {
     fetchFilterdOrders();
   }, [orderFilters]);
@@ -639,7 +639,7 @@ const MainPage = () => {
     setIsLoading(true); // Start loading
   }
 
-  
+
   // Function to handle status change
   const handlestatusChange = (orderType) => {
     setOrderFilters((prevFilters) => ({
@@ -650,13 +650,13 @@ const MainPage = () => {
   // fetchOrdersBySelectedStatus
 
   const toggleCalendar1 = () => {
-    setIsCalendar1Visible((prev) => !prev); 
-    setIsCalendar2Visible(false); 
+    setIsCalendar1Visible((prev) => !prev);
+    setIsCalendar2Visible(false);
   };
-  
+
   const toggleCalendar2 = () => {
-    setIsCalendar2Visible((prev) => !prev); 
-    setIsCalendar1Visible(false); 
+    setIsCalendar2Visible((prev) => !prev);
+    setIsCalendar1Visible(false);
   };
 
   const handleRowsPerPageChange = (newSize) => {
@@ -667,53 +667,53 @@ const MainPage = () => {
 
   const handleSearch = () => {
     if (!searchInput) {
-        alert("Please enter an Order Id.");
-        return;
+      alert("Please enter an Order Id.");
+      return;
     }
 
     // Fetch orders by orderName
     Apis.getAllOrders({ orderName: searchInput })
-        .then((response) => {
-            const order = response.data.find((order) => order.orderName === searchInput);
+      .then((response) => {
+        const order = response.data.find((order) => order.orderName === searchInput);
 
-            if (order) {
-                const orderId = order.orderId;
+        if (order) {
+          const orderId = order.orderId;
 
-                // Fetch order details using orderId
-                Apis.searchOrdersByOrderId(orderId)
-                    .then((response) => {
-                        const mappedOrders = response.data.map((order) => ({
-                            orderId: order.orderId || "N/A",
-                            orderName: order.orderName || "N/A",
-                            orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                            orderDate: new Date(order.orderDateTime).toLocaleDateString(),
-                            status: order.orderStatus?.status || "Unknown",
-                            items: order.items.map((item) => ({
-                                itemName: item.productName || "Unnamed Product",
-                                productWeight: item.productSize || "Unknown Size",
-                                quantity: item.quantity || 0,
-                                status: item.itemStatus?.status || "Pending",
-                                customizationNotes: item.customizationNotes || "No Notes",
-                            })),
-                            deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                            customerName: order.customerName || "Unknown Customer",
-                            deliveryAddress: order.deliveryAddress || "No Address Provided",
-                        }));
-                        setOrders(mappedOrders);
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching order by ID:", error);
-                        alert("No orders found for this Order ID.");
-                    });
-            } else {
-                alert("No orders found with this Order Name.");
-            }
-        })
-        .catch((error) => {
-            console.error("Error searching orders by Order Name:", error);
-            alert("Error occurred while searching. Please try again.");
-        });
-};
+          // Fetch order details using orderId
+          Apis.searchOrdersByOrderId(orderId)
+            .then((response) => {
+              const mappedOrders = response.data.map((order) => ({
+                orderId: order.orderId || "N/A",
+                orderName: order.orderName || "N/A",
+                orderTime: new Date(order.orderDateTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                orderDate: new Date(order.orderDateTime).toLocaleDateString(),
+                status: order.orderStatus?.status || "Unknown",
+                items: order.items.map((item) => ({
+                  itemName: item.productName || "Unnamed Product",
+                  productWeight: item.productSize || "Unknown Size",
+                  quantity: item.quantity || 0,
+                  status: item.itemStatus?.status || "Pending",
+                  customizationNotes: item.customizationNotes || "No Notes",
+                })),
+                deliveryTime: new Date(order.deliveryTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                customerName: order.customerName || "Unknown Customer",
+                deliveryAddress: order.deliveryAddress || "No Address Provided",
+              }));
+              setOrders(mappedOrders);
+            })
+            .catch((error) => {
+              console.error("Error fetching order by ID:", error);
+              alert("No orders found for this Order ID.");
+            });
+        } else {
+          alert("No orders found with this Order Name.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error searching orders by Order Name:", error);
+        alert("Error occurred while searching. Please try again.");
+      });
+  };
 
   const handleBatchOrders = () => {
     if (selectedCards.length >= 3) {
@@ -741,85 +741,98 @@ const MainPage = () => {
       <MainContainer>
         {!isLoading && activeOption === 'ORDERS' && (
           <>
-            <OrderListContainer>
-            <BatchButton
-              isDisabled={selectedCards.length < 3}
-              disabled={selectedCards.length < 3}
-              onClick={handleBatchOrders}>
-              Batch
-            </BatchButton>
-            <OrderDateButton onClick={toggleCalendar1}>
-              <span style={{ color: '#E1BD52' }}>Order Date</span>
-              <VerticalLine />
-              {/* <OrderDateText>12-11-2024</OrderDateText> */}
-              <img
-                src={CalendarIcon}
-                alt="Calendar Icon"
-                style={{ width: '24px', height: '24px', marginRight: '10px' }}/>
-                {selectedDate || "Select Date"} {/* Display only the formatted date */}
-               </OrderDateButton>
-               <CalendarDropdown isVisible={isCalendar1Visible}>
-               <Calendar
-                onChange={handleDateChange}
-                value={selectedDate ? new Date(selectedDate) : new Date()}/>
+            <OrderListContainer
+              style={{ background: '#06555C' }}
+            >
+
+              <ButtonGroup
+                style={{ background: '', padding: '10px', }}
+              >
+
+
+                <BatchButton
+                  isDisabled={selectedCards.length < 3}
+                  disabled={selectedCards.length < 3}
+                  onClick={handleBatchOrders}>
+                  Batch
+                </BatchButton>
+
+                <OrderDateButton onClick={toggleCalendar1}>
+                  <span style={{ color: '#E1BD52' }}>Order Date</span>
+                  <VerticalLine />
+                  {/* <OrderDateText>12-11-2024</OrderDateText> */}
+                  <img
+                    src={CalendarIcon}
+                    alt="Calendar Icon"
+                    style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+                  {selectedDate || "Select Date"} {/* Display only the formatted date */}
+                </OrderDateButton>
+                <CalendarDropdown isVisible={isCalendar1Visible}>
+                  <Calendar
+                    onChange={handleDateChange}
+                    value={selectedDate ? new Date(selectedDate) : new Date()} />
                 </CalendarDropdown>
-              <ButtonGroup >
-              <SearchBar>
-              <img
-               src={SearchIcon}
-               alt="Search Icon"
-               style={{ width: '16px', height: '16px', marginRight: '8px', cursor: 'pointer' }}
-               onClick={handleSearch} // Call API on click
-               />
-              <input
-               type="text"
-               placeholder="Enter OrderId (e.g., 261760)"
-               value={searchInput}
-               onChange={(e) => setSearchInput(e.target.value)} // Update searchInput state
-               style={{
-               border: "none",
-               outline: "none",
-               width: "200px",
-               fontFamily: "Futura Bk BT",
-               fontSize: "14px",
-               }}
-               />
-              </SearchBar>
-              <StatusBar   onMouseEnter={() => setIsStatusDropdownVisible(true)}
+
+              </ButtonGroup>
+
+
+              <ButtonGroup style={{ background: 'orange' }} >
+                <SearchBar>
+                  <img
+                    src={SearchIcon}
+                    alt="Search Icon"
+                    style={{ width: '16px', height: '16px', marginRight: '8px', cursor: 'pointer' }}
+                    onClick={handleSearch} // Call API on click
+                  />
+                  <input
+                    type="text"
+                    placeholder="Enter OrderId (e.g., 261760)"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)} // Update searchInput state
+                    style={{
+                      border: "none",
+                      outline: "none",
+                      width: "200px",
+                      fontFamily: "Futura Bk BT",
+                      fontSize: "14px",
+                    }}
+                  />
+                </SearchBar>
+                <StatusBar onMouseEnter={() => setIsStatusDropdownVisible(true)}
                   onMouseLeave={() => setIsStatusDropdownVisible(false)}
                   style={{ position: 'relative' }}>
-               STATUS
-              <StatusDropdownIcon src={DropdownIcon} alt="Dropdown Icon" />
-              </StatusBar>
+                  STATUS
+                  <StatusDropdownIcon src={DropdownIcon} alt="Dropdown Icon" />
+                </StatusBar>
 
-              {isStatusDropdownVisible && (
-              <StatusDropdownOuter  isVisible={isStatusDropdownVisible}
-              onMouseEnter={() => setIsStatusDropdownVisible(true)}
-              onMouseLeave={() => setIsStatusDropdownVisible(false)}>
-              <StatusDropdownInner>
-              {statusOptions.map((status, index) => (
-              <StatusDropdownItem
-               key={index}
-               onClick={() => handleStatusSelect(status)}
-                >
-               {status}
-              </StatusDropdownItem>
-               ))}
-              </StatusDropdownInner>
+                {isStatusDropdownVisible && (
+                  <StatusDropdownOuter isVisible={isStatusDropdownVisible}
+                    onMouseEnter={() => setIsStatusDropdownVisible(true)}
+                    onMouseLeave={() => setIsStatusDropdownVisible(false)}>
+                    <StatusDropdownInner>
+                      {statusOptions.map((status, index) => (
+                        <StatusDropdownItem
+                          key={index}
+                          onClick={() => handleStatusSelect(status)}
+                        >
+                          {status}
+                        </StatusDropdownItem>
+                      ))}
+                    </StatusDropdownInner>
 
-              </StatusDropdownOuter>
-               )}
-               <DateButton onClick={toggleCalendar2} style={{marginLeft:'20px'}}>
-               <img
-                src={CalendarIcon}
-                alt="Calendar Icon"
-                style={{ width: '24px', height: '24px', marginRight: '10px' }}/>
-                {selectedDate || "Select Date"} {/* Display only the formatted date */}
-               </DateButton>
-               <CalendarDropdown isVisible={isCalendar2Visible}>
-               <Calendar
-                onChange={handleDateChange}
-                value={selectedDate ? new Date(selectedDate) : new Date()}/>
+                  </StatusDropdownOuter>
+                )}
+                <DateButton onClick={toggleCalendar2} style={{ marginLeft: '20px' }}>
+                  <img
+                    src={CalendarIcon}
+                    alt="Calendar Icon"
+                    style={{ width: '24px', height: '24px', marginRight: '10px' }} />
+                  {selectedDate || "Select Date"}
+                </DateButton>
+                <CalendarDropdown isVisible={isCalendar2Visible}>
+                  <Calendar
+                    onChange={handleDateChange}
+                    value={selectedDate ? new Date(selectedDate) : new Date()} />
                 </CalendarDropdown>
 
                 <DeliveryButton
@@ -856,79 +869,86 @@ const MainPage = () => {
                       </DeliveryDropdownInner>
 
                     </DeliveryDropdownOuter>
-                  )} 
+                  )}
                 </DeliveryButton>
 
                 <SortByButton
-                onMouseEnter={() => setIsSortByDropdownVisible(true)} // Open dropdown on hover
+                  onMouseEnter={() => setIsSortByDropdownVisible(true)} // Open dropdown on hover
                   onMouseLeave={() => setIsSortByDropdownVisible(false)} // Close dropdown when leaving
-                 
+
                 >
-  SortBy
-  <img
-    src={SortByIcon}
-    alt="SortBy Icon"
-    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
-  />
-  {isSortByDropdownVisible && (
-    <SortByDropdownOuter
-      // onMouseEnter={() => setIsSortByDropdownVisible(true)} // Keep open when hovering over dropdown
-      // onMouseLeave={() => setIsSortByDropdownVisible(false)} // Close when cursor leaves dropdown
-    >
-      <SortByDropdownInner>
-        {sortByOptions.map((option, index) => (
-          <SortByDropdownItem
-            key={index}
-            onClick={() => {
-              setActiveDropdown(option); // Update selected option
-              handlestatusChange(option.toUpperCase()); // Trigger state change
-            }}
-          >
-            {option}
-          </SortByDropdownItem>
-        ))}
-      </SortByDropdownInner>
-    </SortByDropdownOuter>
-   )} 
-</SortByButton>
+                  SortBy
+                  <img
+                    src={SortByIcon}
+                    alt="SortBy Icon"
+                    style={{ width: '16px', height: '16px', marginLeft: '8px' }}
+                  />
+                  {isSortByDropdownVisible && (
+                    <SortByDropdownOuter
+                    // onMouseEnter={() => setIsSortByDropdownVisible(true)} // Keep open when hovering over dropdown
+                    // onMouseLeave={() => setIsSortByDropdownVisible(false)} // Close when cursor leaves dropdown
+                    >
+                      <SortByDropdownInner>
+                        {sortByOptions.map((option, index) => (
+                          <SortByDropdownItem
+                            key={index}
+                            onClick={() => {
+                              setActiveDropdown(option); // Update selected option
+                              handlestatusChange(option.toUpperCase()); // Trigger state change
+                            }}
+                          >
+                            {option}
+                          </SortByDropdownItem>
+                        ))}
+                      </SortByDropdownInner>
+                    </SortByDropdownOuter>
+                  )}
+                </SortByButton>
 
               </ButtonGroup>
+
               
-              {orders.map((order) => (
-                <OrderCard
-                  key={order.orderId}
-                  orderNumber={order.orderName}
-                  orderTime={order.orderTime}
-                  orderDate={order.orderDate}
-                  status={order.status}
-                  items={order.items}
-                  deliveryTime={order.deliveryTime}
-                  customerName={order.customerName}
-                  address={order.deliveryAddress}
-                  onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
-                  onCheckboxChange={(isChecked) =>
-                    handleCheckboxChange(order.orderId, isChecked)
-                  }
-                  isActive={selectedOrder?.orderId === order.orderId}
-                />
-              ))}
+
+                {orders.map((order) => (
+                  <OrderCard
+                    key={order.orderId}
+                    orderNumber={order.orderName}
+                    orderTime={order.orderTime}
+                    orderDate={order.orderDate}
+                    status={order.status}
+                    items={order.items}
+                    deliveryTime={order.deliveryTime}
+                    customerName={order.customerName}
+                    address={order.deliveryAddress}
+                    onSelect={(selectedOrder) => setSelectedOrder(selectedOrder)}
+                    onCheckboxChange={(isChecked) =>
+                      handleCheckboxChange(order.orderId, isChecked)
+                    }
+                    isActive={selectedOrder?.orderId === order.orderId}
+                  />
+                ))}
+
+
+            
+
+
             </OrderListContainer>
 
             {selectedOrder && (
-              <OrderDetailsContainer>
+              <OrderDetailsContainer style={{ background: 'pink' }}>
                 <OrderDetails order={selectedOrder} />
               </OrderDetailsContainer>
             )}
           </>
         )}
       </MainContainer>
-      <Pagination
+      {/* <Pagination
         currentPage={page}
         rowsPerPage={size}
         totalRows={totalOrders}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleRowsPerPageChange}
-      />
+      /> */}
 
     </LayoutContainer>
   );

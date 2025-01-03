@@ -24,12 +24,12 @@ const OrderDetailsContainer = styled('div')({
   //   backgroundColor:'#00FF00'
    
   // },
-  '@media (min-width:1200px)' : {
-    width:'30px',
-    height:'627px',
-    marginLeft:'30px',
-    backgroundColor:'red'
-  }
+  // '@media (min-width:1200px)' : {
+  //   width:'30px',
+  //   height:'627px',
+  //   marginLeft:'30px',
+  //   backgroundColor:'red'
+  // }
 });
 
 const Header = styled('div')({
