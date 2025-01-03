@@ -18,16 +18,18 @@ const OrderDetailsContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  '@media (min-width: 1025px)': {
-    width: '400',
-    height: '837px',
-    marginLeft: '5px',
-  },
-  '@media (min-width: 768px) and (max-width: 1024px)': {
-    width: '350px',
-    height: '327px',
-    marginLeft: '30px',
-  },
+  // '@media (min-width: 1200px)': {
+  //   width: '400px',
+  //   height: '642px',
+  //   backgroundColor:'#00FF00'
+   
+  // },
+  // '@media (min-width:1200px)' : {
+  //   width:'30px',
+  //   height:'627px',
+  //   marginLeft:'30px',
+  //   backgroundColor:'red'
+  // }
 });
 
 const Header = styled('div')({
